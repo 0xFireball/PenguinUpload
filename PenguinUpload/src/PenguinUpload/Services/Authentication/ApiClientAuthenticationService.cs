@@ -11,18 +11,16 @@ namespace PenguinUpload.Services.Authentication
         public static ClaimsPrincipal ResolveClientIdentity(string apiKey)
         {
             // Check user records in database
-            var u = WebUserManager.FindUserByApiKeyAsync(apiKey);
-            if (u != null)
-            {
-                // Give client identity
-                var id = new ClaimsPrincipal(new ClaimsIdentity(new GenericIdentity(u.Username, "stateless"),
-                    new Claim[] {
-                        StatelessAuthClaim,
-                    }
-                ));
-                return id;
-            }
-            return null;
+            var webUserManager = new WebUserManager();
+            var u = webUserManager.FindUserByApiKeyAsync(apiKey);
+            if (u == null) return null;
+            // Give client identity
+            var id = new ClaimsPrincipal(new ClaimsIdentity(new GenericIdentity(u.Username, "stateless"),
+                new Claim[] {
+                    StatelessAuthClaim,
+                }
+            ));
+            return id;
         }
     }
 }

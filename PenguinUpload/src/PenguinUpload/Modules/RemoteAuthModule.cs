@@ -42,7 +42,8 @@ namespace PenguinUpload.Modules
                     }
 
                     // Validate registration
-                    var newUser = await WebUserManager.RegisterUserAsync(req);
+                    var webUserManager = new WebUserManager();
+                    var newUser = await webUserManager.RegisterUserAsync(req);
 
                     // Return user details
                     return Response.AsJsonNet(new RemoteAuthResponse
@@ -67,13 +68,13 @@ namespace PenguinUpload.Modules
             Post("/login", async args =>
             {
                 var req = this.Bind<LoginRequest>();
-
-                var selectedUser = await WebUserManager.FindUserByUsernameAsync(req.Username);
+                var webUserManager = new WebUserManager();
+                var selectedUser = await webUserManager.FindUserByUsernameAsync(req.Username);
 
                 try
                 {
                     // Validate password
-                    if (await WebUserManager.CheckPasswordAsync(req.Password, selectedUser))
+                    if (await webUserManager.CheckPasswordAsync(req.Password, selectedUser))
                     {
                         // Return user details
                         return Response.AsJsonNet(new RemoteAuthResponse

@@ -11,9 +11,9 @@ namespace PenguinUpload.Services.Authentication
     /// <summary>
     /// A user manager service. Provides access to common operations with users, and abstracts the database
     /// </summary>
-    public static class WebUserManager
+    public class WebUserManager
     {
-        public static async Task<RegisteredUser> FindUserByUsernameAsync(string username)
+        public async Task<RegisteredUser> FindUserByUsernameAsync(string username)
         {
             return await Task.Run(() =>
             {
@@ -23,15 +23,11 @@ namespace PenguinUpload.Services.Authentication
                 var userRecord = registeredUsers.FindOne(u => u.Username == username);
                 storedUserRecord = userRecord;
 
-                if (storedUserRecord == null)
-                {
-                    return null;
-                }
                 return storedUserRecord;
             });
         }
 
-        public static RegisteredUser FindUserByApiKeyAsync(string apiKey)
+        public RegisteredUser FindUserByApiKeyAsync(string apiKey)
         {
             RegisteredUser storedUserRecord = null;
             var db = new DatabaseAccessService().OpenOrCreateDefault();
@@ -39,14 +35,10 @@ namespace PenguinUpload.Services.Authentication
             var userRecord = registeredUsers.FindOne(u => u.ApiKey == apiKey);
             storedUserRecord = userRecord;
 
-            if (storedUserRecord == null)
-            {
-                return null;
-            }
-            return storedUserRecord;
+            return storedUserRecord ?? null;
         }
 
-        public static bool UpdateUserInDatabase(RegisteredUser currentUser)
+        public bool UpdateUserInDatabase(RegisteredUser currentUser)
         {
             bool result;
             var db = new DatabaseAccessService().OpenOrCreateDefault();
@@ -62,12 +54,12 @@ namespace PenguinUpload.Services.Authentication
         /// <summary>
         /// Attempts to register a new user. Only the username is validated, it is expected that other fields have already been validated!
         /// </summary>
-        public static async Task<RegisteredUser> RegisterUserAsync(RegistrationRequest regRequest)
+        public async Task<RegisteredUser> RegisterUserAsync(RegistrationRequest regRequest)
         {
             return await Task.Run(() => RegisterUser(regRequest));
         }
 
-        private static RegisteredUser RegisterUser(RegistrationRequest regRequest)
+        private RegisteredUser RegisterUser(RegistrationRequest regRequest)
         {
             RegisteredUser newUserRecord = null;
             if (FindUserByUsernameAsync(regRequest.Username).GetAwaiter().GetResult() != null)
@@ -107,7 +99,7 @@ namespace PenguinUpload.Services.Authentication
             return newUserRecord;
         }
 
-        public static async Task<bool> CheckPasswordAsync(string password, RegisteredUser userRecord)
+        public async Task<bool> CheckPasswordAsync(string password, RegisteredUser userRecord)
         {
             return await Task.Run(() => CheckPassword(password, userRecord));
         }

@@ -14,7 +14,7 @@ namespace PenguinUpload.Modules
 
             Get("/userinfo", async _ =>
             {
-                var user = await WebUserManager.FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
+                var user = await new WebUserManager().FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
                 return Response.AsJsonNet(user);
             });
         }

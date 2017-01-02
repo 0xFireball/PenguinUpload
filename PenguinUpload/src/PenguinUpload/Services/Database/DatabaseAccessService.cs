@@ -13,11 +13,7 @@ namespace PenguinUpload.Services.Database
 
         public LiteDatabase OpenOrCreateDefault()
         {
-            if (_dbInstance == null)
-            {
-                _dbInstance = new LiteDatabase("penguinupload.lidb");
-            }
-            return _dbInstance;
+            return _dbInstance ?? (_dbInstance = new LiteDatabase("penguinupload.lidb"));
         }
     }
 }
