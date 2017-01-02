@@ -1,7 +1,16 @@
 <template>
   <div class="shrink-layout">
     <!--<img src="./assets/logo.png">-->
-    <intro></intro>
+    <div class="row intro-area">
+        <div class="twelve columns">
+          <intro></intro>
+        </div>
+      </div>
+      <div class="row">
+        <div class="six columns offset-by-three">
+          <login></login>
+        </div>
+      </div>
     <devCredits></devCredits>
   </div>
 </template>
@@ -9,6 +18,7 @@
 <script>
   import Intro from '../components/intro'
   import devCredits from '../components/devCredits'
+  import Login from '../components/login'
 
   export default {
     data() {
@@ -17,6 +27,7 @@
     },
     components: {
       Intro,
+      Login,
       devCredits
     }
   }
@@ -29,5 +40,9 @@
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+  }
+
+  .intro-area {
+    margin-bottom: 2%;
   }
 </style>

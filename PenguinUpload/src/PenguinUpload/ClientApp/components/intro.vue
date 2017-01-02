@@ -19,7 +19,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .intro {
-    margin-top: 15%;
+    margin-top: 8%;
     text-align: center;
   }
   
