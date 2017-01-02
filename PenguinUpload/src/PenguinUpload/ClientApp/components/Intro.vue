@@ -11,7 +11,7 @@
     name: 'intro',
     data() {
       return {
-        appTitle: 'YetAnotherShrinker',
+        appTitle: 'PenguinUpload',
       }
     }
   }

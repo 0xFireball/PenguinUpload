@@ -75,7 +75,7 @@ export default {
   name: 'toolbar',
   data () {
     return {
-      appName: 'YetAnotherShrinker',
+      appName: 'PenguinUpload',
       isLoggedIn: false
     }
   },

@@ -42,8 +42,8 @@ Vue.material.registerTheme({
       hue: 700
     },
     accent: {
-      color: 'cyan',
-      hue: 'A200'
+      color: 'light-blue',
+      hue: 600
     }
   }
 })
