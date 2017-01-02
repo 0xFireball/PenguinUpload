@@ -80,6 +80,10 @@
         // nothing
         let vm = this
         if (!vm.login.e) return
+        if (!vm.login.password || !vm.login.username) {
+          vm.login.err = 'credentials cannot be empty'
+          return
+        }
         vm.login.e = false
         // reset error message
         vm.login.err = ''
@@ -111,28 +115,24 @@
         // nothing
         let vm = this
         if (!vm.register.e) return
-        vm.register.e = false
         // make sure confirmation is correct
         if (vm.register.username.length < 3) {
           vm.register.err = 'username must be at least 3 characters. this is also validated on the server'
-          vm.register.e = true
           return
         }
         if (vm.register.password.length < 8) {
           vm.register.err = 'password must be at least 8 characters. this is also validated on the server'
-          vm.register.e = true
           return
         }
         if (!vm.register.iaccept) {
           vm.register.err = 'you must accept the terms and conditions'
-          vm.register.e = true
           return
         }
         if (vm.register.password !== vm.register.confirm) {
           vm.register.err = 'password confirmation does not match'
-          vm.register.e = true
           return
         }
+        vm.register.e = false
         // reset error message
         vm.register.err = ''
         // send register post
