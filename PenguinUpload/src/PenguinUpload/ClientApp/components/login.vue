@@ -13,7 +13,7 @@
           </md-input-container>
           <p class="error-message">{{ login.err }}</p>
           <input type="submit" class="invisible"></input>
-          <md-button class="md-raised md-primary" v-on:click="tryLogin">Log In</md-button>
+          <md-button class="md-raised md-primary" v-on:click="tryLogin" :disabled="!login.e">Log In</md-button>
         </form>
       </md-tab>
 
@@ -34,7 +34,7 @@
           <md-checkbox v-model="register.iaccept">I accept the Terms and Conditions</md-checkbox>
           <p class="error-message">{{ register.err }}</p>
           <input type="submit" class="invisible"></input>
-          <md-button class="md-raised md-primary" v-on:click="tryRegister">Sign Up</md-button>
+          <md-button class="md-raised md-primary" v-on:click="tryRegister" :disabled="!register.e">Sign Up</md-button>
         </form>
       </md-tab>
     </md-tabs>
@@ -56,16 +56,18 @@
     data() {
       return {
         login: {
-          username,
-          password,
-          err
+          username: '',
+          password: '',
+          err: '',
+          e: true // enabled
         },
         register: {
-          username,
-          password,
-          confirm,
-          iaccept,
-          err
+          username: '',
+          password: '',
+          confirm: '',
+          iaccept: '',
+          err: '',
+          e: true // enabled
         },
         dialog: {
           title: ' ',
@@ -77,6 +79,8 @@
       tryLogin: function () {
         // nothing
         let vm = this
+        if (!vm.login.e) return
+        vm.login.e = false
         // reset error message
         vm.login.err = ''
         // send login post
@@ -93,39 +97,47 @@
               // unauthorized
               vm.login.err = response.data
             }
+            vm.login.e = true
           })
           .catch(function (error) {
             // TODO: handle error
             if (error) {
               vm.login.err = 'invalid login credentials'
             }
+            vm.login.e = true
           })
       },
       tryRegister: function () {
         // nothing
         let vm = this
+        if (!vm.register.e) return
+        vm.register.e = false
         // make sure confirmation is correct
         if (vm.register.username.length < 3) {
           vm.register.err = 'username must be at least 3 characters. this is also validated on the server'
+          vm.register.e = true
           return
         }
         if (vm.register.password.length < 8) {
           vm.register.err = 'password must be at least 8 characters. this is also validated on the server'
+          vm.register.e = true
           return
         }
         if (!vm.register.iaccept) {
           vm.register.err = 'you must accept the terms and conditions'
+          vm.register.e = true
           return
         }
-        if (vm.register.password !== vm.vm.register.confirm) {
+        if (vm.register.password !== vm.register.confirm) {
           vm.register.err = 'password confirmation does not match'
+          vm.register.e = true
           return
         }
         // reset error message
         vm.register.err = ''
         // send register post
         axios.post('/register', {
-          username: vm.vm.register.username,
+          username: vm.register.username,
           password: vm.register.password,
         }, axiosRequestConfig)
           .then((response) => {
@@ -138,11 +150,13 @@
               // unauthorized because of error
               vm.register.err = response.data
             }
+            vm.register.e = true
           })
           .catch(function (error) {
             if (error) {
               console.log(error)
             }
+            vm.register.e = true
           })
       },
       showPopup: function (content, title) {
