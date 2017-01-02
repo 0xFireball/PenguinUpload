@@ -36,11 +36,6 @@ namespace PenguinUpload.Modules
                         throw new SecurityException("Password must be at least 8 characters.");
                     }
 
-                    if (req.PhoneNumber != null && !StringUtils.IsPhoneNumber(req.PhoneNumber))
-                    {
-                        throw new SecurityException("Phone number was of invalid format.");
-                    }
-
                     // Validate registration
                     var webUserManager = new WebUserManager();
                     var newUser = await webUserManager.RegisterUserAsync(req);

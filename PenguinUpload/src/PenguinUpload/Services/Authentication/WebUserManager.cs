@@ -80,7 +80,6 @@ namespace PenguinUpload.Services.Authentication
                 {
                     Identifier = Guid.NewGuid().ToString(),
                     Username = regRequest.Username,
-                    PhoneNumber = regRequest.PhoneNumber,
                     ApiKey = StringUtils.SecureRandomString(40),
                     CryptoSalt = pwSalt,
                     PasswordCryptoConf = cryptoConf,
