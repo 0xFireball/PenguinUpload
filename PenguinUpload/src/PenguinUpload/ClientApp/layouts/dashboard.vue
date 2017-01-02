@@ -2,14 +2,14 @@
   <div class="shrink-layout">
     <!--<img src="./assets/logo.png">-->
     <intro></intro>
-    <urlShrinkInput></urlShrinkInput>
+    <fileUploadWidget></fileUploadWidget>
     <devCredits></devCredits>
   </div>
 </template>
 
 <script>
   import Intro from '../components/Intro'
-  import urlShrinkInput from '../components/urlShrinkInput'
+  import fileUploadWidget from '../components/fileUploadWidget'
   import devCredits from '../components/devCredits'
 
   export default {
@@ -19,7 +19,7 @@
     },
     components: {
       Intro,
-      urlShrinkInput,
+      fileUploadWidget,
       devCredits
     }
   }

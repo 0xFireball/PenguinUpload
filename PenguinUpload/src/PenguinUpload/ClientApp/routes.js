@@ -1,18 +1,18 @@
 
-import ShrinkPlace from './layouts/shrinkPlace'
-import StatsPlace from './layouts/statsPlace'
+import Dashboard from './layouts/dashboard'
 import NotFound from './layouts/notFound'
+import Landing from './layouts/landing'
 
 const main = [
   {
     path: '/',
     name: 'landing',
-    component: ShrinkPlace
+    component: Landing
   },
   {
-    path: '/s/:sroute',
-    name: 'statsview',
-    component: StatsPlace
+    path: '/u',
+    name: 'dashboard',
+    component: Dashboard
   },
   {
     path: '/home',
