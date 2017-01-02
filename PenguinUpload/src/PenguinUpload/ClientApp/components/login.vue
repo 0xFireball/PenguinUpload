@@ -5,13 +5,13 @@
         <form v-on:submit.prevent="tryLogin">
           <md-input-container>
             <label>Username</label>
-            <md-input v-model="lUsername"></md-input>
+            <md-input v-model="login.username"></md-input>
           </md-input-container>
           <md-input-container md-has-password>
             <label>Password</label>
-            <md-input type="password" v-model="lPassword"></md-input>
+            <md-input type="password" v-model="login.password"></md-input>
           </md-input-container>
-          <p class="error-message">{{ lErrMsg }}</p>
+          <p class="error-message">{{ login.err }}</p>
           <input type="submit" class="invisible"></input>
           <md-button class="md-raised md-primary" v-on:click="tryLogin">Log In</md-button>
         </form>
@@ -21,18 +21,18 @@
         <form v-on:submit.prevent="tryRegister">
           <md-input-container>
             <label>Username</label>
-            <md-input v-model="rUsername"></md-input>
+            <md-input v-model="register.username"></md-input>
           </md-input-container>
           <md-input-container md-has-password>
             <label>Password</label>
-            <md-input type="password" v-model="rPassword"></md-input>
+            <md-input type="password" v-model="register.password"></md-input>
           </md-input-container>
           <md-input-container>
             <label>Confirm Password</label>
-            <md-input type="password" v-model="rConfirmPassword"></md-input>
+            <md-input type="password" v-model="register.confirm"></md-input>
           </md-input-container>
-          <md-checkbox v-model="iaccept">I accept the Terms and Conditions</md-checkbox>
-          <p class="error-message">{{ rErrMsg }}</p>
+          <md-checkbox v-model="register.iaccept">I accept the Terms and Conditions</md-checkbox>
+          <p class="error-message">{{ register.err }}</p>
           <input type="submit" class="invisible"></input>
           <md-button class="md-raised md-primary" v-on:click="tryRegister">Sign Up</md-button>
         </form>
@@ -55,14 +55,18 @@
     name: 'login',
     data() {
       return {
-        lUsername: '', // login username
-        lPassword: '', // login password
-        rUsername: '', // login username
-        rPassword: '', // register password
-        rConfirmPassword: '', // register confirm password
-        lErrMsg: '', // login error message
-        rErrMsg: '', // register error message
-        iaccept: false,
+        login: {
+          username,
+          password,
+          err
+        },
+        register: {
+          username,
+          password,
+          confirm,
+          iaccept,
+          err
+        },
         dialog: {
           title: ' ',
           content: ' '
@@ -74,11 +78,11 @@
         // nothing
         let vm = this
         // reset error message
-        vm.lErrMsg = ''
+        vm.login.err = ''
         // send login post
         axios.post('/login', {
-          username: vm.lUsername,
-          password: vm.lPassword
+          username: vm.login.username,
+          password: vm.login.password
         })
           .then((response) => {
             // TODO: process response
@@ -87,13 +91,13 @@
               vm.$router.push('/u');
             } else if (response.status == 401) {
               // unauthorized
-              vm.lErrMsg = response.data
+              vm.login.err = response.data
             }
           })
           .catch(function (error) {
             // TODO: handle error
             if (error) {
-              vm.lErrMsg = 'invalid login credentials'
+              vm.login.err = 'invalid login credentials'
             }
           })
       },
@@ -101,28 +105,28 @@
         // nothing
         let vm = this
         // make sure confirmation is correct
-        if (vm.rUsername.length < 3) {
-          vm.rErrMsg = 'username must be at least 3 characters. this is also validated on the server'
+        if (vm.register.username.length < 3) {
+          vm.register.err = 'username must be at least 3 characters. this is also validated on the server'
           return
         }
-        if (vm.rPassword.length < 8) {
-          vm.rErrMsg = 'password must be at least 8 characters. this is also validated on the server'
+        if (vm.register.password.length < 8) {
+          vm.register.err = 'password must be at least 8 characters. this is also validated on the server'
           return
         }
-        if (!vm.iaccept) {
-          vm.rErrMsg = 'you must accept the terms and conditions'
+        if (!vm.register.iaccept) {
+          vm.register.err = 'you must accept the terms and conditions'
           return
         }
-        if (vm.rPassword !== vm.rConfirmPassword) {
-          vm.rErrMsg = 'password confirmation does not match'
+        if (vm.register.password !== vm.vm.register.confirm) {
+          vm.register.err = 'password confirmation does not match'
           return
         }
         // reset error message
-        vm.rErrMsg = ''
+        vm.register.err = ''
         // send register post
         axios.post('/register', {
-          username: vm.rUsername,
-          password: vm.rPassword
+          username: vm.vm.register.username,
+          password: vm.register.password,
         }, axiosRequestConfig)
           .then((response) => {
             // TODO: process response
@@ -132,7 +136,7 @@
               // this.$refs.authOptionTabs.changeTab('t-login')
             } else if (response.status === 401) {
               // unauthorized because of error
-              vm.rErrMsg = response.data
+              vm.register.err = response.data
             }
           })
           .catch(function (error) {
