@@ -21,6 +21,7 @@
 <style scoped>
   .intro {
     margin-top: 15%;
+    text-align: center;
   }
   
   .app-title {

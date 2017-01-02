@@ -51,7 +51,7 @@
 
               <md-list-expand>
                 <md-list>
-                  <md-list-item class="md-inset" href="https://github.com/0xFireball/YetAnotherShrinker">
+                  <md-list-item class="md-inset" target="_blank" href="https://github.com/0xFireball/PenguinUpload">
                     GitHub
                   </md-list-item>
 
@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     visitGitHub: function () {
-      window.open('https://github.com/0xFireball/YetAnotherShrinker')
+      window.open('https://github.com/0xFireball/' + this.appName)
     },
     toggleLeftSidenav: function () {
       this.$refs.leftSidenav.toggle()

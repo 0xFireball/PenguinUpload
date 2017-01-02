@@ -2,6 +2,7 @@
 import Dashboard from './layouts/dashboard'
 import NotFound from './layouts/notFound'
 import Landing from './layouts/landing'
+import About from './layouts/about'
 
 const main = [
   {
@@ -17,6 +18,11 @@ const main = [
   {
     path: '/home',
     redirect: '/'
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: About
   }
 ]
 
