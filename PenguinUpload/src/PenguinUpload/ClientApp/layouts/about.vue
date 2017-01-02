@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Intro from '../components/Intro'
+import Intro from '../components/intro'
 import About from '../components/aboutWidget'
 
 export default {

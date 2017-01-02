@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Intro from '../components/Intro'
+import Intro from '../components/intro'
 
 export default {
   data () {

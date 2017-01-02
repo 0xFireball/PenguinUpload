@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import Intro from '../components/Intro'
+  import Intro from '../components/intro'
   import fileUploadWidget from '../components/fileUploadWidget'
   import devCredits from '../components/devCredits'
 

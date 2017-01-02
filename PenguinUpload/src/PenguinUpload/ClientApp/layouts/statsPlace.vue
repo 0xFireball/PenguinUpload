@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import Intro from '../components/Intro'
+  import Intro from '../components/intro'
   import statsViewer from '../components/statistics/statsViewer'
   import devCredits from '../components/devCredits'
 

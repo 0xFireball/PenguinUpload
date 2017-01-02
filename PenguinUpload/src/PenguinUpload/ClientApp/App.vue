@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Toolbar from './components/Toolbar'
+import Toolbar from './components/toolbar'
 export default {
   data () {
     return {

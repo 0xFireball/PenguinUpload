@@ -8,7 +8,6 @@
 
 <script>
   export default {
-    name: 'intro',
     data() {
       return {
         appTitle: 'PenguinUpload',

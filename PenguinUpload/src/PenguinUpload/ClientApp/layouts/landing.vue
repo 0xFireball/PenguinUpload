@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import Intro from '../components/Intro'
+  import Intro from '../components/intro'
   import devCredits from '../components/devCredits'
 
   export default {
