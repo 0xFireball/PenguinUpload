@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace YetAnotherShrinker.Controllers
+namespace PenguinUpload.Controllers
 {
     public class HomeController : Controller
     {
