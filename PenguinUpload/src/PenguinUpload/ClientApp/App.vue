@@ -1,5 +1,5 @@
 <template>
-  <div v-md-theme="'apptheme'">
+  <div>
     <toolbar></toolbar>
 
     <transition name="md-router">

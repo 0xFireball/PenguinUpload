@@ -35,12 +35,14 @@ router.afterEach((currentRoute) => {
   }
 })
 
-Vue.material.theme.registerAll({
+Vue.material.registerTheme({
   apptheme: {
     primary: 'teal',
     accent: 'cyan'
   }
 })
+
+Vue.material.setCurrentTheme('apptheme')
 
 import App from './App'
 
