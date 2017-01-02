@@ -37,8 +37,14 @@ router.afterEach((currentRoute) => {
 
 Vue.material.registerTheme({
   apptheme: {
-    primary: 'teal',
-    accent: 'cyan'
+    primary: {
+      color: 'cyan',
+      hue: 700
+    },
+    accent: {
+      color: 'cyan',
+      hue: 'A200'
+    }
   }
 })
 
