@@ -13,6 +13,7 @@ import Toolbar from './components/toolbar'
 export default {
   data () {
     return {
+      loggedIn: false
     }
   },
   components: {

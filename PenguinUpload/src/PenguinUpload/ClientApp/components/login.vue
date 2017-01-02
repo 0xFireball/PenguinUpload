@@ -96,6 +96,7 @@
             // TODO: process response
             if (response.status === 200) {
               // succeeded
+              vm.$root.loggedIn = true
               vm.$router.push('/u');
             } else if (response.status == 401) {
               // unauthorized
