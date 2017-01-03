@@ -57,5 +57,19 @@ namespace PenguinUpload.Services.FileStorage
                     .OrderBy(x => x.UploadedDate);
             });
         }
+
+        public async Task UnregisterStoredFileAsync(string fileId)
+        {
+            await Task.Run(() =>
+            {
+                var db = new DatabaseAccessService().OpenOrCreateDefault();
+                var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);
+                using (var trans = db.BeginTrans())
+                {
+                    storedFiles.Delete(x => x.Identifier == fileId);
+                    trans.Commit();
+                }
+            });
+        }
     }
 }

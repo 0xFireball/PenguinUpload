@@ -81,10 +81,15 @@
         window.location.href = '/api/download/' + f.fileId
       },
       deleteFile: function (ix) {
+        let f = this.files[ix]
         this.showConfirm('Are you sure you want to delete this file? It cannot be recovered.', 'Confirm Delete', (r) => {
           if (r) {
             // send delete request
-            // axios.post('')
+            axios.delete('/api/delete/' + f.fileId)
+              .then(function (res) {
+                // update file list
+                this.files.splice(ix, 1)
+              })
           }
         })
       },

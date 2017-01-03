@@ -1,4 +1,5 @@
-﻿using Nancy;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Security;
 using PenguinUpload.DataModels.Api;
@@ -39,6 +40,19 @@ namespace PenguinUpload.Modules
                         uploadResult.Size);
 
                 return Response.AsJsonNet(storedFile);
+            });
+
+            Delete("/delete/{id}", async args =>
+            {
+                var user = await new WebUserManager().FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
+                var fileId = (string) args.id;
+                // Remove physical file
+                var fileUploadHandler = new LocalStorageHandler();
+                await fileUploadHandler.DeleteFile(fileId);
+                // Unregister file
+                var storedFilesManager = new StoredFilesManager();
+                await storedFilesManager.UnregisterStoredFileAsync(fileId);
+                return HttpStatusCode.OK;
             });
 
             Get("/userfiles", async _ =>

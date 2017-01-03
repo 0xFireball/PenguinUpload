@@ -8,13 +8,6 @@ namespace PenguinUpload.Infrastructure.Upload
 {
     public class LocalStorageHandler : IFileUploadHandler
     {
-        private readonly IRootPathProvider _rootPathProvider;
-
-        public LocalStorageHandler()
-        {
-            _rootPathProvider = new DefaultRootPathProvider();
-        }
-
         public async Task<FileUploadResult> HandleUpload(string fileName, Stream stream)
         {
             var fileId = Guid.NewGuid().ToString();
@@ -50,6 +43,12 @@ namespace PenguinUpload.Infrastructure.Upload
         {
             var filePath = GetTargetFilePath(id);
             return File.OpenRead(filePath);
+        }
+
+        public async Task DeleteFile(string fileId)
+        {
+            var filePath = GetTargetFilePath(fileId);
+            await Task.Run(() => File.Delete(filePath));
         }
     }
 }
