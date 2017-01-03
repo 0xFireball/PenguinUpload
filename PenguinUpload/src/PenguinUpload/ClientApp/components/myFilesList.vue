@@ -1,5 +1,5 @@
 <template>
-  <div class="file-upload-widget">
+  <div class="my-files-list">
     <div class="container">
       <div class="row">
         <div class="eight columns offset-by-two">

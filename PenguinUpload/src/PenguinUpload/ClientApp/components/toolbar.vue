@@ -6,7 +6,7 @@
       </md-button>
       <h2 class="md-title toolbar-title">{{ appName }}</h2>
       <div v-if="$root.loggedIn">
-        <md-menu>
+        <md-menu md-align-trigger>
           <md-button md-menu-trigger>
             <md-icon>account_circle</md-icon>
             <span class="account-username">
@@ -16,6 +16,12 @@
           <md-menu-content>
             <md-menu-item>
               Account
+            </md-menu-item>
+            <md-menu-item @click="viewMyDashboard">
+              Dashboard
+            </md-menu-item>
+            <md-menu-item @click="viewMyFiles">
+              My Files
             </md-menu-item>
             <md-divider></md-divider>
             <md-menu-item @click="logout">
@@ -95,6 +101,12 @@
       logout: function () {
         this.$root.u.key = ''
         this.$router.push('/')
+      },
+      viewMyDashboard: function () {
+        this.$router.push('/u')
+      },
+      viewMyFiles: function () {
+        this.$router.push('/files')
       }
     },
     created() {

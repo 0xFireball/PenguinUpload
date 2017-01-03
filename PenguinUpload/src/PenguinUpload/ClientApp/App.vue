@@ -56,4 +56,20 @@
     margin-top: 5%;
     margin-bottom: 5%;
   }
+
+  .sep-b {
+    margin-bottom: 10px;
+  }
+
+  .left {
+    text-align: left;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .right {
+    text-align: right;
+  }
 </style>
