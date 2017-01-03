@@ -8,11 +8,11 @@ namespace PenguinUpload.Infrastructure.Upload
 {
     public class LocalStorageHandler : IFileUploadHandler
     {
-        private readonly IRootPathProvider rootPathProvider;
+        private readonly IRootPathProvider _rootPathProvider;
 
         public LocalStorageHandler(IRootPathProvider rootPathProvider)
         {
-            this.rootPathProvider = rootPathProvider;
+            this._rootPathProvider = rootPathProvider;
         }
 
         public async Task<FileUploadResult> HandleUpload(string fileName, System.IO.Stream stream)
@@ -38,7 +38,7 @@ namespace PenguinUpload.Infrastructure.Upload
 
         private string GetUploadDirectory()
         {
-            var uploadDirectory = Path.Combine(rootPathProvider.GetRootPath(),
+            var uploadDirectory = Path.Combine(_rootPathProvider.GetRootPath(),
                 PenguinUploadRegistry.Configuration.FileUploadDirectory);
 
             if (!Directory.Exists(uploadDirectory))
@@ -49,3 +49,4 @@ namespace PenguinUpload.Infrastructure.Upload
             return uploadDirectory;
         }
     }
+}

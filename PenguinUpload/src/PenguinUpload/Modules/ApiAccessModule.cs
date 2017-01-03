@@ -31,7 +31,7 @@ namespace PenguinUpload.Modules
 
                 var uploadResult = await _fileUploadHandler.HandleUpload(request.File.Name, request.File.Value);
 
-                return null;
+                return Response.AsJsonNet(uploadResult);
             });
         }
     }

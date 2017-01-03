@@ -4,7 +4,7 @@ namespace PenguinUpload.DataModels.Api
 {
     public class FileUploadResult
     {
-        [JsonProperty("id")]
+        [JsonProperty("fileId")]
         public string FileId { get; set; }
     }
 }
