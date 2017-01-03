@@ -1,5 +1,5 @@
 <template>
-  <div class="urlShrinkInput">
+  <div class="file-upload-widget">
     <div class="container">
       <div class="row">
         <div class="eight columns offset-by-two">
@@ -14,9 +14,41 @@
               <md-card-content>
                 <div class="upload-area-padding">
                 </div>
-                <div class="upload-progress-indicator" v-if="uploading">
-                  <md-spinner md-size="60" :md-progress="progressIndicator.value" class="md-warn"></md-spinner>
-                  <p>{{ progressMessage }}</p>
+                <div class="upload-progress-indicators">
+                  <!--<md-spinner md-size="60" :md-progress="progressIndicator.value" class="md-warn"></md-spinner>
+                  <p>{{ progressMessage }}</p>-->
+                  <md-list class="custom-list md-double-line">
+                    <!--Uploading file-->
+                    <md-list-item v-for="(prInd, ix) in progressIndicators">
+                      <md-icon class="md-primary">cloud_queue</md-icon>
+
+                      <div class="md-list-text-container">
+                        <span> {{ prInd.name }}</span>
+                        <span> {{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Upload Complete!' }}</span>
+                      </div>
+
+                      <md-button class="md-icon-button md-list-action">
+                        <md-icon class="md-primary">star</md-icon>
+                      </md-button>
+
+                      <md-divider class="md-inset"></md-divider>
+                    </md-list-item>
+                    <!--Upload completed files-->
+                    <md-list-item v-for="(cmplFile, ix) in completedFiles">
+                      <md-icon class="md-primary">cloud_done</md-icon>
+
+                      <div class="md-list-text-container">
+                        <span> {{ cmplFile.name }}</span>
+                        <span>Upload Complete!</span>
+                      </div>
+
+                      <md-button class="md-icon-button md-list-action">
+                        <md-icon class="md-primary">star</md-icon>
+                      </md-button>
+
+                      <md-divider class="md-inset"></md-divider>
+                    </md-list-item>
+                  </md-list>
                 </div>
               </md-card-content>
               <md-card-actions>
@@ -43,25 +75,27 @@
   }
 
   export default {
-    name: 'urlShrinkInput',
     data() {
       return {
-        progressIndicator: {
-          value: 0,
-          content: ''
-        },
-        filesToUpload: 0
+        progressIndicators: [],
+        /* schema:
+        {
+          value: number [0-100],
+          fileRef: object [reference to file that is uploading],
+          name: string [name of file]
+        }
+        */
+        completedFiles: []
+        /* schema:
+        */
       }
     },
     computed: {
-      progressMessage: function () {
-        if (value < 100) {
-          return `Uploading files... (${this.progressIndicator.value}%)`
-        }
-        return 'Upload complete!'
+      uploadingFiles: function () {
+        return this.progressIndicators.length
       },
       uploading: function () {
-        return this.filesToUpload > 0
+        return this.uploadingFiles > 0
       }
     },
     methods: {
@@ -73,33 +107,38 @@
       onFilesUploaded: function (e) {
         let browse = this.$refs.browse
         let fileCount = browse.files.length
-        this.filesToUpload = fileCount
-        if (this.uploading) {
-          this.progressIndicator.content = 'Uploading files...'
-          this.progressIndicator.value = 0
-        }
-        for (var i = 0; i < fileCount; i++) {
-          var f = browse.files[i]
-          var progress = addRow(f)
+        for (let i = 0; i < fileCount; i++) {
+          let f = browse.files[i]
+          let progress = {
+            value: 0,
+            fileRef: f,
+            name: 'Fahrenheit 451'
+          }
+          this.progressIndicators.push(progress)
           this.uploadFile(f, progress)
         }
       },
       uploadFile: function (file, progress) {
-        var xhr = new XMLHttpRequest()
+        let vm = this
+        let xhr = new XMLHttpRequest()
         xhr.open("POST", "/api/upload")
         xhr.onload = function () {
           // upload complete
-          console.log('upload complete')
-          this.filesToUpload--
-          // var response = JSON.parse(xhr.responseText)
-          // progress.innerHTML = "<a href='" + response.url + "'>" + response.url + "</a>"
+          console.log('upload complete', progress.name)
+          // dequeue the uploading file
+          vm.progressIndicators.splice(vm.progressIndicators.indexOf(progress), 1)
+          // let response = JSON.parse(xhr.responseText)
+          vm.completedFiles.push({
+            name: progress.name,
+            // downloadPage: response.downloadPage // get download page from server response
+          })
         }
         xhr.upload.onprogress = function (e) {
           if (e.lengthComputable) {
-            this.progressIndicator.value = Math.floor((e.loaded / e.total) * 100)
+            progress.value = Math.floor((e.loaded / e.total) * 100)
           }
         }
-        var form = new FormData()
+        let form = new FormData()
         form.append("key", vm.$root.u.key)
         form.append("file", file)
         xhr.send(form)
@@ -114,7 +153,7 @@
   padding: 8%;
 }
 
-.upload-progress-indicator {
+.upload-progress-indicators {
   text-align: center;
 }
 
