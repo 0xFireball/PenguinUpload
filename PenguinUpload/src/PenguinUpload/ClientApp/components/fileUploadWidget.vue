@@ -28,7 +28,7 @@
                       </div>
 
                       <md-button class="md-icon-button md-list-action">
-                        <md-icon class="md-primary">star</md-icon>
+                        <md-icon class="md-primary">file_upload</md-icon>
                       </md-button>
 
                       <md-divider class="md-inset"></md-divider>
@@ -43,7 +43,7 @@
                       </div>
 
                       <md-button class="md-icon-button md-list-action">
-                        <md-icon class="md-primary">star</md-icon>
+                        <md-icon class="md-primary">done</md-icon>
                       </md-button>
 
                       <md-divider class="md-inset"></md-divider>
@@ -112,7 +112,7 @@
           let progress = {
             value: 0,
             fileRef: f,
-            name: 'Fahrenheit 451'
+            name: f.name
           }
           this.progressIndicators.push(progress)
           this.uploadFile(f, progress)
