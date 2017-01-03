@@ -22,7 +22,7 @@ namespace PenguinUpload.Services.FileStorage
                     Name = name,
                     Identifier = identifier,
                     HumanReadableSize = HumanReadableFileSize.FromLength(fileSize),
-                    Owner = owner
+                    OwnerUsername = owner.Username
                 };
                 using (var trans = db.BeginTrans())
                 {
@@ -42,7 +42,6 @@ namespace PenguinUpload.Services.FileStorage
                 var db = new DatabaseAccessService().OpenOrCreateDefault();
                 var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);
                 return storedFiles
-                    .Include(x => x.Owner)
                     .FindOne(x => x.Identifier == id);
             });
         }
@@ -54,8 +53,7 @@ namespace PenguinUpload.Services.FileStorage
                 var db = new DatabaseAccessService().OpenOrCreateDefault();
                 var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);
                 return storedFiles
-                    .Include(x => x.Owner)
-                    .Find(x => x.Owner.Username == user.Username)
+                    .Find(x => x.OwnerUsername == user.Username)
                     .OrderBy(x => x.UploadedDate);
             });
         }

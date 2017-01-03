@@ -21,7 +21,6 @@ namespace PenguinUpload.DataModels.Files
         public string HumanReadableSize { get; set; }
 
         [JsonIgnore]
-        [BsonRef(DatabaseAccessService.UsersCollectionDatabaseKey)]
-        public RegisteredUser Owner { get; set; }
+        public string OwnerUsername { get; set; }
     }
 }

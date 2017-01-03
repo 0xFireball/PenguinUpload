@@ -34,7 +34,7 @@
     components: {
       Toolbar
     },
-    mounted: function () {
+    created: function () {
       let savedU = localStorage.getItem('u')
       if (savedU) {
         this.u = JSON.parse(savedU)

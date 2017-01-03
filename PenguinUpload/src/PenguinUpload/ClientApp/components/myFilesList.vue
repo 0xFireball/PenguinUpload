@@ -98,6 +98,18 @@
         this.confirm.callback(result == 'ok')
         this.confirm.callback = null
       }
+    },
+    mounted: function () {
+      // load files from server
+      let vm = this
+      axios.get('/api/userfiles?apikey=' + vm.$root.u.key)
+        .then(function (response) {
+          // merge file list
+          this.files.concat(response.data)
+        })
+        .catch(function (error) {
+          // console.log(error)
+        })
     }
   }
 </script>
