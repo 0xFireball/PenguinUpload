@@ -18,7 +18,7 @@ namespace PenguinUpload.Infrastructure.Upload
         public async Task<FileUploadResult> HandleUpload(string fileName, Stream stream)
         {
             var fileId = Guid.NewGuid().ToString();
-            var targetFile = GetTargetFileName(fileId);
+            var targetFile = GetTargetFilePath(fileId);
 
             using (var destinationStream = File.Create(targetFile))
             {
@@ -31,9 +31,9 @@ namespace PenguinUpload.Infrastructure.Upload
             };
         }
 
-        private string GetTargetFileName(string fileName)
+        private string GetTargetFilePath(string fileIdentifier)
         {
-            return Path.Combine(GetUploadDirectory(), fileName);
+            return Path.Combine(GetUploadDirectory(), fileIdentifier);
         }
 
         private string GetUploadDirectory()
@@ -43,6 +43,12 @@ namespace PenguinUpload.Infrastructure.Upload
             Directory.CreateDirectory(uploadDirectory);
 
             return uploadDirectory;
+        }
+
+        public Stream RetrieveFileStream(string id)
+        {
+            var filePath = GetTargetFilePath(id);
+            return File.OpenRead(filePath);
         }
     }
 }

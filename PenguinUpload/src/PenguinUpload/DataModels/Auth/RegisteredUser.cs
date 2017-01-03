@@ -1,12 +1,13 @@
 ﻿using LiteDB;
 using Newtonsoft.Json;
+using PenguinUpload.Services.Authentication;
 
-namespace PenguinUpload.Services.Authentication
+namespace PenguinUpload.DataModels.Auth
 {
     /// <summary>
     /// Represents a user who is registered and on record in the database.
     /// </summary>
-    public class RegisteredUser
+    public class RegisteredUser : DatabaseObject
     {
         [JsonProperty("username")]
         public string Username { get; set; }
@@ -28,9 +29,5 @@ namespace PenguinUpload.Services.Authentication
 
         [JsonIgnore]
         public string Identifier { get; set; }
-
-        [JsonIgnore]
-        [BsonId]
-        public ObjectId DatabaseIdentifier { get; set; }
     }
 }

@@ -7,5 +7,6 @@ namespace PenguinUpload.Infrastructure.Upload
     public interface IFileUploadHandler
     {
         Task<FileUploadResult> HandleUpload(string fileName, Stream stream);
+        Stream RetrieveFileStream(string id);
     }
 }
