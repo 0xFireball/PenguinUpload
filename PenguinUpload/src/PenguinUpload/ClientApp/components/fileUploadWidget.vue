@@ -14,6 +14,10 @@
               <md-card-content>
                 <div class="upload-area-padding">
                 </div>
+                <div class="upload-progress-indicator" v-if="uploading">
+                  <md-spinner md-size="60" :md-progress="progressIndicator.value" class="md-warn"></md-spinner>
+                  <p>{{ progressMessage }}</p>
+                </div>
               </md-card-content>
               <md-card-actions>
                 <md-button class="md-fab">
@@ -25,9 +29,6 @@
           </div>
         </div>
       </div>
-
-      <md-dialog-alert :md-content-html="completedAlert.content" :md-ok-text="completedAlert.ok" ref="completedDialog">
-      </md-dialog-alert>
     </div>
   </div>
 </template>
@@ -45,43 +46,63 @@
     name: 'urlShrinkInput',
     data() {
       return {
-        completedAlert: {
-          content: '.',
-          ok: 'Cool'
+        progressIndicator: {
+          value: 0,
+          content: ''
+        },
+        filesToUpload: 0
+      }
+    },
+    computed: {
+      progressMessage: function () {
+        if (value < 100) {
+          return `Uploading files... (${this.progressIndicator.value}%)`
         }
+        return 'Upload complete!'
+      },
+      uploading: function () {
+        return this.filesToUpload > 0
       }
     },
     methods: {
       browseForFiles: function () {
-        this.$refs.browse.click()
+        if (!this.uploading) {
+          this.$refs.browse.click()
+        }
       },
       onFilesUploaded: function (e) {
         let browse = this.$refs.browse
-        for (var i = 0; i < browse.files.length; i++) {
-          var f = browse.files[i];
-          var progress = addRow(f);
-          this.uploadFile(f, progress);
+        let fileCount = browse.files.length
+        this.filesToUpload = fileCount
+        if (this.uploading) {
+          this.progressIndicator.content = 'Uploading files...'
+          this.progressIndicator.value = 0
+        }
+        for (var i = 0; i < fileCount; i++) {
+          var f = browse.files[i]
+          var progress = addRow(f)
+          this.uploadFile(f, progress)
         }
       },
       uploadFile: function (file, progress) {
-        var bar = progress.querySelector(".progress-bar");
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/api/upload");
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST", "/api/upload")
         xhr.onload = function () {
-          var response = JSON.parse(xhr.responseText);
-          progress.innerHTML = "<a href='" + response.url + "'>" + response.url + "</a>";
-        };
+          // upload complete
+          console.log('upload complete')
+          this.filesToUpload--
+          // var response = JSON.parse(xhr.responseText)
+          // progress.innerHTML = "<a href='" + response.url + "'>" + response.url + "</a>"
+        }
         xhr.upload.onprogress = function (e) {
           if (e.lengthComputable) {
-            var progress = Math.floor((e.loaded / e.total) * 100);
-            bar.style.width = progress + "%";
-            bar.textContent = progress + "%";
+            this.progressIndicator.value = Math.floor((e.loaded / e.total) * 100)
           }
-        };
-        var form = new FormData();
-        form.append("key", window.api_key);
-        form.append("file", file);
-        xhr.send(form);
+        }
+        var form = new FormData()
+        form.append("key", vm.$root.u.key)
+        form.append("file", file)
+        xhr.send(form)
       }
     }
   }
@@ -91,6 +112,10 @@
 
 .upload-area-padding {
   padding: 8%;
+}
+
+.upload-progress-indicator {
+  text-align: center;
 }
 
 </style>

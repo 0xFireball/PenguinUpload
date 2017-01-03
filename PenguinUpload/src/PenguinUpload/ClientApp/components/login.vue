@@ -96,7 +96,10 @@
             // TODO: process response
             if (response.status === 200) {
               // succeeded
-              vm.$root.loggedIn = true
+              // vm.$root.loggedIn = true
+              // push user info
+              vm.$root.u.key = response.data.apikey
+              vm.$root.u.name = response.data.user
               vm.$router.push('/u')
             } else if (response.status == 401) {
               // unauthorized

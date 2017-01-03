@@ -13,7 +13,16 @@ import Toolbar from './components/toolbar'
 export default {
   data () {
     return {
-      loggedIn: false
+      u: {
+        key: '',
+        name: ''
+      }
+    }
+  },
+  computed: {
+    loggedIn: function () {
+      if (!this.u.key) return false
+      return true
     }
   },
   components: {
