@@ -29,13 +29,6 @@
       Intro,
       downloadItem,
       devCredits
-    },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        if (vm.$root.loggedIn) {
-          vm.$router.replace('/u')
-        }
-      })
     }
   }
 </script>

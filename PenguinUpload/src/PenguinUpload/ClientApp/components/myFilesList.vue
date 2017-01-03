@@ -10,6 +10,7 @@
             <md-card>
               <md-card-header>
                 <div class="md-title">All My Files</div>
+                <div class="md-subtitle">Click to download</div>
               </md-card-header>
 
               <md-card-content>
@@ -17,9 +18,9 @@
                   <md-list-item v-for="(file, ix) in files">
                     <md-icon class="md-primary">cloud_done</md-icon>
 
-                    <div class="md-list-text-container">
+                    <div class="md-list-text-container" @click="downloadFile(ix)">
                       <span> {{ file.name }}</span>
-                      <span> {{ file.sizeText }}</span>
+                      <span> {{ file.hrSize }}</span>
                     </div>
                     <md-menu md-align-trigger>
                       <md-button class="md-icon-button md-list-action" md-menu-trigger>
@@ -64,13 +65,7 @@
           cancel: 'Cancel',
           callback: null
         },
-        // files: []
-        files: [
-          {
-            name: 'Fahrenheit 451',
-            sizeText: 'OVER 9000'
-          }
-        ]
+        files: []
       }
     },
     methods: {
@@ -79,6 +74,11 @@
       },
       visitUrl: function (u) {
         window.open(u, '_blank')
+      },
+      downloadFile: function (ix) {
+        let f = this.files[ix]
+        // let dlPage = '/#/d/' + f.fileId
+        window.location.href = '/api/download/' + f.fileId
       },
       deleteFile: function (ix) {
         this.showConfirm('Are you sure you want to delete this file? It cannot be recovered.', 'Confirm Delete', (r) => {
@@ -105,7 +105,9 @@
       axios.get('/api/userfiles?apikey=' + vm.$root.u.key)
         .then(function (response) {
           // merge file list
-          this.files.concat(response.data)
+          for (let i = 0; i < response.data.length; i++) {
+            vm.files.push(response.data[i])
+          }
         })
         .catch(function (error) {
           // console.log(error)
