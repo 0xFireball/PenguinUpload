@@ -56,6 +56,7 @@
                       <md-divider class="md-inset"></md-divider>
                     </md-list-item>
                   </md-list>
+                  <md-button v-if="completedFiles.length > 0" @click="completedFiles = []">Clear All</md-button>
                 </div>
               </md-card-content>
             </md-card>
@@ -141,7 +142,7 @@
           }
         }
         let form = new FormData()
-        form.append("key", vm.$root.u.key)
+        form.append("apikey", vm.$root.u.key)
         form.append("file", file)
         xhr.send(form)
       }
