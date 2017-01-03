@@ -10,7 +10,8 @@
                 <div class="md-title">Upload Files</div>
                 <div class="md-subhead">Drag and drop or click</div>
               </md-card-header>
-              <div class="upload-area-padding" @click="browseForFiles">
+              <div class="upload-area-padding" @click="browseForFiles" @drop.stop.prevent="handleDragDropUpload" @dragenter.stop.prevent
+                @dragleave.stop.prevent @dragover.stop.prevent>
               </div>
               <md-card-actions>
                 <md-button class="md-fab" :disabled="uploading" @click="browseForFiles">
@@ -119,6 +120,17 @@
           }
           this.progressIndicators.push(progress)
           this.uploadFile(f, progress)
+        }
+      },
+      handleDragDropUpload: function (e) {
+        for (var i = 0; i < e.dataTransfer.files.length; i++) {
+          var f = e.dataTransfer.files[i];
+          let progress = {
+            value: 0,
+            fileRef: f,
+            name: f.name
+          }
+          this.progressIndicators.push(progress)
         }
       },
       uploadFile: function (file, progress) {
