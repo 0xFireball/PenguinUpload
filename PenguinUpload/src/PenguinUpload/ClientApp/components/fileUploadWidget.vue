@@ -3,28 +3,33 @@
     <div class="container">
       <div class="row">
         <div class="eight columns offset-by-two">
-          <div class="upload-here" @click="browseForFiles">
+          <div class="upload-here">
             <!--<a class="target">Drag and drop or click to upload files</a>-->
             <md-card>
               <md-card-header>
                 <div class="md-title">Upload Files</div>
                 <div class="md-subhead">Drag and drop or click</div>
               </md-card-header>
-
+              <div class="upload-area-padding" @click="browseForFiles">
+              </div>
+              <md-card-actions>
+                <md-button class="md-fab" :disabled="uploading" @click="browseForFiles">
+                  <md-icon>cloud_upload</md-icon>
+                </md-button>
+              </md-card-actions>
               <md-card-content>
-                <div class="upload-area-padding">
-                </div>
                 <div class="upload-progress-indicators">
                   <!--<md-spinner md-size="60" :md-progress="progressIndicator.value" class="md-warn"></md-spinner>
                   <p>{{ progressMessage }}</p>-->
                   <md-list class="custom-list md-double-line">
                     <!--Uploading file-->
+                    <md-subheader v-if="progressIndicators.length > 0">Uploading</md-subheader>
                     <md-list-item v-for="(prInd, ix) in progressIndicators">
                       <md-icon class="md-primary">cloud_queue</md-icon>
 
                       <div class="md-list-text-container">
                         <span> {{ prInd.name }}</span>
-                        <span> {{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Upload Complete!' }}</span>
+                        <span> {{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Uploaded, Processing...' }}</span>
                       </div>
 
                       <md-button class="md-icon-button md-list-action">
@@ -33,7 +38,9 @@
 
                       <md-divider class="md-inset"></md-divider>
                     </md-list-item>
+
                     <!--Upload completed files-->
+                    <md-subheader v-if="completedFiles.length > 0">Completed</md-subheader>
                     <md-list-item v-for="(cmplFile, ix) in completedFiles">
                       <md-icon class="md-primary">cloud_done</md-icon>
 
@@ -51,11 +58,6 @@
                   </md-list>
                 </div>
               </md-card-content>
-              <md-card-actions>
-                <md-button class="md-fab">
-                  <md-icon>cloud_upload</md-icon>
-                </md-button>
-              </md-card-actions>
             </md-card>
             <input type="file" class="invisible" ref="browse" @change="onFilesUploaded" multiple />
           </div>
