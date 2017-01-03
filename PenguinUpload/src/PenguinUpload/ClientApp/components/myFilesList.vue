@@ -65,7 +65,12 @@
           cancel: 'Cancel',
           callback: null
         },
-        files: []
+        files: [],
+        authRequestParams: {
+          params: {
+            apikey: ''
+          }
+        }
       }
     },
     methods: {
@@ -81,14 +86,15 @@
         window.location.href = '/api/download/' + f.fileId
       },
       deleteFile: function (ix) {
-        let f = this.files[ix]
-        this.showConfirm('Are you sure you want to delete this file? It cannot be recovered.', 'Confirm Delete', (r) => {
+        let vm = this
+        let f = vm.files[ix]
+        vm.showConfirm('Are you sure you want to delete this file? It cannot be recovered.', 'Confirm Delete', (r) => {
           if (r) {
             // send delete request
-            axios.delete('/api/delete/' + f.fileId)
+            axios.delete('/api/delete/' + f.fileId, vm.authRequestParams)
               .then(function (res) {
                 // update file list
-                this.files.splice(ix, 1)
+                vm.files.splice(ix, 1)
               })
           }
         })
@@ -107,7 +113,8 @@
     mounted: function () {
       // load files from server
       let vm = this
-      axios.get('/api/userfiles?apikey=' + vm.$root.u.key)
+      vm.authRequestParams.params.apikey = vm.$root.u.key
+      axios.get('/api/userfiles', vm.authRequestParams)
         .then(function (response) {
           // merge file list
           for (let i = 0; i < response.data.length; i++) {
