@@ -1,13 +1,14 @@
 <template>
   <div class="intro">
     <div class="container">
-      <h1 class="app-title">{{ appTitle }}</h1>
+      <h1 class="app-title">{{ viewTitle || appTitle }}</h1>
     </div>
   </div>
 </template>
 
 <script>
   export default {
+    props: ['viewTitle'],
     data() {
       return {
         appTitle: 'PenguinUpload',

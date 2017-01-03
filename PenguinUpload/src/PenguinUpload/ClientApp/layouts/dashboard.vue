@@ -1,7 +1,7 @@
 <template>
   <div class="shrink-layout">
     <!--<img src="./assets/logo.png">-->
-    <intro></intro>
+    <intro view-title="Dashboard"></intro>
     <fileUploadWidget></fileUploadWidget>
     <devCredits></devCredits>
   </div>

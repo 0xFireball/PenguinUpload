@@ -1,7 +1,7 @@
 <template>
   <div class="shrink-layout">
     <!--<img src="./assets/logo.png">-->
-    <intro></intro>
+    <intro view-title="My Files"></intro>
     <myFilesList></myFilesList>
     <devCredits></devCredits>
   </div>
