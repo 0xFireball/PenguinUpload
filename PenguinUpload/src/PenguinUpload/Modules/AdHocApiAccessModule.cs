@@ -24,7 +24,7 @@ namespace PenguinUpload.Modules
                 // Register uploaded file
                 var storedFilesManager = new StoredFilesManager();
                 var storedFile =
-                    await storedFilesManager.RegisterStoredFileAsync(request.File.Name, uploadResult.FileId);
+                    await storedFilesManager.RegisterStoredFileAsync(request.File.Name, uploadResult.FileId, uploadResult.Size);
 
                 return Response.AsJsonNet(storedFile);
             });

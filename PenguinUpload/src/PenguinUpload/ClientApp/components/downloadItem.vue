@@ -3,8 +3,7 @@
     <md-card>
 
       <md-card-header>
-        <div class="md-title">{{ file.name }}</div>
-        <div class="md-subhead">{{ file.size }}</div>
+        <div class="md-title">File Download</div>
       </md-card-header>
       <div v-if="loading">
         <md-card-content>
@@ -14,11 +13,12 @@
       </div>
       <div v-else>
         <md-card-content>
-          <md-spinner md-indeterminate></md-spinner>
-          <h5>Loading File Information</h5>
+          <md-icon md-theme="light-blue" class="md-primary">insert_drive_file</md-icon>
+          <h5>{{ file.name }}</h5>
+          <p>{{ file.sizeText }}</p>
         </md-card-content>
-        <md-card-actions>
-          <md-button>Download</md-button>
+        <md-card-actions v-if="!error">
+          <md-button @click="downloadFile">Download</md-button>
           <!--<md-button>Copy Link</md-button>-->
         </md-card-actions>
       </div>
@@ -37,23 +37,32 @@
         file: {
           name: 'Loading',
           size: 'retrieving information from server',
-          id: null
-        }
+          id: null,
+        },
+        error: false
+      }
+    },
+    methods: {
+      downloadFile: function () {
+        window.location.href = '/api/download/' + this.file.id
       }
     },
     mounted: function () {
-      this.file.id = this.itemId
-      axios.get('/api/fileInfo/' + this.file.id)
+      let vm = this
+      vm.file.id = vm.itemId
+      axios.get('/api/fileInfo/' + vm.file.id)
         .then(function (response) {
-          this.file.name = response.data.name
-          this.file.sizeText = ''
+          vm.file.name = response.data.name
+          vm.file.sizeText = response.data.hrSize
+          vm.loading = false
         })
         .catch(function (error) {
-          if (error) {
-            // file not found
-            this.file.name = 'File Not Found'
-            this.file.sizeText = 'Error'
-          }
+          console.log(error)
+          // file not found
+          vm.file.name = 'File Not Found'
+          vm.file.sizeText = 'Error'
+          vm.loading = false
+          vm.error = true
         })
     }
   }

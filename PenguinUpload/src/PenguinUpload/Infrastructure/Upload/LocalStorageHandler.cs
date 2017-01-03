@@ -25,9 +25,10 @@ namespace PenguinUpload.Infrastructure.Upload
                 await stream.CopyToAsync(destinationStream);
             }
 
-            return new FileUploadResult()
+            return new FileUploadResult
             {
-                FileId = fileId
+                FileId = fileId,
+                Size = stream.Length
             };
         }
 

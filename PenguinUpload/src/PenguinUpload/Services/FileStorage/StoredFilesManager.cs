@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
 using PenguinUpload.DataModels.Files;
 using PenguinUpload.Services.Database;
+using PenguinUpload.Utilities;
 
 namespace PenguinUpload.Services.FileStorage
 {
     public class StoredFilesManager
     {
-        public async Task<StoredFile> RegisterStoredFileAsync(string name, string identifier)
+        public async Task<StoredFile> RegisterStoredFileAsync(string name, string identifier, double fileSize)
         {
             return await Task.Run(() =>
             {
@@ -15,7 +16,8 @@ namespace PenguinUpload.Services.FileStorage
                 var result = new StoredFile
                 {
                     Name = name,
-                    Identifier = identifier
+                    Identifier = identifier,
+                    HumanReadableSize = HumanReadableFileSize.FromLength(fileSize)
                 };
                 using (var trans = db.BeginTrans())
                 {

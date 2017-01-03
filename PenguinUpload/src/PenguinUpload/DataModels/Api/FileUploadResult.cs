@@ -6,5 +6,8 @@ namespace PenguinUpload.DataModels.Api
     {
         [JsonProperty("fileId")]
         public string FileId { get; set; }
+
+        [JsonProperty("size")]
+        public double Size { get; set; }
     }
 }
