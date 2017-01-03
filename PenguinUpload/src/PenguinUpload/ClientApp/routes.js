@@ -3,6 +3,7 @@ import Dashboard from './layouts/dashboard'
 import NotFound from './layouts/notFound'
 import Landing from './layouts/landing'
 import About from './layouts/about'
+import Download from './layouts/download'
 
 const main = [
   {
@@ -23,6 +24,11 @@ const main = [
     path: '/about',
     name: 'About',
     component: About
+  },
+  {
+    path: '/d/:id',
+    name: 'Download',
+    component: Download
   }
 ]
 

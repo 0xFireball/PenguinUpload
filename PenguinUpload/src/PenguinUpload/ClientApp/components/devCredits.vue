@@ -1,12 +1,11 @@
 <template>
-  <div class="devCredits">
+  <div class="dev-credits">
     <h6 class="credit-text">Made by <a href="https://0xfireball.me" target="_blank">0xFireball</a></h6>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'devCredits',
   data: function () {
     return {
     }
@@ -15,7 +14,7 @@ export default {
 </script>
 
 <style scoped>
-  .devCredits {
+  .dev-credits {
     margin: 2%;
   }
   

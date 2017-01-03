@@ -134,7 +134,7 @@
           let response = JSON.parse(xhr.responseText)
           vm.completedFiles.push({
             name: progress.name,
-            downloadPage: '/#/download/' + response.fileId
+            downloadPage: '/#/d/' + response.fileId
             // downloadPage: response.downloadPage // get download page from server response
           })
         }
