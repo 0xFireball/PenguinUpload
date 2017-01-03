@@ -41,7 +41,7 @@
 
                     <!--Upload completed files-->
                     <md-subheader v-if="completedFiles.length > 0">Completed</md-subheader>
-                    <md-list-item v-for="(cmplFile, ix) in completedFiles">
+                    <md-list-item v-for="(cmplFile, ix) in completedFiles" @click="visitUrl(cmplFile.downloadPage)">
                       <md-icon class="md-primary">cloud_done</md-icon>
 
                       <div class="md-list-text-container">
@@ -130,9 +130,11 @@
           console.log('upload complete', progress.name)
           // dequeue the uploading file
           vm.progressIndicators.splice(vm.progressIndicators.indexOf(progress), 1)
-          // let response = JSON.parse(xhr.responseText)
+          // console.log(xhr.responseText)
+          let response = JSON.parse(xhr.responseText)
           vm.completedFiles.push({
             name: progress.name,
+            downloadPage: '/#/download/' + response.fileId
             // downloadPage: response.downloadPage // get download page from server response
           })
         }
@@ -145,6 +147,9 @@
         form.append("apikey", vm.$root.u.key)
         form.append("file", file)
         xhr.send(form)
+      },
+      visitUrl: function (u) {
+        window.open(u, '_blank')
       }
     }
   }

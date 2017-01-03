@@ -12,13 +12,13 @@ namespace PenguinUpload.Infrastructure.Upload
 
         public LocalStorageHandler(IRootPathProvider rootPathProvider)
         {
-            this._rootPathProvider = rootPathProvider;
+            _rootPathProvider = rootPathProvider;
         }
 
-        public async Task<FileUploadResult> HandleUpload(string fileName, System.IO.Stream stream)
+        public async Task<FileUploadResult> HandleUpload(string fileName, Stream stream)
         {
             var fileId = Guid.NewGuid().ToString();
-            var targetFile = GetTargetFile(fileId);
+            var targetFile = GetTargetFileName(fileId);
 
             using (var destinationStream = File.Create(targetFile))
             {
@@ -31,20 +31,16 @@ namespace PenguinUpload.Infrastructure.Upload
             };
         }
 
-        private string GetTargetFile(string fileName)
+        private string GetTargetFileName(string fileName)
         {
             return Path.Combine(GetUploadDirectory(), fileName);
         }
 
         private string GetUploadDirectory()
         {
-            var uploadDirectory = Path.Combine(_rootPathProvider.GetRootPath(),
-                PenguinUploadRegistry.Configuration.FileUploadDirectory);
+            var uploadDirectory = Path.Combine(PenguinUploadRegistry.Configuration.FileUploadDirectory);
 
-            if (!Directory.Exists(uploadDirectory))
-            {
-                Directory.CreateDirectory(uploadDirectory);
-            }
+            Directory.CreateDirectory(uploadDirectory);
 
             return uploadDirectory;
         }
