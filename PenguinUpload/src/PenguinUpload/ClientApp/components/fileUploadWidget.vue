@@ -3,15 +3,14 @@
     <div class="container">
       <div class="row">
         <div class="eight columns offset-by-two">
-          <div class="upload-here">
+          <div class="upload-here" @drop.stop.prevent="handleDragDropUpload" @dragenter.stop.prevent @dragleave.stop.prevent @dragover.stop.prevent>
             <!--<a class="target">Drag and drop or click to upload files</a>-->
             <md-card>
               <md-card-header>
                 <div class="md-title">Upload Files</div>
                 <div class="md-subhead">Drag and drop or click</div>
               </md-card-header>
-              <div class="upload-area-padding" @click="browseForFiles" @drop.stop.prevent="handleDragDropUpload" @dragenter.stop.prevent
-                @dragleave.stop.prevent @dragover.stop.prevent>
+              <div class="upload-area-padding" @click="browseForFiles">
               </div>
               <md-card-actions>
                 <md-button class="md-fab" :disabled="uploading" @click="browseForFiles">
@@ -131,6 +130,7 @@
             name: f.name
           }
           this.progressIndicators.push(progress)
+          this.uploadFile(f, progress)
         }
       },
       uploadFile: function (file, progress) {
