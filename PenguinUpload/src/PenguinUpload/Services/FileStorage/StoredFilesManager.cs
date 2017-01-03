@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using PenguinUpload.DataModels.Auth;
 using PenguinUpload.DataModels.Files;
 using PenguinUpload.Services.Database;
 using PenguinUpload.Utilities;
@@ -37,6 +39,11 @@ namespace PenguinUpload.Services.FileStorage
                 var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);
                 return storedFiles.FindOne(x => x.Identifier == id);
             });
+        }
+
+        public async Task<IEnumerable<StoredFile>> GetStoredFilesByUser(RegisteredUser user)
+        {
+            return new StoredFile[0];
         }
     }
 }

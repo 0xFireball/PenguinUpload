@@ -10,9 +10,9 @@ namespace PenguinUpload.Infrastructure.Upload
     {
         private readonly IRootPathProvider _rootPathProvider;
 
-        public LocalStorageHandler(IRootPathProvider rootPathProvider)
+        public LocalStorageHandler()
         {
-            _rootPathProvider = rootPathProvider;
+            _rootPathProvider = new DefaultRootPathProvider();
         }
 
         public async Task<FileUploadResult> HandleUpload(string fileName, Stream stream)
