@@ -19,6 +19,8 @@ namespace PenguinUpload.Modules
             {
                 var request = this.Bind<FileUploadRequest>();
 
+                // TODO: Verify API KEY
+
                 var uploadResult = await _fileUploadHandler.HandleUpload(request.File.Name, request.File.Value);
 
                 // Register uploaded file
