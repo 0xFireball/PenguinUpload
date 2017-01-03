@@ -17,17 +17,17 @@ namespace PenguinUpload.Infrastructure.Upload
 
         public async Task<FileUploadResult> HandleUpload(string fileName, System.IO.Stream stream)
         {
-            string uuid = GetFileName();
-            string targetFile = GetTargetFile(uuid);
+            var fileId = Guid.NewGuid().ToString();
+            var targetFile = GetTargetFile(fileId);
 
-            using (FileStream destinationStream = File.Create(targetFile))
+            using (var destinationStream = File.Create(targetFile))
             {
                 await stream.CopyToAsync(destinationStream);
             }
 
             return new FileUploadResult()
             {
-                FileId = uuid
+                FileId = fileId
             };
         }
 
@@ -36,14 +36,10 @@ namespace PenguinUpload.Infrastructure.Upload
             return Path.Combine(GetUploadDirectory(), fileName);
         }
 
-        private string GetFileName()
-        {
-            return Guid.NewGuid().ToString();
-        }
-
         private string GetUploadDirectory()
         {
-            var uploadDirectory = Path.Combine(rootPathProvider.GetRootPath(), PenguinUploadRegistry.Configuration.FileUploadDirectory);
+            var uploadDirectory = Path.Combine(rootPathProvider.GetRootPath(),
+                PenguinUploadRegistry.Configuration.FileUploadDirectory);
 
             if (!Directory.Exists(uploadDirectory))
             {
