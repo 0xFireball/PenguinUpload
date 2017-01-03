@@ -23,9 +23,17 @@ namespace PenguinUpload.Modules
 
                 // Register uploaded file
                 var storedFilesManager = new StoredFilesManager();
-                var storedFile = storedFilesManager.RegisterStoredFileAsync(request.File.Name, uploadResult.FileId);
+                var storedFile =
+                    await storedFilesManager.RegisterStoredFileAsync(request.File.Name, uploadResult.FileId);
 
                 return Response.AsJsonNet(storedFile);
+            });
+
+            Get("/fileInfo/{id}", async args =>
+            {
+                var storedFilesManager = new StoredFilesManager();
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifier((string) args.id);
+                return storedFile == null ? HttpStatusCode.NotFound : Response.AsJsonNet(storedFile);
             });
 
             Get("/download/{id}", async args =>
