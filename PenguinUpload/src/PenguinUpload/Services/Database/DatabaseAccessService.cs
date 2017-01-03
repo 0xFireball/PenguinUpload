@@ -7,8 +7,9 @@ namespace PenguinUpload.Services.Database
     /// </summary>
     public class DatabaseAccessService
     {
-        public static string UsersCollectionDatabaseKey => "Users";
-        public static string StoredFilesCollectionDatabaseKey => "StoredFiles";
+        public const string UsersCollectionDatabaseKey = "Users";
+        public const string StoredFilesCollectionDatabaseKey = "StoredFiles";
+
 
         private static LiteDatabase _dbInstance;
 

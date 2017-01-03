@@ -1,5 +1,8 @@
 ﻿using System;
+using LiteDB;
 using Newtonsoft.Json;
+using PenguinUpload.DataModels.Auth;
+using PenguinUpload.Services.Database;
 
 namespace PenguinUpload.DataModels.Files
 {
@@ -16,5 +19,9 @@ namespace PenguinUpload.DataModels.Files
 
         [JsonProperty("hrSize")]
         public string HumanReadableSize { get; set; }
+
+        [JsonIgnore]
+        [BsonRef(DatabaseAccessService.UsersCollectionDatabaseKey)]
+        public RegisteredUser Owner { get; set; }
     }
 }

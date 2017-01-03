@@ -30,10 +30,12 @@ namespace PenguinUpload.Modules
                 var fileUploadHandler = new LocalStorageHandler();
                 var uploadResult = await fileUploadHandler.HandleUpload(request.File.Name, request.File.Value);
 
+                var user = await new WebUserManager().FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
+
                 // Register uploaded file
                 var storedFilesManager = new StoredFilesManager();
                 var storedFile =
-                    await storedFilesManager.RegisterStoredFileAsync(request.File.Name, uploadResult.FileId,
+                    await storedFilesManager.RegisterStoredFileAsync(user, request.File.Name, uploadResult.FileId,
                         uploadResult.Size);
 
                 return Response.AsJsonNet(storedFile);

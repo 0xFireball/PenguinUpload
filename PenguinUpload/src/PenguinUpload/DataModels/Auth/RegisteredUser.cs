@@ -11,6 +11,7 @@ namespace PenguinUpload.DataModels.Auth
     {
         [JsonProperty("username")]
         public string Username { get; set; }
+
         [JsonIgnore]
         public string ApiKey { get; set; }
 
@@ -25,5 +26,15 @@ namespace PenguinUpload.DataModels.Auth
 
         [JsonIgnore]
         public string Identifier { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return Username == ((RegisteredUser) obj).Username;
+        }
+
+        public override int GetHashCode()
+        {
+            return Username.GetHashCode();
+        }
     }
 }

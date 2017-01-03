@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using PenguinUpload.DataModels.Auth;
 using PenguinUpload.DataModels.Files;
@@ -9,7 +10,8 @@ namespace PenguinUpload.Services.FileStorage
 {
     public class StoredFilesManager
     {
-        public async Task<StoredFile> RegisterStoredFileAsync(string name, string identifier, double fileSize)
+        public async Task<StoredFile> RegisterStoredFileAsync(RegisteredUser owner, string name, string identifier,
+            double fileSize)
         {
             return await Task.Run(() =>
             {
@@ -19,13 +21,15 @@ namespace PenguinUpload.Services.FileStorage
                 {
                     Name = name,
                     Identifier = identifier,
-                    HumanReadableSize = HumanReadableFileSize.FromLength(fileSize)
+                    HumanReadableSize = HumanReadableFileSize.FromLength(fileSize),
+                    Owner = owner
                 };
                 using (var trans = db.BeginTrans())
                 {
                     storedFiles.Insert(result);
                     trans.Commit();
                 }
+                // Index the database
                 storedFiles.EnsureIndex(x => x.Identifier);
                 return result;
             });
@@ -37,13 +41,23 @@ namespace PenguinUpload.Services.FileStorage
             {
                 var db = new DatabaseAccessService().OpenOrCreateDefault();
                 var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);
-                return storedFiles.FindOne(x => x.Identifier == id);
+                return storedFiles
+                    .Include(x => x.Owner)
+                    .FindOne(x => x.Identifier == id);
             });
         }
 
         public async Task<IEnumerable<StoredFile>> GetStoredFilesByUser(RegisteredUser user)
         {
-            return new StoredFile[0];
+            return await Task.Run(() =>
+            {
+                var db = new DatabaseAccessService().OpenOrCreateDefault();
+                var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);
+                return storedFiles
+                    .Include(x => x.Owner)
+                    .Find(x => x.Owner.Username == user.Username)
+                    .OrderBy(x => x.UploadedDate);
+            });
         }
     }
 }
