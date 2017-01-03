@@ -9,26 +9,38 @@
 </template>
 
 <script>
-import Toolbar from './components/toolbar'
-export default {
-  data () {
-    return {
-      u: {
-        key: '',
-        name: ''
+  import Toolbar from './components/toolbar'
+  export default {
+    data() {
+      return {
+        u: {
+          key: '',
+          name: ''
+        }
+      }
+    },
+    computed: {
+      loggedIn: function () {
+        if (!this.u.key) return false
+        return true
+      }
+    },
+    watch: {
+      loggedIn: function (nowLoggedIn) {
+        // console.log(nowLoggedIn)
+        localStorage.setItem('u', JSON.stringify(this.u))
+      }
+    },
+    components: {
+      Toolbar
+    },
+    mounted: function () {
+      let savedU = localStorage.getItem('u')
+      if (savedU) {
+        this.u = JSON.parse(savedU)
       }
     }
-  },
-  computed: {
-    loggedIn: function () {
-      if (!this.u.key) return false
-      return true
-    }
-  },
-  components: {
-    Toolbar
   }
-}
 </script>
 
 <style>

@@ -7,8 +7,11 @@
       <h2 class="md-title toolbar-title">{{ appName }}</h2>
       <div v-if="$root.loggedIn">
         <md-menu>
-          <md-button class="md-icon-button" md-menu-trigger>
+          <md-button md-menu-trigger>
             <md-icon>account_circle</md-icon>
+            <span class="account-username">
+              {{ $root.u.name }}
+            </span>
           </md-button>
           <md-menu-content>
             <md-menu-item>
@@ -90,7 +93,7 @@
         this.$refs.leftSidenav.close()
       },
       logout: function () {
-        this.$root.loggedIn = false
+        this.$root.u.key = ''
         this.$router.push('/')
       }
     },
@@ -109,5 +112,8 @@
 <style scoped>
   .toolbar-title {
     flex: 1;
+  }
+  .account-username {
+    margin-left: 10px;
   }
 </style>
