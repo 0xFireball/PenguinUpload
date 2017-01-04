@@ -56,7 +56,7 @@ namespace PenguinUpload.Services.FileStorage
                 var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);
                 return storedFiles
                     .Find(x => x.OwnerUsername == user.Username)
-                    .OrderBy(x => x.UploadedDate);
+                    .OrderByDescending(x => x.UploadedDate);
             });
         }
 
