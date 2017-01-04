@@ -19,7 +19,7 @@ namespace PenguinUpload
             // Load ASP.NET Core web app
             var config = new ConfigurationBuilder()
                 .AddCommandLine(args)
-                .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "hosting.json"))
+                .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "hosting.json"), true)
                 .AddEnvironmentVariables(prefix: "ASPNETCORE_")
                 .Build();
 
