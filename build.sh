@@ -12,6 +12,7 @@ echo "Restoring packages..."
 
 # Restore packages
 dotnet restore
+npm install --prefix ./PenguinUpload/src/PenguinUpload ./PenguinUpload/src/PenguinUpload
 
 echo "Publishing project..."
 
