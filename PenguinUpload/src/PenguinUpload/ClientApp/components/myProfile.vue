@@ -129,7 +129,7 @@
           vm.updatePassword.err = 'password must be at least 8 characters. this is also validated on the server'
           return
         }
-        if (vm.updatePassword.old !== vm.updatePassword.password) {
+        if (vm.updatePassword.password !== vm.updatePassword.confirm) {
           vm.updatePassword.err = 'password confirmation does not match'
           return
         }
