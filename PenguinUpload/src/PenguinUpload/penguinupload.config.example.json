@@ -4,7 +4,7 @@
 
     // Whether to enable public registration through the web interface.
     // You may want to enable this when creating accounts.
-    "registrationEnabled": false,
+    "registerEnabled": false,
 
     // An optional invite key. This can be used as an alternative
     // to disabling registration; users will be required to provide
