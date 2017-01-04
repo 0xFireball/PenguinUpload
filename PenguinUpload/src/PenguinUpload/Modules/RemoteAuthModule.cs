@@ -21,6 +21,10 @@ namespace PenguinUpload.Modules
 
                 try
                 {
+                    if (!PenguinUploadRegistry.Configuration.RegistrationEnabled)
+                        return Response.AsText("Account registration has been disabled by the administrator.")
+                            .WithStatusCode(HttpStatusCode.Unauthorized);
+
                     // Validate parameters!
 
                     // Valdiate username length, charset
@@ -44,6 +48,15 @@ namespace PenguinUpload.Modules
                     if (req.Password.Length > 128)
                     {
                         throw new SecurityException("Password may not exceed 128 characters.");
+                    }
+
+                    // Check invite key if enabled
+                    if (PenguinUploadRegistry.Configuration.InviteKey != null)
+                    {
+                        if (req.InviteKey != PenguinUploadRegistry.Configuration.InviteKey)
+                        {
+                            throw new SecurityException("The invite key is not recognized.");
+                        }
                     }
 
                     // Validate registration
