@@ -5,6 +5,9 @@
     <transition name="md-router">
       <router-view></router-view>
     </transition>
+
+    <md-dialog-alert :md-title="dialog.title" :md-content-html="dialog.content" ref="modalDialog">
+    </md-dialog-alert>
   </div>
 </template>
 
@@ -16,6 +19,10 @@
         u: {
           key: '',
           name: ''
+        },
+        dialog: {
+          title: ' ',
+          content: ' '
         }
       }
     },
@@ -33,6 +40,13 @@
     },
     components: {
       Toolbar
+    },
+    methods: {
+      showPopup: function (content, title) {
+        this.dialog.content = content
+        this.dialog.title = title
+        this.$refs.modalDialog.open()
+      }
     },
     created: function () {
       let savedU = localStorage.getItem('u')

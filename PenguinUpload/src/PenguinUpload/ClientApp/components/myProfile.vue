@@ -36,8 +36,6 @@
       <md-button class="md-raised md-warn" @click="deleteAllFiles">Delete All Files</md-button>
       <md-button class="md-raised md-warn" @click="deleteAccount">Delete Account</md-button>
     </div>
-    <md-dialog-alert :md-title="dialog.title" :md-content-html="dialog.content" ref="modalDialog">
-    </md-dialog-alert>
     <md-dialog-confirm :md-title="confirm.title" :md-content-html="confirm.content" :md-ok-text="confirm.ok" :md-cancel-text="confirm.cancel"
       @close="onConfirmClose" ref="confirmDialog">
     </md-dialog-confirm>
@@ -61,10 +59,6 @@
           ok: 'OK',
           cancel: 'Cancel',
           callback: null
-        },
-        dialog: {
-          title: ' ',
-          content: ' '
         },
         updatePassword: {
           old: '',
@@ -146,7 +140,7 @@
             // TODO: process response
             if (response.status === 200) {
               // success
-              vm.showPopup('Password change succeeded! Please log in again.')
+              vm.$root.showPopup('Password change succeeded! Please log in again.')
               // log out
               vm.$root.u.key = ''
               vm.$router.replace('/')
@@ -162,11 +156,6 @@
             }
             vm.updatePassword.e = true
           })
-      },
-      showPopup: function (content, title) {
-        this.dialog.content = content
-        this.dialog.title = title
-        this.$refs.modalDialog.open()
       }
     },
     mounted: function () {
