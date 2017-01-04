@@ -145,7 +145,7 @@
         xhr.open("POST", "/api/upload")
         xhr.onload = function () {
           // upload complete
-          console.log('upload complete', progress.name)
+          // console.log('upload complete', progress.name)
           // dequeue the uploading file
           vm.progressIndicators.splice(vm.progressIndicators.indexOf(progress), 1)
           // console.log(xhr.responseText)

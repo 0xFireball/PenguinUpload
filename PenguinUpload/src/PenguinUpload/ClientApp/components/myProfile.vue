@@ -13,6 +13,8 @@
 </template>
 
 <script>
+  import axios from 'axios'
+
   export default {
     data() {
       return {
@@ -51,6 +53,7 @@
               })
             // now log out
             vm.$root.u.key = ''
+            vm.$router.replace('/')
           }
         })
       },
@@ -65,6 +68,7 @@
                 })
               // now log out
               vm.$root.u.key = ''
+              vm.$router.replace('/')
             }
           }
         })

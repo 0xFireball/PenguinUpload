@@ -100,7 +100,7 @@
               // push user info
               vm.$root.u.key = response.data.apikey
               vm.$root.u.name = response.data.user.username
-              console.log(vm.$root.u.name)
+              // console.log(vm.$root.u.name)
               vm.$router.push('/u')
             } else if (response.status == 401) {
               // unauthorized

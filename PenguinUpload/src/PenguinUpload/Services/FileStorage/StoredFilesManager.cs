@@ -29,11 +29,11 @@ namespace PenguinUpload.Services.FileStorage
                 {
                     storedFiles.Insert(result);
 
-                    // Index the database
-                    storedFiles.EnsureIndex(x => x.Identifier);
-
                     trans.Commit();
                 }
+
+                // Index the database
+                storedFiles.EnsureIndex(x => x.Identifier);
                 return result;
             });
         }
