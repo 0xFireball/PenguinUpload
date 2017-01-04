@@ -13,25 +13,31 @@
                 <div class="md-subtitle">Click to download</div>
               </md-card-header>
               <md-card-content>
-                <md-list class="custom-list md-double-line">
-                  <md-list-item v-for="(file, ix) in files">
-                    <md-icon class="md-primary">cloud_done</md-icon>
-                    <div class="md-list-text-container" @click="downloadFile(ix)">
-                      <span> {{ file.name }}</span>
-                      <span> {{ file.hrSize }}</span>
-                    </div>
-                    <md-menu md-align-trigger>
-                      <md-button class="md-icon-button md-list-action" md-menu-trigger>
-                        <md-icon class="md-primary">more_horiz</md-icon>
-                      </md-button>
-                      <md-menu-content>
-                        <md-menu-item @click="visitDownloadPage(ix)">Download Page</md-menu-item>
-                        <md-menu-item @click="deleteFile(ix)">Delete</md-menu-item>
-                      </md-menu-content>
-                    </md-menu>
-                    <md-divider class="md-inset"></md-divider>
-                  </md-list-item>
-                </md-list>
+                <div v-if="loadFinished">
+                  <md-list class="custom-list md-double-line">
+                    <md-list-item v-for="(file, ix) in files">
+                      <md-icon class="md-primary">cloud_done</md-icon>
+                      <div class="md-list-text-container" @click="downloadFile(ix)">
+                        <span> {{ file.name }}</span>
+                        <span> {{ file.hrSize }}</span>
+                      </div>
+                      <md-menu md-align-trigger>
+                        <md-button class="md-icon-button md-list-action" md-menu-trigger>
+                          <md-icon class="md-primary">more_horiz</md-icon>
+                        </md-button>
+                        <md-menu-content>
+                          <md-menu-item @click="visitDownloadPage(ix)">Download Page</md-menu-item>
+                          <md-menu-item @click="deleteFile(ix)">Delete</md-menu-item>
+                        </md-menu-content>
+                      </md-menu>
+                      <md-divider class="md-inset"></md-divider>
+                    </md-list-item>
+                  </md-list>
+                </div>
+                <div v-else>
+                  <md-spinner md-indeterminate></md-spinner>
+                  <h5>Retrieving Data</h5>
+                </div>
               </md-card-content>
             </md-card>
           </div>
@@ -67,7 +73,8 @@
           params: {
             apikey: ''
           }
-        }
+        },
+        loadFinished: false
       }
     },
     methods: {
@@ -121,9 +128,11 @@
           for (let i = 0; i < response.data.length; i++) {
             vm.files.push(response.data[i])
           }
+          vm.loadFinished = true
         })
         .catch(function (error) {
           // console.log(error)
+          vm.loadFinished = true
         })
     }
   }
