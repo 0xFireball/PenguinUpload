@@ -41,6 +41,6 @@ location on the filesystem.
 
 ## License
 
-Copyright &copy; 0xFireball (Nihal Talur) 2017. All Rights Reserved.
+Copyright &copy; 2017 0xFireball (Nihal Talur). All Rights Reserved.
 
 Licensed under the Apache License 2.0
