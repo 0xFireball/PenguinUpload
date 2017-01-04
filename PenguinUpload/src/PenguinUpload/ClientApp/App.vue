@@ -8,6 +8,10 @@
 
     <md-dialog-alert :md-title="dialog.title" :md-content-html="dialog.content" ref="modalDialog">
     </md-dialog-alert>
+
+    <md-dialog-confirm :md-title="confirm.title" :md-content-html="confirm.content" :md-ok-text="confirm.ok" :md-cancel-text="confirm.cancel"
+      @close="onConfirmClose" ref="confirmDialog">
+    </md-dialog-confirm>
   </div>
 </template>
 
@@ -23,7 +27,14 @@
         dialog: {
           title: ' ',
           content: ' '
-        }
+        },
+        confirm: {
+          title: ' ',
+          content: ' ',
+          ok: 'OK',
+          cancel: 'Cancel',
+          callback: null
+        },
       }
     },
     computed: {
@@ -46,6 +57,16 @@
         this.dialog.content = content
         this.dialog.title = title
         this.$refs.modalDialog.open()
+      },
+      showConfirm: function (content, title, cb) {
+        this.confirm.content = content
+        this.confirm.title = title
+        this.confirm.callback = cb
+        this.$refs.confirmDialog.open()
+      },
+      onConfirmClose: function (result) {
+        this.confirm.callback(result == 'ok')
+        this.confirm.callback = null
       }
     },
     created: function () {

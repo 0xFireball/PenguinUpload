@@ -44,9 +44,6 @@
         </div>
       </div>
     </div>
-    <md-dialog-confirm :md-title="confirm.title" :md-content-html="confirm.content" :md-ok-text="confirm.ok" :md-cancel-text="confirm.cancel"
-      @close="onConfirmClose" ref="confirmDialog">
-    </md-dialog-confirm>
   </div>
 </template>
 <script>
@@ -61,13 +58,6 @@
   export default {
     data() {
       return {
-        confirm: {
-          title: ' ',
-          content: ' ',
-          ok: 'OK',
-          cancel: 'Cancel',
-          callback: null
-        },
         files: [],
         authRequestParams: {
           params: {
@@ -96,7 +86,7 @@
       deleteFile: function (ix) {
         let vm = this
         let f = vm.files[ix]
-        vm.showConfirm('Are you sure you want to delete this file? It cannot be recovered.', 'Confirm Delete', (r) => {
+        vm.$root.showConfirm('Are you sure you want to delete this file? It cannot be recovered.', 'Confirm Delete', (r) => {
           if (r) {
             // send delete request
             axios.delete('/api/delete/' + f.fileId, vm.authRequestParams)
@@ -106,16 +96,6 @@
               })
           }
         })
-      },
-      showConfirm: function (content, title, cb) {
-        this.confirm.content = content
-        this.confirm.title = title
-        this.confirm.callback = cb
-        this.$refs.confirmDialog.open()
-      },
-      onConfirmClose: function (result) {
-        this.confirm.callback(result == 'ok')
-        this.confirm.callback = null
       }
     },
     mounted: function () {
