@@ -36,6 +36,16 @@ namespace PenguinUpload.Modules
                         throw new SecurityException("Password must be at least 8 characters.");
                     }
 
+                    if (req.Username.Length > 24)
+                    {
+                        throw new SecurityException("Username may not exceed 24 characters.");
+                    }
+
+                    if (req.Password.Length > 128)
+                    {
+                        throw new SecurityException("Password may not exceed 128 characters.");
+                    }
+
                     // Validate registration
                     var webUserManager = new WebUserManager();
                     var newUser = await webUserManager.RegisterUserAsync(req);
