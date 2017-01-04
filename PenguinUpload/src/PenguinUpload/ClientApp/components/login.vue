@@ -31,6 +31,10 @@
             <label>Confirm Password</label>
             <md-input type="password" v-model="register.confirm"></md-input>
           </md-input-container>
+          <md-input-container>
+            <label>Invite Key (optional)</label>
+            <md-input type="password" v-model="register.inviteKey"></md-input>
+          </md-input-container>
           <md-checkbox v-model="register.iaccept">I accept the Terms and Conditions</md-checkbox>
           <p class="error-message">{{ register.err }}</p>
           <input type="submit" class="invisible"></input>
@@ -66,6 +70,7 @@
           password: '',
           confirm: '',
           iaccept: '',
+          inviteKey: '',
           err: '',
           e: true // enabled
         },
@@ -144,6 +149,7 @@
         axios.post('/register', {
           username: vm.register.username,
           password: vm.register.password,
+          inviteKey: vm.register.inviteKey
         }, axiosRequestConfig)
           .then((response) => {
             // TODO: process response
