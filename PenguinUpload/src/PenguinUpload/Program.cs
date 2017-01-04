@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace PenguinUpload
 {
@@ -8,6 +9,14 @@ namespace PenguinUpload
     {
         public static void Main(string[] args)
         {
+            // Load PenguinUpload Config
+            if (File.Exists(PenguinUploadRegistry.ConfigFileName))
+            {
+                var configFileContents = File.ReadAllText(PenguinUploadRegistry.ConfigFileName);
+                JsonConvert.PopulateObject(configFileContents, PenguinUploadRegistry.Configuration);
+            }
+
+            // Load ASP.NET Core web app
             var config = new ConfigurationBuilder()
                 .AddCommandLine(args)
                 .AddEnvironmentVariables(prefix: "ASPNETCORE_")

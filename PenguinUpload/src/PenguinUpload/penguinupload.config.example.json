@@ -1,0 +1,4 @@
+{
+    // Data path for uploads
+    "uploadDirectory": "data/uploads"
+}
