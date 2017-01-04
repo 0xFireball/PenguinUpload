@@ -32,7 +32,7 @@ location on the filesystem.
 
 ### Setup Instructions (From source)
 
-1. Install dependencies (.NET Core SDK 1.1)
+1. Install dependencies (.NET Core SDK 1.1, NPM/Node.js v7)
 1. `dotnet restore` Get dependencies
 1. `dotnet publish -c Release` Build app for Release
 1. Set up configuration (optional) - Create a file called `penguinupload.config.json`.
