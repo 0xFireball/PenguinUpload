@@ -12,12 +12,10 @@
                 <div class="md-title">All My Files</div>
                 <div class="md-subtitle">Click to download</div>
               </md-card-header>
-
               <md-card-content>
                 <md-list class="custom-list md-double-line">
                   <md-list-item v-for="(file, ix) in files">
                     <md-icon class="md-primary">cloud_done</md-icon>
-
                     <div class="md-list-text-container" @click="downloadFile(ix)">
                       <span> {{ file.name }}</span>
                       <span> {{ file.hrSize }}</span>
@@ -27,10 +25,10 @@
                         <md-icon class="md-primary">more_horiz</md-icon>
                       </md-button>
                       <md-menu-content>
+                        <md-menu-item @click="visitDownloadPage(ix)">Download Page</md-menu-item>
                         <md-menu-item @click="deleteFile(ix)">Delete</md-menu-item>
                       </md-menu-content>
                     </md-menu>
-
                     <md-divider class="md-inset"></md-divider>
                   </md-list-item>
                 </md-list>
@@ -45,7 +43,6 @@
     </md-dialog-confirm>
   </div>
 </template>
-
 <script>
   import axios from 'axios'
 
@@ -80,9 +77,13 @@
       visitUrl: function (u) {
         window.open(u, '_blank')
       },
+      visitDownloadPage: function (ix) {
+        let f = this.files[ix]
+        let dlPage = '/#/d/' + f.fileId
+        window.open(dlPage, '_blank')
+      },
       downloadFile: function (ix) {
         let f = this.files[ix]
-        // let dlPage = '/#/d/' + f.fileId
         window.location.href = '/api/download/' + f.fileId
       },
       deleteFile: function (ix) {
@@ -127,7 +128,6 @@
     }
   }
 </script>
-
 <style scoped>
 
 </style>
