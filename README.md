@@ -23,6 +23,8 @@ Vue Material as a frontend.
   - Set physical location of files (use `/tmp` for ephemeral storage)
 - Intuitive Material Design interface
   - Pages for login, upload, download, profile, file management, and more
+- Concurrent, streamed file transfer
+  - Multiple uploads/downloads at a time
 
 ## Install
 
