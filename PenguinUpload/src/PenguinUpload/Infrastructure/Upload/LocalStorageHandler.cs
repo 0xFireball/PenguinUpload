@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Nancy;
@@ -49,6 +50,14 @@ namespace PenguinUpload.Infrastructure.Upload
         {
             var filePath = GetTargetFilePath(fileId);
             await Task.Run(() => File.Delete(filePath));
+        }
+
+        public async Task NukeAllFiles(IEnumerable<string> identifiers)
+        {
+            foreach (var id in identifiers)
+            {
+                await DeleteFile(id);
+            }
         }
     }
 }

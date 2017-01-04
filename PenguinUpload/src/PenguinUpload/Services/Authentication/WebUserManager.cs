@@ -19,7 +19,8 @@ namespace PenguinUpload.Services.Authentication
             {
                 RegisteredUser storedUserRecord = null;
                 var db = new DatabaseAccessService().OpenOrCreateDefault();
-                var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
+                var registeredUsers =
+                    db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
                 var userRecord = registeredUsers.FindOne(u => u.Username == username);
                 storedUserRecord = userRecord;
 
@@ -74,7 +75,8 @@ namespace PenguinUpload.Services.Authentication
                 //Calculate cryptographic info
                 var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
                 var pwSalt = AuthCryptoHelper.GetRandomSalt(64);
-                var encryptedPassword = AuthCryptoHelper.CalculateUserPasswordHash(regRequest.Password, pwSalt, cryptoConf);
+                var encryptedPassword =
+                    AuthCryptoHelper.CalculateUserPasswordHash(regRequest.Password, pwSalt, cryptoConf);
                 // Create user
                 newUserRecord = new RegisteredUser
                 {
@@ -106,8 +108,25 @@ namespace PenguinUpload.Services.Authentication
         private static bool CheckPassword(string password, RegisteredUser userRecord)
         {
             //Calculate hash and compare
-            var pwKey = AuthCryptoHelper.CalculateUserPasswordHash(password, userRecord.CryptoSalt, userRecord.PasswordCryptoConf);
+            var pwKey =
+                AuthCryptoHelper.CalculateUserPasswordHash(password, userRecord.CryptoSalt,
+                    userRecord.PasswordCryptoConf);
             return StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, userRecord.PasswordKey);
+        }
+
+        public async Task RemoveUser(string username)
+        {
+            await Task.Run(() =>
+            {
+                var db = new DatabaseAccessService().OpenOrCreateDefault();
+                var registeredUsers =
+                    db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
+                using (var trans = db.BeginTrans())
+                {
+                    registeredUsers.Delete(u => u.Username == username);
+                    trans.Commit();
+                }
+            });
         }
     }
 }

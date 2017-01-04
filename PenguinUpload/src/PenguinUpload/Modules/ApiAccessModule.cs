@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using System.Linq;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Security;
@@ -61,6 +62,35 @@ namespace PenguinUpload.Modules
                 var storedFilesManager = new StoredFilesManager();
                 var userFiles = await storedFilesManager.GetStoredFilesByUser(user);
                 return Response.AsJsonNet(userFiles);
+            });
+
+            Delete("/nuke/files", async _ =>
+            {
+                var user = await new WebUserManager().FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
+                var storedFilesManager = new StoredFilesManager();
+                var fileUploadHandler = new LocalStorageHandler();
+                // Start tasks to nuke user's files
+                var userFiles = await storedFilesManager.GetStoredFilesByUser(user);
+                var nukePhysicalFilesTask = fileUploadHandler.NukeAllFiles(userFiles.Select(x => x.Identifier));
+                var nukeFilesTask = storedFilesManager.NukeAllFiles(user);
+                return HttpStatusCode.OK;
+            });
+
+            Delete("/nuke/user", async _ =>
+            {
+                var userManager = new WebUserManager();
+                var user = await userManager.FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
+                var storedFilesManager = new StoredFilesManager();
+                var fileUploadHandler = new LocalStorageHandler();
+                // Start tasks to nuke user's files
+                var userFiles = await storedFilesManager.GetStoredFilesByUser(user);
+                var nukePhysicalFilesTask = fileUploadHandler.NukeAllFiles(userFiles.Select(x => x.Identifier));
+                var nukeFilesTask = storedFilesManager.NukeAllFiles(user);
+                await nukeFilesTask;
+                await nukePhysicalFilesTask;
+                // Now nuke the user
+                await userManager.RemoveUser(user.Username);
+                return HttpStatusCode.OK;
             });
         }
     }

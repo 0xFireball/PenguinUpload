@@ -28,10 +28,12 @@ namespace PenguinUpload.Services.FileStorage
                 using (var trans = db.BeginTrans())
                 {
                     storedFiles.Insert(result);
+
+                    // Index the database
+                    storedFiles.EnsureIndex(x => x.Identifier);
+
                     trans.Commit();
                 }
-                // Index the database
-                storedFiles.EnsureIndex(x => x.Identifier);
                 return result;
             });
         }
@@ -70,6 +72,23 @@ namespace PenguinUpload.Services.FileStorage
                     storedFiles.Delete(x => x.Identifier == fileId);
                     trans.Commit();
                 }
+                storedFiles.EnsureIndex(x => x.Identifier);
+            });
+        }
+
+        public async Task NukeAllFiles(RegisteredUser user)
+        {
+            await Task.Run(() =>
+            {
+                var db = new DatabaseAccessService().OpenOrCreateDefault();
+                var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);
+                using (var trans = db.BeginTrans())
+                {
+                    storedFiles
+                        .Delete(x => x.OwnerUsername == user.Username);
+                    trans.Commit();
+                }
+                storedFiles.EnsureIndex(x => x.Identifier);
             });
         }
     }

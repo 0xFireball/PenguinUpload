@@ -1,9 +1,15 @@
 <template>
   <div class="shrink-layout">
     <!--<img src="./assets/logo.png">-->
-    <intro view-title="User Profile"></intro>
-    <myProfile></myProfile>
-    <devCredits></devCredits>
+    <div class="container">
+      <intro view-title="User Profile"></intro>
+      <div class="row">
+        <div class="eight columns offset-by-two">
+          <myProfile></myProfile>
+        </div>
+      </div>
+      <devCredits></devCredits>
+    </div>
   </div>
 </template>
 
