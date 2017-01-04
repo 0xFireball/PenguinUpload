@@ -128,6 +128,16 @@ namespace PenguinUpload.Modules
                 try
                 {
                     // Validate password
+                    if (req.NewPassword.Length < 8)
+                    {
+                        throw new SecurityException("Password must be at least 8 characters.");
+                    }
+
+                    if (req.NewPassword.Length > 128)
+                    {
+                        throw new SecurityException("Password may not exceed 128 characters.");
+                    }
+
                     if (selectedUser.Enabled && await webUserManager.CheckPasswordAsync(req.OldPassword, selectedUser))
                     {
                         // Update password

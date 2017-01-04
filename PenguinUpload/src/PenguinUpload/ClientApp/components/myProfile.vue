@@ -3,7 +3,7 @@
     <h4>Manage Account</h4>
     <div>
       <h5>Security</h5>
-      <form v-on:submit.prevent="tryupdatePassword">
+      <form v-on:submit.prevent="tryUpdatePassword">
         <div class="row">
           <div class="eight columns">
             <md-input-container>
@@ -28,7 +28,7 @@
         </div>
         <p class="error-message">{{ updatePassword.err }}</p>
         <input type="submit" class="invisible"></input>
-        <md-button class="md-raised md-primary" v-on:click="tryupdatePassword" :disabled="!updatePassword.e">Change Password</md-button>
+        <md-button class="md-raised md-primary" v-on:click="tryUpdatePassword" :disabled="!updatePassword.e">Change Password</md-button>
       </form>
     </div>
     <div>
@@ -36,6 +36,8 @@
       <md-button class="md-raised md-warn" @click="deleteAllFiles">Delete All Files</md-button>
       <md-button class="md-raised md-warn" @click="deleteAccount">Delete Account</md-button>
     </div>
+    <md-dialog-alert :md-title="dialog.title" :md-content-html="dialog.content" ref="modalDialog">
+    </md-dialog-alert>
     <md-dialog-confirm :md-title="confirm.title" :md-content-html="confirm.content" :md-ok-text="confirm.ok" :md-cancel-text="confirm.cancel"
       @close="onConfirmClose" ref="confirmDialog">
     </md-dialog-confirm>
@@ -44,6 +46,11 @@
 
 <script>
   import axios from 'axios'
+  let axiosRequestConfig = {
+    validateStatus: function (status) {
+      return status >= 200 && status < 500
+    }
+  }
 
   export default {
     data() {
@@ -54,6 +61,10 @@
           ok: 'OK',
           cancel: 'Cancel',
           callback: null
+        },
+        dialog: {
+          title: ' ',
+          content: ' '
         },
         updatePassword: {
           old: '',
@@ -109,6 +120,51 @@
             }
           }
         })
+      },
+      tryUpdatePassword: function () {
+        let vm = this
+        if (!vm.updatePassword.e) return
+        // make sure confirmation is correct
+        if (vm.updatePassword.password.length < 8) {
+          vm.updatePassword.err = 'password must be at least 8 characters. this is also validated on the server'
+          return
+        }
+        if (vm.updatePassword.old !== vm.updatePassword.password) {
+          vm.updatePassword.err = 'password confirmation does not match'
+          return
+        }
+        vm.updatePassword.e = false
+        // reset error message
+        vm.updatePassword.err = ''
+        // send updatePassword post
+        axios.patch('/changepassword', {
+          username: vm.$root.u.name,
+          oldPassword: vm.updatePassword.old,
+          newPassword: vm.updatePassword.password
+        }, axiosRequestConfig)
+          .then((response) => {
+            // TODO: process response
+            if (response.status === 200) {
+              // success
+              this.showPopup('Password change succeeded! Please log in again.')
+              // this.$refs.authOptionTabs.changeTab('t-login')
+            } else if (response.status === 401) {
+              // unauthorized because of error
+              vm.updatePassword.err = response.data
+            }
+            vm.updatePassword.e = true
+          })
+          .catch(function (error) {
+            if (error) {
+              console.log(error)
+            }
+            vm.updatePassword.e = true
+          })
+      },
+      showPopup: function (content, title) {
+        this.dialog.content = content
+        this.dialog.title = title
+        this.$refs.modalDialog.open()
       }
     },
     mounted: function () {

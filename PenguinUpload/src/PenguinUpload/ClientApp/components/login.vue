@@ -122,7 +122,6 @@
           })
       },
       tryRegister: function () {
-        // nothing
         let vm = this
         if (!vm.register.e) return
         // make sure confirmation is correct
