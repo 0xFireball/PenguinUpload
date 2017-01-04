@@ -146,8 +146,10 @@
             // TODO: process response
             if (response.status === 200) {
               // success
-              this.showPopup('Password change succeeded! Please log in again.')
-              // this.$refs.authOptionTabs.changeTab('t-login')
+              vm.showPopup('Password change succeeded! Please log in again.')
+              // log out
+              vm.$root.u.key = ''
+              vm.$router.replace('/')
             } else if (response.status === 401) {
               // unauthorized because of error
               vm.updatePassword.err = response.data
