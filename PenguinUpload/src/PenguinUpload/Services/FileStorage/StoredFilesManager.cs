@@ -28,7 +28,6 @@ namespace PenguinUpload.Services.FileStorage
                 using (var trans = db.BeginTrans())
                 {
                     storedFiles.Insert(result);
-
                     trans.Commit();
                 }
 

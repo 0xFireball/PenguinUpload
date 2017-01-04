@@ -39,17 +39,21 @@ namespace PenguinUpload.Services.Authentication
             return storedUserRecord ?? null;
         }
 
-        public bool UpdateUserInDatabase(RegisteredUser currentUser)
+        public async Task<bool> UpdateUserInDatabase(RegisteredUser currentUser)
         {
-            bool result;
-            var db = new DatabaseAccessService().OpenOrCreateDefault();
-            var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
-            using (var trans = db.BeginTrans())
+            return await Task.Run(() =>
             {
-                result = registeredUsers.Update(currentUser);
-                trans.Commit();
-            }
-            return result;
+                bool result;
+                var db = new DatabaseAccessService().OpenOrCreateDefault();
+                var registeredUsers =
+                    db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
+                using (var trans = db.BeginTrans())
+                {
+                    result = registeredUsers.Update(currentUser);
+                    trans.Commit();
+                }
+                return result;
+            });
         }
 
         /// <summary>
@@ -127,6 +131,12 @@ namespace PenguinUpload.Services.Authentication
                     trans.Commit();
                 }
             });
+        }
+
+        public async Task DisableUser(RegisteredUser user)
+        {
+            user.Enabled = false;
+            await UpdateUserInDatabase(user);
         }
     }
 }

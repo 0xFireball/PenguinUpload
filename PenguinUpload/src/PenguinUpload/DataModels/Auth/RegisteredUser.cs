@@ -26,5 +26,8 @@ namespace PenguinUpload.DataModels.Auth
 
         [JsonIgnore]
         public string Identifier { get; set; }
+
+        [JsonIgnore]
+        public bool Enabled { get; set; } = true;
     }
 }

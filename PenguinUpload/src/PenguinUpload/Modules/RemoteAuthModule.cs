@@ -79,7 +79,7 @@ namespace PenguinUpload.Modules
                 try
                 {
                     // Validate password
-                    if (await webUserManager.CheckPasswordAsync(req.Password, selectedUser))
+                    if (selectedUser.Enabled && await webUserManager.CheckPasswordAsync(req.Password, selectedUser))
                     {
                         // Return user details
                         return Response.AsJsonNet(new RemoteAuthResponse

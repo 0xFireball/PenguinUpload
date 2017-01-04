@@ -59,7 +59,7 @@
       },
       deleteAccount: function () {
         let vm = this
-        vm.showConfirm('Are you absolutely sure? Your account and all files that you have uploaded will be permanently removed. You will then be logged out.', 'Confirm Action', function (r1) {
+        vm.showConfirm('Are you absolutely sure? Your account and all files that you have uploaded will be permanently removed.', 'Confirm Action', function (r1) {
           if (r1) {
             if (window.confirm('Your account will be deleted. Are you certain you would like to proceed?')) {
               axios.delete('/api/nuke/user', vm.authRequestParams)
