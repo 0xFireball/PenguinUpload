@@ -10,18 +10,49 @@ namespace PenguinUpload.Modules
     {
         public AdHocApiAccessModule() : base("/api")
         {
-            Get("/fileInfo/{id}", async args =>
+            Get("/fileInfo/{idPass}", async args =>
             {
-                var storedFilesManager = new StoredFilesManager();
-                var storedFile = await storedFilesManager.GetStoredFileByIdentifier((string) args.id);
-                return storedFile == null ? HttpStatusCode.NotFound : Response.AsJsonNet(storedFile);
-            });
-
-            Get("/download/{id}", async args =>
-            {
+                var idParts = ((string) args.idPass).Split('!');
+                var id = idParts[0];
+                string pass = null;
+                if (idParts.Length > 1)
+                {
+                    pass = idParts[1];
+                }
                 var storedFilesManager = new StoredFilesManager();
                 var storedFile = await storedFilesManager.GetStoredFileByIdentifier((string) args.id);
                 if (storedFile == null) return HttpStatusCode.NotFound;
+                if (storedFile.IsPasswordProtected)
+                {
+                    // Make sure password matches
+                    if (storedFile.Password != pass)
+                    {
+                        return HttpStatusCode.Unauthorized;
+                    }
+                }
+                return Response.AsJsonNet(storedFile);
+            });
+
+            Get("/download/{idPass}", async args =>
+            {
+                var idParts = ((string) args.idPass).Split('!');
+                var id = idParts[0];
+                string pass = null;
+                if (idParts.Length > 1)
+                {
+                    pass = idParts[1];
+                }
+                var storedFilesManager = new StoredFilesManager();
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifier((string) args.id);
+                if (storedFile == null) return HttpStatusCode.NotFound;
+                if (storedFile.IsPasswordProtected)
+                {
+                    // Make sure password matches
+                    if (storedFile.Password != pass)
+                    {
+                        return HttpStatusCode.Unauthorized;
+                    }
+                }
 
                 var fileUploadHandler = new LocalStorageHandler();
                 var fileStream = fileUploadHandler.RetrieveFileStream(storedFile.Identifier);

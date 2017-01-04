@@ -12,6 +12,10 @@
     <md-dialog-confirm :md-title="confirm.title" :md-content-html="confirm.content" :md-ok-text="confirm.ok" :md-cancel-text="confirm.cancel"
       @close="onConfirmClose" ref="confirmDialog">
     </md-dialog-confirm>
+
+    <md-dialog-prompt :md-title="prompt.title" :md-ok-text="prompt.ok" :md-cancel-text="prompt.cancel" :md-input-placeholder="prompt.placeholder"
+      @close="onPromptClose" v-model="prompt.result" ref="promptDialog">
+    </md-dialog-prompt>
   </div>
 </template>
 
@@ -35,6 +39,15 @@
           cancel: 'Cancel',
           callback: null
         },
+        prompt: {
+          title: '',
+          ok: 'OK',
+          cancel: 'Cancel',
+          placeholder: '',
+          // maxlength: 0,
+          value: '',
+          callback: null
+        }
       }
     },
     computed: {
@@ -63,6 +76,19 @@
         this.confirm.title = title
         this.confirm.callback = cb
         this.$refs.confirmDialog.open()
+      },
+      showPrompt: function (title, placeholder, cb) {
+        this.prompt.title = title
+        this.prompt.placeholder = placeholder
+        this.$refs.promptDialog.open()
+      },
+      onPromptClose: function (result) {
+        if (result == 'ok') {
+          this.prompt.callback(this.prompt.value)
+        }
+
+        this.prompt.value = ''
+        this.prompt.callback = null
       },
       onConfirmClose: function (result) {
         this.confirm.callback(result == 'ok')

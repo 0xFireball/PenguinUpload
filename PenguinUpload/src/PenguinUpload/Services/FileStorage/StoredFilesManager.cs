@@ -89,5 +89,28 @@ namespace PenguinUpload.Services.FileStorage
                 storedFiles.EnsureIndex(x => x.Identifier);
             });
         }
+
+        public async Task<bool> UpdateStoredFileInDatabase(StoredFile currentFile)
+        {
+            return await Task.Run(() =>
+            {
+                bool result;
+                var db = new DatabaseAccessService().OpenOrCreateDefault();
+                var storedFiles =
+                    db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);
+                using (var trans = db.BeginTrans())
+                {
+                    result = storedFiles.Update(currentFile);
+                    trans.Commit();
+                }
+                return result;
+            });
+        }
+
+        public async Task SetFilePassword(StoredFile file, string pass)
+        {
+            file.Password = pass;
+            await UpdateStoredFileInDatabase(file);
+        }
     }
 }

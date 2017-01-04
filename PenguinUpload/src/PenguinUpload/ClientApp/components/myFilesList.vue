@@ -21,9 +21,15 @@
                         <span> {{ file.name }}</span>
                         <span> {{ file.hrSize }}</span>
                       </div>
+                      <md-button class="md-icon-button md-list-action" @click="lockFile(ix)" v-if="!file.locked">
+                        <md-icon class="md-primary">lock_open</md-icon>
+                      </md-button>
+                      <md-button class="md-icon-button md-list-action" @click="unlockFile(ix)" v-else>
+                        <md-icon class="md-primary">lock</md-icon>
+                      </md-button>
                       <md-button class="md-icon-button md-list-action" @click="downloadFile(ix)">
-                          <md-icon class="md-primary">file_download</md-icon>
-                        </md-button>
+                        <md-icon class="md-primary">file_download</md-icon>
+                      </md-button>
                       <md-menu md-align-trigger>
                         <md-button class="md-icon-button md-list-action" md-menu-trigger>
                           <md-icon class="md-primary">more_horiz</md-icon>
@@ -85,6 +91,30 @@
       downloadFile: function (ix) {
         let f = this.files[ix]
         window.location.href = '/api/download/' + f.fileId
+      },
+      lockFile: function (ix) {
+        let vm = this
+        let f = vm.files[ix]
+        // vm.$root.showConfirm('Are you sure you want to lock the file?', 'Confirm Delete', (r) => {
+        //   if (r) {
+        //     // send delete request
+        //     axios.delete('/api/delete/' + f.fileId, vm.authRequestParams)
+        //       .then(function (res) {
+        //         // update file list
+        //         vm.files.splice(ix, 1)
+        //       })
+        //   }
+        // })
+        vm.$root.showPrompt('Enter password', 'Password', function (r) {
+          if (r) {
+            // send lock request
+            axios.patch('/api/lock/' + f.fileId + '!' + r, vm.authRequestParams)
+              .then(function (res) {
+                // update file list
+                f.locked = true
+              })
+          }
+        })
       },
       deleteFile: function (ix) {
         let vm = this

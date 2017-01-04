@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Security;
@@ -40,6 +41,22 @@ namespace PenguinUpload.Modules
                         uploadResult.Size);
 
                 return Response.AsJsonNet(storedFile);
+            });
+
+
+            Patch("/lock/{idPass}", async args =>
+            {
+                var user = await new WebUserManager().FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
+                var idParts = ((string) args.idPass).Split('!');
+                if (idParts.Length < 2) return HttpStatusCode.BadRequest;
+                var id = idParts[0];
+                var pass = idParts[1];
+                // Update file metadata
+                var storedFilesManager = new StoredFilesManager();
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifier(id);
+                if (storedFile == null) return HttpStatusCode.BadRequest;
+                await storedFilesManager.SetFilePassword(storedFile, pass);
+                return HttpStatusCode.OK;
             });
 
             Delete("/delete/{id}", async args =>

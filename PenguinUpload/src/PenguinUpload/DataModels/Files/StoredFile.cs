@@ -19,5 +19,11 @@ namespace PenguinUpload.DataModels.Files
 
         [JsonIgnore]
         public string OwnerUsername { get; set; }
+
+        [JsonIgnore]
+        public string Password { get; set; }
+
+        [JsonIgnore]
+        public bool IsPasswordProtected => Password != null;
     }
 }

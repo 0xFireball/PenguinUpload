@@ -45,25 +45,28 @@
     methods: {
       downloadFile: function () {
         window.location.href = '/api/download/' + this.file.id
+      },
+      updateFileInfo: function () {
+        let vm = this
+        vm.file.id = vm.itemId
+        axios.get('/api/fileInfo/' + vm.file.id)
+          .then(function (response) {
+            vm.file.name = response.data.name
+            vm.file.sizeText = response.data.hrSize
+            vm.loading = false
+          })
+          .catch(function (error) {
+            console.log(error)
+            // file not found
+            vm.file.name = 'File Not Found'
+            vm.file.sizeText = 'Error'
+            vm.loading = false
+            vm.error = true
+          })
       }
     },
     mounted: function () {
-      let vm = this
-      vm.file.id = vm.itemId
-      axios.get('/api/fileInfo/' + vm.file.id)
-        .then(function (response) {
-          vm.file.name = response.data.name
-          vm.file.sizeText = response.data.hrSize
-          vm.loading = false
-        })
-        .catch(function (error) {
-          console.log(error)
-          // file not found
-          vm.file.name = 'File Not Found'
-          vm.file.sizeText = 'Error'
-          vm.loading = false
-          vm.error = true
-        })
+      this.updateFileInfo()
     }
   }
 </script>
