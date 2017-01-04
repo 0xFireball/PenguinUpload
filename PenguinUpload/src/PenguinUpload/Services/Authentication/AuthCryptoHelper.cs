@@ -28,5 +28,7 @@ namespace PenguinUpload.Services.Authentication
             var passwordBytes = Encoding.UTF8.GetBytes(password);
             return CalculatePasswordHash(passwordBytes, salt, cryptoConf.Iterations, cryptoConf.Length);
         }
+
+        public const int DefaultSaltLength = 64;
     }
 }

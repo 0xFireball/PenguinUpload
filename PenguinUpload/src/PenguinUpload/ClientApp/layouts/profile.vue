@@ -4,7 +4,7 @@
     <div class="container">
       <intro view-title="User Profile"></intro>
       <div class="row">
-        <div class="eight columns offset-by-two">
+        <div class="twelve columns">
           <myProfile></myProfile>
         </div>
       </div>

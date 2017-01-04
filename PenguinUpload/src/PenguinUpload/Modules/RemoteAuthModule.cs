@@ -73,7 +73,7 @@ namespace PenguinUpload.Modules
                 catch (NullReferenceException)
                 {
                     // A parameter was not provided
-                    return new Response().WithStatusCode(HttpStatusCode.BadRequest);
+                    return HttpStatusCode.BadRequest;
                 }
                 catch (SecurityException secEx)
                 {
@@ -103,7 +103,40 @@ namespace PenguinUpload.Modules
                     }
                     else
                     {
-                        return new Response().WithStatusCode(HttpStatusCode.Unauthorized);
+                        return HttpStatusCode.Unauthorized;
+                    }
+                }
+                catch (NullReferenceException)
+                {
+                    // A parameter was not provided
+                    return HttpStatusCode.BadRequest;
+                }
+                catch (SecurityException secEx)
+                {
+                    // Registration blocked for security reasons
+                    return Response.AsText(secEx.Message)
+                        .WithStatusCode(HttpStatusCode.Unauthorized);
+                }
+            });
+
+            Patch("/changepassword", async args =>
+            {
+                var req = this.Bind<ChangePasswordRequest>();
+                var webUserManager = new WebUserManager();
+                var selectedUser = await webUserManager.FindUserByUsernameAsync(req.Username);
+
+                try
+                {
+                    // Validate password
+                    if (selectedUser.Enabled && await webUserManager.CheckPasswordAsync(req.OldPassword, selectedUser))
+                    {
+                        // Update password
+                        await webUserManager.ChangeUserPasswordAsync(selectedUser, req.NewPassword);
+                        return HttpStatusCode.OK;
+                    }
+                    else
+                    {
+                        return HttpStatusCode.Unauthorized;
                     }
                 }
                 catch (NullReferenceException)

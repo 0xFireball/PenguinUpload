@@ -2,19 +2,19 @@
   <div class="aboutWidget">
     <h5>About {{ appName }}</h5>
     <p>
-      Easy file hosting/uploads
+      PenguinUpload is a self-hostable web application that lets users upload and share files.
     </p>
   </div>
 </template>
 
 <script>
-export default {
-  data: function () {
-    return {
-      appName: 'PenguinUpload'
+  export default {
+    data: function () {
+      return {
+        appName: 'PenguinUpload'
+      }
     }
   }
-}
 </script>
 
 <style scoped>

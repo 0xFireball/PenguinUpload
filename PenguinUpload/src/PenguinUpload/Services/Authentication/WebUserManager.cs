@@ -76,9 +76,9 @@ namespace PenguinUpload.Services.Authentication
             var registeredUsers = db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
             using (var trans = db.BeginTrans())
             {
-                //Calculate cryptographic info
+                // Calculate cryptographic info
                 var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
-                var pwSalt = AuthCryptoHelper.GetRandomSalt(64);
+                var pwSalt = AuthCryptoHelper.GetRandomSalt(AuthCryptoHelper.DefaultSaltLength);
                 var encryptedPassword =
                     AuthCryptoHelper.CalculateUserPasswordHash(regRequest.Password, pwSalt, cryptoConf);
                 // Create user
@@ -137,6 +137,22 @@ namespace PenguinUpload.Services.Authentication
         {
             user.Enabled = false;
             await UpdateUserInDatabase(user);
+        }
+
+        public async Task ChangeUserPasswordAsync(RegisteredUser selectedUser, string newPassword)
+        {
+            await Task.Run(() =>
+            {
+                // Recompute password crypto
+                var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
+                var pwSalt = AuthCryptoHelper.GetRandomSalt(AuthCryptoHelper.DefaultSaltLength);
+                var encryptedPassword =
+                    AuthCryptoHelper.CalculateUserPasswordHash(newPassword, pwSalt, cryptoConf);
+                selectedUser.CryptoSalt = pwSalt;
+                selectedUser.PasswordCryptoConf = cryptoConf;
+                selectedUser.PasswordKey = encryptedPassword;
+            });
+            await UpdateUserInDatabase(selectedUser);
         }
     }
 }
