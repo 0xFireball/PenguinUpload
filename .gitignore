@@ -1,4 +1,8 @@
 
+# Publish output path
+
+./build/
+
 # Default data storage
 data/
 
