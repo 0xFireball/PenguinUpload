@@ -16,9 +16,9 @@ namespace PenguinUpload.Services.Authentication
             if (u == null || !u.Enabled) return null;
             // Give client identity
             var id = new ClaimsPrincipal(new ClaimsIdentity(new GenericIdentity(u.Username, "stateless"),
-                new Claim[]
+                new[]
                 {
-                    StatelessAuthClaim,
+                    StatelessAuthClaim
                 }
             ));
             return id;

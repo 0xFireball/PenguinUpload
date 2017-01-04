@@ -89,7 +89,7 @@ namespace PenguinUpload.Services.Authentication
                     ApiKey = StringUtils.SecureRandomString(40),
                     CryptoSalt = pwSalt,
                     PasswordCryptoConf = cryptoConf,
-                    PasswordKey = encryptedPassword,
+                    PasswordKey = encryptedPassword
                 };
                 // Add the user to the database
                 registeredUsers.Insert(newUserRecord);

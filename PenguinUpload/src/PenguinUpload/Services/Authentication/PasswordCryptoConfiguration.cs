@@ -10,7 +10,7 @@
             return new PasswordCryptoConfiguration
             {
                 Iterations = 10000,
-                Length = 128,
+                Length = 128
             };
         }
     }

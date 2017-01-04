@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PenguinUpload.Utilities
+﻿namespace PenguinUpload.Utilities
 {
     public class HumanReadableFileSize
     {

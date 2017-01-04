@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using PenguinUpload.Services.Authentication;
 
 namespace PenguinUpload.DataModels.Auth
 {

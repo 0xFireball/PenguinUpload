@@ -67,7 +67,7 @@ namespace PenguinUpload.Modules
                     return Response.AsJsonNet(new RemoteAuthResponse
                     {
                         User = newUser,
-                        ApiKey = newUser.ApiKey,
+                        ApiKey = newUser.ApiKey
                     });
                 }
                 catch (NullReferenceException)
@@ -100,13 +100,10 @@ namespace PenguinUpload.Modules
                         return Response.AsJsonNet(new RemoteAuthResponse
                         {
                             User = selectedUser,
-                            ApiKey = selectedUser.ApiKey,
+                            ApiKey = selectedUser.ApiKey
                         });
                     }
-                    else
-                    {
-                        return HttpStatusCode.Unauthorized;
-                    }
+                    return HttpStatusCode.Unauthorized;
                 }
                 catch (NullReferenceException)
                 {
@@ -146,10 +143,7 @@ namespace PenguinUpload.Modules
                         await webUserManager.ChangeUserPasswordAsync(selectedUser, req.NewPassword);
                         return HttpStatusCode.OK;
                     }
-                    else
-                    {
-                        return HttpStatusCode.Unauthorized;
-                    }
+                    return HttpStatusCode.Unauthorized;
                 }
                 catch (NullReferenceException)
                 {
