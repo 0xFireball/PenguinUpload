@@ -89,6 +89,8 @@ namespace PenguinUpload.Modules
                 var webUserManager = new WebUserManager();
                 var selectedUser = await webUserManager.FindUserByUsernameAsync(req.Username);
 
+                if (selectedUser == null) return HttpStatusCode.Unauthorized;
+
                 try
                 {
                     // Validate password
