@@ -16,7 +16,7 @@
               <div class="upload-area-padding" @click="browseForFiles">
               </div>
               <md-card-actions>
-                <md-button class="md-fab" :disabled="uploading" @click="browseForFiles">
+                <md-button class="md-fab" @click="browseForFiles">
                   <md-icon>cloud_upload</md-icon>
                 </md-button>
               </md-card-actions>
@@ -109,9 +109,7 @@
         this.$router.push('/files')
       },
       browseForFiles: function () {
-        if (!this.uploading) {
-          this.$refs.browse.click()
-        }
+        this.$refs.browse.click()
       },
       onFilesUploaded: function (e) {
         let browse = this.$refs.browse
