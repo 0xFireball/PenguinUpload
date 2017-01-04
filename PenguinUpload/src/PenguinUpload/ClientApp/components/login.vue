@@ -42,8 +42,6 @@
         </form>
       </md-tab>
     </md-tabs>
-    <md-dialog-alert :md-title="dialog.title" :md-content-html="dialog.content" ref="modalDialog">
-    </md-dialog-alert>
   </div>
 </template>
 
@@ -73,11 +71,7 @@
           inviteKey: '',
           err: '',
           e: true // enabled
-        },
-        dialog: {
-          title: ' ',
-          content: ' '
-        },
+        }
       }
     },
     methods: {
@@ -154,7 +148,7 @@
             // TODO: process response
             if (response.status === 200) {
               // registration succeeded
-              this.showPopup('Registration succeeded! You may now log in.', 'Success')
+              vm.$root.showPopup('Registration succeeded! You may now log in.', 'Success')
               // this.$refs.authOptionTabs.changeTab('t-login')
             } else if (response.status === 401) {
               // unauthorized because of error
@@ -168,11 +162,6 @@
             }
             vm.register.e = true
           })
-      },
-      showPopup: function (content, title) {
-        this.dialog.content = content
-        this.dialog.title = title
-        this.$refs.modalDialog.open()
       }
     }
   }
