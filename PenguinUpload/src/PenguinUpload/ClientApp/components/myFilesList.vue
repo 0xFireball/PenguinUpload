@@ -10,17 +10,20 @@
             <md-card>
               <md-card-header>
                 <div class="md-title">All My Files</div>
-                <div class="md-subtitle">Click to download</div>
+                <div class="md-subtitle">Files</div>
               </md-card-header>
               <md-card-content>
                 <div v-if="loadFinished">
                   <md-list class="custom-list md-double-line">
                     <md-list-item v-for="(file, ix) in files">
                       <md-icon class="md-primary">cloud_done</md-icon>
-                      <div class="md-list-text-container" @click="downloadFile(ix)">
+                      <div class="md-list-text-container">
                         <span> {{ file.name }}</span>
                         <span> {{ file.hrSize }}</span>
                       </div>
+                      <md-button class="md-icon-button md-list-action" @click="downloadFile(ix)">
+                          <md-icon class="md-primary">file_download</md-icon>
+                        </md-button>
                       <md-menu md-align-trigger>
                         <md-button class="md-icon-button md-list-action" md-menu-trigger>
                           <md-icon class="md-primary">more_horiz</md-icon>
