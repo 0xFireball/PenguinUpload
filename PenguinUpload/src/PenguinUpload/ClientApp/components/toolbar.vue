@@ -14,13 +14,13 @@
             </span>
           </md-button>
           <md-menu-content>
-            <md-menu-item>
+            <md-menu-item @click="routerGo('/p')">
               Account
             </md-menu-item>
-            <md-menu-item @click="viewMyDashboard">
+            <md-menu-item @click="routerGo('/u')">
               Dashboard
             </md-menu-item>
-            <md-menu-item @click="viewMyFiles">
+            <md-menu-item @click="routerGo('/files')">
               My Files
             </md-menu-item>
             <md-divider></md-divider>
@@ -102,11 +102,8 @@
         this.$root.u.key = ''
         this.$router.push('/')
       },
-      viewMyDashboard: function () {
-        this.$router.push('/u')
-      },
-      viewMyFiles: function () {
-        this.$router.push('/files')
+      routerGo: function (u) {
+        this.$router.push(u)
       }
     },
     created() {

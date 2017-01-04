@@ -6,6 +6,7 @@ import Download from './layouts/download'
 
 import Dashboard from './layouts/dashboard'
 import MyFiles from './layouts/myfiles'
+import Profile from './layouts/profile'
 
 const main = [
   {
@@ -31,6 +32,11 @@ const main = [
     path: '/files',
     name: 'my files',
     component: MyFiles
+  },
+  {
+    path: '/p',
+    name: 'profile',
+    component: Profile
   },
   {
     path: '/d/:id',
