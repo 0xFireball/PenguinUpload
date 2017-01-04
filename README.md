@@ -1,6 +1,8 @@
 
 # PenguinUpload
 
+![screenshot](img/screenshot_upload.png)
+
 Easy file hosting/uploads
 
 ## About
