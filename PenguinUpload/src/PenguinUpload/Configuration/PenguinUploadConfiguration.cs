@@ -12,5 +12,8 @@ namespace PenguinUpload.Configuration
 
         [JsonProperty("inviteKey")]
         public string InviteKey { get; set; } = null;
+
+        [JsonProperty("admins")]
+        public string[] Admins { get; set; } = new string[0];
     }
 }

@@ -44,9 +44,14 @@ location on the filesystem.
 1. Install dependencies (.NET Core SDK 1.1, NPM/Node.js v7)
 1. Run the included script `./build.sh`. It will output the application to `./PenguinUpload/src/PenguinUpload/bin/Release/netcoreapp1.0/publish/`,
   and you can copy it to wherever you like
-1. Set up configuration (optional) - Create a file called `penguinupload.config.json`.
- See the example configuration file (`penguinupload.config.example.json` for an example.)
- You can also set ASP.NET Core config in a `hosting.json` file.
+1. Set up configuration - Create a file called `penguinupload.config.json`.
+ See the [example configuration file](PenguinUpload/src/PenguinUpload/penguinupload.config.example.json) (`penguinupload.config.example.json` for an example.)
+ This is required, as registration is disabled by default for security reasons.
+1. (optional) Set ASP.NET Core config in a `hosting.json` file.
+
+### Administration
+
+See the [Administration documentation](docs/admin.md)
 
 ## License
 
