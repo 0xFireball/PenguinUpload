@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Security;
 using System.Threading.Tasks;
 using PenguinUpload.DataModels.Auth;
@@ -163,6 +164,17 @@ namespace PenguinUpload.Services.Authentication
                 user.ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength);
             });
             await UpdateUserInDatabase(user);
+        }
+
+        public async Task<IEnumerable<RegisteredUser>> GetAllUsersAsync()
+        {
+            return await Task.Run(() =>
+            {
+                var db = new DatabaseAccessService().OpenOrCreateDefault();
+                var registeredUsers =
+                    db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
+                return registeredUsers.FindAll();
+            });
         }
     }
 }
