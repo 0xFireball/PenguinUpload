@@ -35,7 +35,7 @@ namespace PenguinUpload.Modules
             });
 
             // Get user account info
-            Post("/accountinfo/{name}", async args =>
+            Get("/accountinfo/{name}", async args =>
             {
                 var userManager = new WebUserManager();
                 var user = await userManager.FindUserByUsernameAsync((string) args.name);
@@ -65,7 +65,7 @@ namespace PenguinUpload.Modules
             });
 
             // Get file info (admin override)
-            Delete("/fileinfo/{id}", async args =>
+            Get("/fileinfo/{id}", async args =>
             {
                 var fileId = (string) args.id;
                 // Get metadata
