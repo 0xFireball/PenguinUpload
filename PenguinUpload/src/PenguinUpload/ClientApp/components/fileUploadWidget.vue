@@ -28,18 +28,13 @@
                     <!--Uploading file-->
                     <md-subheader v-if="progressIndicators.length > 0">Uploading</md-subheader>
                     <md-list-item v-for="(prInd, ix) in progressIndicators">
-                      <md-icon class="md-primary" v-if="prInd.error == null">cloud_queue</md-icon>
+                      <md-icon class="md-primary" v-if="!prInd.error">cloud_queue</md-icon>
                       <md-icon class="md-primary" v-else>error</md-icon>
 
                       <div class="md-list-text-container">
-                        <template v-if="prInd.error == null">
-                          <span> {{ prInd.name }}</span>
-                          <span> {{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Uploaded, Processing...' }}</span>
-                        </template>
-                        <template v-else>
-                          <span> {{ prInd.name }} </span>
-                          <span> {{ 'Upload error: '+ prInd.error }}</span>
-                        </template>
+                        <span> {{ prInd.name }} </span>
+                        <span v-if="!prInd.error"> {{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Uploaded, Processing...' }}</span>
+                        <span v-else> {{ 'Upload error: ' + prInd.message }}</span>
                       </div>
 
                       <md-button class="md-icon-button md-list-action" @click="cancelUpload(prInd)">
@@ -101,7 +96,8 @@
           fileRef: object [reference to file that is uploading],
           name: string [name of file],
           xhr: object [xhr object reference],
-          error: string or null [an error message]
+          error: bool
+          message: string or null [an error message]
         }
         */
         completedFiles: []
@@ -145,7 +141,8 @@
             value: 0,
             fileRef: f,
             name: f.name,
-            error: null
+            error: false,
+            message: ''
           }
           this.progressIndicators.push(progress)
           this.uploadFile(f, progress)
@@ -175,8 +172,8 @@
               // downloadPage: response.downloadPage // get download page from server response
             })
           } else {
-            progress.error = xhr.responseText
-            console.log(progress)
+            progress.message = xhr.responseText
+            progress.error = true
           }
         }
         xhr.upload.onprogress = function (e) {
