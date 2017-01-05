@@ -108,7 +108,7 @@
         vm.$root.showPrompt('Enter password', 'Password', function (r) {
           if (r) {
             // send lock request
-            axios.patch('/api/lock/' + f.fileId + '!' + r, vm.authRequestParams)
+            axios.patch('/api/lock/' + f.fileId + '!' + r, {}, vm.authRequestParams)
               .then(function (res) {
                 // update file list
                 f.locked = true

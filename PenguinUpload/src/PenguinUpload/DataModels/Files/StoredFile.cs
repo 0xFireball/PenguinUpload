@@ -1,4 +1,5 @@
 ﻿using System;
+using LiteDB;
 using Newtonsoft.Json;
 
 namespace PenguinUpload.DataModels.Files
@@ -23,7 +24,8 @@ namespace PenguinUpload.DataModels.Files
         [JsonIgnore]
         public string Password { get; set; }
 
-        [JsonIgnore]
+        [BsonIgnore]
+        [JsonProperty("locked")]
         public bool IsPasswordProtected => Password != null;
     }
 }
