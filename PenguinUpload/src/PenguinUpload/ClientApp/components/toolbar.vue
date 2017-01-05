@@ -90,7 +90,7 @@
     },
     methods: {
       visitGitHub: function () {
-        window.open('https://github.com/0xFireball/' + this.appName)
+        window.open('https://github.com/0xFireball/PenguinUpload')
       },
       toggleLeftSidenav: function () {
         this.$refs.leftSidenav.toggle()
