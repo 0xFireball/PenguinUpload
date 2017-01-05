@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Nancy;
+using Nancy.Responses;
 using Nancy.Security;
 using PenguinUpload.Infrastructure.Upload;
 using PenguinUpload.Services.Authentication;
@@ -72,6 +73,20 @@ namespace PenguinUpload.Modules
                 var storedFilesManager = new StoredFilesManager();
                 var storedFile = await storedFilesManager.GetStoredFileByIdentifier(fileId);
                 return Response.AsJsonNet(storedFile);
+            });
+
+            // Download a file (admin override)
+            Get("/downloadfile/{id}", async args =>
+            {
+                var fileId = (string) args.id;
+                // Get metadata
+                var storedFilesManager = new StoredFilesManager();
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifier(fileId);
+                if (storedFile == null) return HttpStatusCode.NotFound;
+                var fileUploadHandler = new LocalStorageHandler();
+                var fileStream = fileUploadHandler.RetrieveFileStream(storedFile.Identifier);
+                var response = new StreamResponse(() => fileStream, MimeTypes.GetMimeType(storedFile.Name));
+                return response.AsAttachment(storedFile.Name);
             });
 
             // Delete a file (admin override)

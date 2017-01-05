@@ -45,3 +45,5 @@ mentioned `disableuser`.
 GET `/api/admin/fileinfo/{id}` - Get file info by ID.
 
 DELETE `/api/admin/deletefile/{id}` - Deletes a file by ID.
+
+GET `/api/admin/downloadfile/{id}` - Download a file by ID.
