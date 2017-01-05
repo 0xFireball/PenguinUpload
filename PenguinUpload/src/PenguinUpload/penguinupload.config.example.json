@@ -1,14 +1,17 @@
 {
     // Data path for uploads
     "uploadDirectory": "data/uploads",
-
     // Whether to enable public registration through the web interface.
     // You may want to enable this when creating accounts.
     "registerEnabled": false,
-
     // An optional invite key. This can be used as an alternative
     // to disabling registration; users will be required to provide
     // this key when registering an account. Be sure to choose
     // a key of sufficient length and complexity
-    "inviteKey": null
+    "inviteKey": null,
+    // A list of usernames that should be granted admin privileges.
+    // Be careful only to add the usernames of existing users!
+    // Please refer to the Admininistration Documentation (docs/admin.md)
+    // for more information.
+    "admins": []
 }
