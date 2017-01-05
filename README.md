@@ -21,6 +21,11 @@ Vue Material as a frontend.
   - Disable public registration
     - Require an invite code to create an account
   - Set physical location of files (use `/tmp` for ephemeral storage)
+- Password protection of files
+  - Server enforced password protection
+- Complete API with stateless authentication for accessing the entire application
+  - All functionality is exposed through the API
+  - Each user has an API key
 - Intuitive Material Design interface
   - Pages for login, upload, download, profile, file management, and more
 - Concurrent, streamed file transfer
