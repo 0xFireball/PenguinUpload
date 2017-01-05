@@ -134,9 +134,9 @@ namespace PenguinUpload.Services.Authentication
             });
         }
 
-        public async Task DisableUser(RegisteredUser user)
+        public async Task SetEnabled(RegisteredUser user, bool status)
         {
-            user.Enabled = false;
+            user.Enabled = status;
             await UpdateUserInDatabase(user);
         }
 

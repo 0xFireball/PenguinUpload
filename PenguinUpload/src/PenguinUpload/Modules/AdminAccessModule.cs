@@ -39,7 +39,18 @@ namespace PenguinUpload.Modules
                 var user = await userManager.FindUserByUsernameAsync((string) args.name);
                 if (user == null) return HttpStatusCode.BadRequest;
                 // Disable user
-                await userManager.DisableUser(user);
+                await userManager.SetEnabled(user, false);
+                return HttpStatusCode.OK;
+            });
+
+            // Enable a user's account
+            Post("/enableuser/{name}", async args =>
+            {
+                var userManager = new WebUserManager();
+                var user = await userManager.FindUserByUsernameAsync((string) args.name);
+                if (user == null) return HttpStatusCode.BadRequest;
+                // Disable user
+                await userManager.SetEnabled(user, true);
                 return HttpStatusCode.OK;
             });
         }

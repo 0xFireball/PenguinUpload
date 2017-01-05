@@ -140,7 +140,7 @@ namespace PenguinUpload.Modules
                 var userManager = new WebUserManager();
                 var user = await userManager.FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
                 // Disable user
-                await userManager.DisableUser(user);
+                await userManager.SetEnabled(user, false);
                 var storedFilesManager = new StoredFilesManager();
                 var fileUploadHandler = new LocalStorageHandler();
                 // Start tasks to nuke user's files
