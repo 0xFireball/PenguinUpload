@@ -25,6 +25,8 @@ Vue Material as a frontend.
   - Server enforced password protection
 - Complete API with stateless authentication for accessing the entire application
   - All functionality is exposed through the API
+  - In fact, the entire web application (a Vue.js SPA) works entirely
+    through calls to PenguinUpload's REST API
   - Each user has an API key
 - Intuitive Material Design interface
   - Pages for login, upload, download, profile, file management, and more
