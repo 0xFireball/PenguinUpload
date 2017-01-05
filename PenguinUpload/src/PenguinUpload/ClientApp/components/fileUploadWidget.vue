@@ -28,11 +28,18 @@
                     <!--Uploading file-->
                     <md-subheader v-if="progressIndicators.length > 0">Uploading</md-subheader>
                     <md-list-item v-for="(prInd, ix) in progressIndicators">
-                      <md-icon class="md-primary">cloud_queue</md-icon>
+                      <md-icon class="md-primary" v-if="prInd.error == null">cloud_queue</md-icon>
+                      <md-icon class="md-primary" v-else>error</md-icon>
 
                       <div class="md-list-text-container">
-                        <span> {{ prInd.name }}</span>
-                        <span> {{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Uploaded, Processing...' }}</span>
+                        <template v-if="prInd.error == null">
+                          <span> {{ prInd.name }}</span>
+                          <span> {{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Uploaded, Processing...' }}</span>
+                        </template>
+                        <template v-else>
+                          <span> {{ prInd.name }} </span>
+                          <span> {{ 'Upload error: '+ prInd.error }}</span>
+                        </template>
                       </div>
 
                       <md-button class="md-icon-button md-list-action" @click="cancelUpload(prInd)">
@@ -137,7 +144,8 @@
           let progress = {
             value: 0,
             fileRef: f,
-            name: f.name
+            name: f.name,
+            error: null
           }
           this.progressIndicators.push(progress)
           this.uploadFile(f, progress)
@@ -154,17 +162,22 @@
         progress.xhr = xhr
         xhr.open("POST", "/api/upload")
         xhr.onload = function () {
-          // upload complete
-          // console.log('upload complete', progress.name)
-          // dequeue the uploading file
-          vm.progressIndicators.splice(vm.progressIndicators.indexOf(progress), 1)
-          // console.log(xhr.responseText)
-          let response = JSON.parse(xhr.responseText)
-          vm.completedFiles.push({
-            name: progress.name,
-            downloadPage: '/#/d/' + response.fileId
-            // downloadPage: response.downloadPage // get download page from server response
-          })
+          if (xhr.status === 200) {
+            // upload complete
+            // console.log('upload complete', progress.name)
+            // dequeue the uploading file
+            vm.progressIndicators.splice(vm.progressIndicators.indexOf(progress), 1)
+            // console.log(xhr.responseText)
+            let response = JSON.parse(xhr.responseText)
+            vm.completedFiles.push({
+              name: progress.name,
+              downloadPage: '/#/d/' + response.fileId
+              // downloadPage: response.downloadPage // get download page from server response
+            })
+          } else {
+            progress.error = xhr.responseText
+            console.log(progress)
+          }
         }
         xhr.upload.onprogress = function (e) {
           if (e.lengthComputable) {
