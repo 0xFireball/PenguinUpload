@@ -1,6 +1,10 @@
 <template>
   <div class="my-profile left">
-    <h4>Manage Account</h4>
+    <h4>Manage Account ({{ $root.u.name }})</h4>
+    <div>
+      <h5>API</h5>
+      <h6>API Key: <code>{{ $root.u.key }}</code></h6>
+    </div>
     <div>
       <h5>Security</h5>
       <form v-on:submit.prevent="tryUpdatePassword">
