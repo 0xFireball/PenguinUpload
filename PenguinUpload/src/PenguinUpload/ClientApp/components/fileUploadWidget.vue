@@ -35,6 +35,10 @@
                         <span> {{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Uploaded, Processing...' }}</span>
                       </div>
 
+                      <md-button class="md-icon-button md-list-action" @click="cancelUpload(prInd)">
+                        <md-icon class="md-primary">cancel</md-icon>
+                      </md-button>
+
                       <md-button class="md-icon-button md-list-action">
                         <md-icon class="md-primary">file_upload</md-icon>
                       </md-button>
@@ -88,7 +92,8 @@
         {
           value: number [0-100],
           fileRef: object [reference to file that is uploading],
-          name: string [name of file]
+          name: string [name of file],
+          xhr: object [xhr object reference]
         }
         */
         completedFiles: []
@@ -137,9 +142,15 @@
           this.uploadFile(f, progress)
         }
       },
+      cancelUpload: function (progress) {
+        let vm = this
+        progress.xhr.abort()
+        vm.progressIndicators.splice(vm.progressIndicators.indexOf(progress), 1)
+      },
       uploadFile: function (file, progress) {
         let vm = this
         let xhr = new XMLHttpRequest()
+        progress.xhr = xhr
         xhr.open("POST", "/api/upload")
         xhr.onload = function () {
           // upload complete
