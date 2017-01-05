@@ -4,6 +4,9 @@
     <p>
       PenguinUpload is a self-hostable, fully featured web application that lets users upload and share files.
     </p>
+    <h6>
+      PenguinUpload version {{ appVersion }}
+    </h6>
   </div>
 </template>
 
@@ -11,7 +14,8 @@
   export default {
     data: function () {
       return {
-        appName: 'PenguinUpload'
+        appName: 'PenguinUpload',
+        appVersion: window.$appVersion
       }
     }
   }

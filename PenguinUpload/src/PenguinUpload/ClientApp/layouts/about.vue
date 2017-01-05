@@ -32,6 +32,6 @@ export default {
 <style scoped>
   .about-content {
     text-align: center;
-    font-weight: 600;
+    /*font-weight: 600;*/
   }
 </style>

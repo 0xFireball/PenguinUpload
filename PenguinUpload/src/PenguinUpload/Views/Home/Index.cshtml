@@ -1,3 +1,4 @@
+@using PenguinUpload
 @{
     ViewData["Title"] = "PenguinUpload";
 }
@@ -6,5 +7,8 @@
 <!-- built files will be auto injected -->
 
 @section scripts {
-    <script src="/dist/main.js" asp-append-version="true"></script>
+  <script>
+      window.$appVersion = '@PenguinUploadRegistry.Version';
+  </script>
+  <script src="/dist/main.js" asp-append-version="true"></script>
 }
