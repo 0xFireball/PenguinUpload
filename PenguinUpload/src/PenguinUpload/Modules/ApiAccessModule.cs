@@ -58,6 +58,17 @@ namespace PenguinUpload.Modules
                 return HttpStatusCode.OK;
             });
 
+            Patch("/unlock/{id}", async args =>
+            {
+                var id = (string) args.id;
+                // Update file metadata
+                var storedFilesManager = new StoredFilesManager();
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifier(id);
+                if (storedFile == null) return HttpStatusCode.BadRequest;
+                await storedFilesManager.SetFilePassword(storedFile, null);
+                return HttpStatusCode.OK;
+            });
+
             Delete("/delete/{id}", async args =>
             {
                 var user = await new WebUserManager().FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);

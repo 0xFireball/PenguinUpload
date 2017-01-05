@@ -95,16 +95,6 @@
       lockFile: function (ix) {
         let vm = this
         let f = vm.files[ix]
-        // vm.$root.showConfirm('Are you sure you want to lock the file?', 'Confirm Delete', (r) => {
-        //   if (r) {
-        //     // send delete request
-        //     axios.delete('/api/delete/' + f.fileId, vm.authRequestParams)
-        //       .then(function (res) {
-        //         // update file list
-        //         vm.files.splice(ix, 1)
-        //       })
-        //   }
-        // })
         vm.$root.showPrompt('Enter password', 'Password', function (r) {
           if (r) {
             // send lock request
@@ -112,6 +102,20 @@
               .then(function (res) {
                 // update file list
                 f.locked = true
+              })
+          }
+        })
+      },
+      unlockFile: function (ix) {
+        let vm = this
+        let f = vm.files[ix]
+        vm.$root.showConfirm('Are you sure you want to remove the password on this file?', 'Confirm Unlock', (r) => {
+          if (r) {
+            // send unlock request
+            axios.patch('/api/unlock/' + f.fileId, {}, vm.authRequestParams)
+              .then(function (res) {
+                // update file list
+                f.locked = false
               })
           }
         })
