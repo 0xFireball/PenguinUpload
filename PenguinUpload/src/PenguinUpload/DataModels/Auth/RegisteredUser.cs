@@ -11,6 +11,18 @@ namespace PenguinUpload.DataModels.Auth
         [JsonProperty("username")]
         public string Username { get; set; }
 
+        /// <summary>
+        /// Storage quota in bytes
+        /// </summary>
+        [JsonProperty("quota")]
+        public int? StorageQuota { get; set; } = PenguinUploadRegistry.Configuration.DefaultQuota;
+
+        /// <summary>
+        ///  Storage usage in bytes
+        /// </summary>
+        [JsonProperty("usage")]
+        public long StorageUsage { get; set; } = 0;
+
         [JsonIgnore]
         public string ApiKey { get; set; }
 

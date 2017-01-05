@@ -1,4 +1,5 @@
 ﻿using PenguinUpload.Configuration;
+using System.Linq;
 
 namespace PenguinUpload
 {
@@ -9,5 +10,10 @@ namespace PenguinUpload
 
         public static string Version = Microsoft.Extensions.PlatformAbstractions
             .PlatformServices.Default.Application.ApplicationVersion;
+
+        public static bool IsAdministrator(string username)
+        {
+            return Configuration.Administrators.Contains(username);
+        }
     }
 }

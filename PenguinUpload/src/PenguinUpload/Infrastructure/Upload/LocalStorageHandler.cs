@@ -1,27 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security;
 using System.Threading.Tasks;
 using PenguinUpload.DataModels.Api;
+using PenguinUpload.DataModels.Auth;
+using PenguinUpload.Services.Authentication;
 
 namespace PenguinUpload.Infrastructure.Upload
 {
     public class LocalStorageHandler : IFileUploadHandler
     {
+        private readonly RegisteredUser _owner;
+        private readonly bool _adminOverride;
+
+        public LocalStorageHandler(RegisteredUser owner, bool adminOverride = false)
+        {
+            _owner = owner;
+            _adminOverride = adminOverride;
+        }
+
+        /// <summary>
+        /// Requires that an owner be provided unless the accessor is an administrator
+        /// All operations that act on a quota should call this to ensure
+        /// that the quota is handled correctly
+        /// </summary>
+        /// <exception cref="ArgumentException"></exception>
+        private void AssertIdentityProvided()
+        {
+            if (_owner == null && !_adminOverride)
+            {
+                throw new ArgumentException("Unless acting as administrator, storage owner must be provided.");
+            }
+        }
+
         public async Task<FileUploadResult> HandleUpload(string fileName, Stream stream)
         {
+            AssertIdentityProvided(); // Quota is affected
             var fileId = Guid.NewGuid().ToString();
             var targetFile = GetTargetFilePath(fileId);
+            var fileSize = stream.Length;
+
+            // Make sure user has enough space remaining
+            var afterUploadSpace = _owner?.StorageUsage + fileSize;
+            if (afterUploadSpace > _owner?.StorageQuota)
+            {
+                throw new QuotaExceededException();
+            }
 
             using (var destinationStream = File.Create(targetFile))
             {
                 await stream.CopyToAsync(destinationStream);
             }
 
+            if (_owner != null)
+            {
+                // Increase user storage usage
+                var userManager = new WebUserManager();
+                _owner.StorageUsage += fileSize;
+                await userManager.UpdateUserInDatabase(_owner);
+            }
+
             return new FileUploadResult
             {
                 FileId = fileId,
-                Size = stream.Length
+                Size = fileSize
             };
         }
 
@@ -39,16 +82,31 @@ namespace PenguinUpload.Infrastructure.Upload
             return uploadDirectory;
         }
 
+        /// <summary>
+        /// Retrieve the file stream for a file ID. This does not require an owner.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Stream RetrieveFileStream(string id)
         {
+            // Quota is not affected
             var filePath = GetTargetFilePath(id);
             return File.OpenRead(filePath);
         }
 
         public async Task DeleteFile(string fileId)
         {
+            AssertIdentityProvided(); // Quota is affected
             var filePath = GetTargetFilePath(fileId);
+            var fileInfo = await Task.Run(() => new FileInfo(filePath));
             await Task.Run(() => File.Delete(filePath));
+            if (_owner != null)
+            {
+                // Decrease user storage usage
+                var userManager = new WebUserManager();
+                _owner.StorageUsage -= fileInfo.Length;
+                await userManager.UpdateUserInDatabase(_owner);
+            }
         }
 
         public async Task NukeAllFiles(IEnumerable<string> identifiers)
