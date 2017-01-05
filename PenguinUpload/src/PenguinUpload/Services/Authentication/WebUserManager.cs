@@ -39,7 +39,7 @@ namespace PenguinUpload.Services.Authentication
             return storedUserRecord ?? null;
         }
 
-        public async Task<bool> UpdateUserInDatabase(RegisteredUser currentUser)
+        public async Task<bool> UpdateUserInDatabase(RegisteredUser user)
         {
             return await Task.Run(() =>
             {
@@ -49,7 +49,7 @@ namespace PenguinUpload.Services.Authentication
                     db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
                 using (var trans = db.BeginTrans())
                 {
-                    result = registeredUsers.Update(currentUser);
+                    result = registeredUsers.Update(user);
                     trans.Commit();
                 }
                 return result;
@@ -59,9 +59,9 @@ namespace PenguinUpload.Services.Authentication
         /// <summary>
         /// Attempts to register a new user. Only the username is validated, it is expected that other fields have already been validated!
         /// </summary>
-        public async Task<RegisteredUser> RegisterUserAsync(RegistrationRequest regRequest)
+        public async Task<RegisteredUser> RegisterUserAsync(RegistrationRequest request)
         {
-            return await Task.Run(() => RegisterUser(regRequest));
+            return await Task.Run(() => RegisterUser(request));
         }
 
         private RegisteredUser RegisterUser(RegistrationRequest regRequest)
@@ -86,7 +86,7 @@ namespace PenguinUpload.Services.Authentication
                 {
                     Identifier = Guid.NewGuid().ToString(),
                     Username = regRequest.Username,
-                    ApiKey = StringUtils.SecureRandomString(40),
+                    ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength),
                     CryptoSalt = pwSalt,
                     PasswordCryptoConf = cryptoConf,
                     PasswordKey = encryptedPassword
@@ -104,18 +104,18 @@ namespace PenguinUpload.Services.Authentication
             return newUserRecord;
         }
 
-        public async Task<bool> CheckPasswordAsync(string password, RegisteredUser userRecord)
+        public async Task<bool> CheckPasswordAsync(string password, RegisteredUser user)
         {
-            return await Task.Run(() => CheckPassword(password, userRecord));
+            return await Task.Run(() => CheckPassword(password, user));
         }
 
-        private static bool CheckPassword(string password, RegisteredUser userRecord)
+        private static bool CheckPassword(string password, RegisteredUser user)
         {
             //Calculate hash and compare
             var pwKey =
-                AuthCryptoHelper.CalculateUserPasswordHash(password, userRecord.CryptoSalt,
-                    userRecord.PasswordCryptoConf);
-            return StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, userRecord.PasswordKey);
+                AuthCryptoHelper.CalculateUserPasswordHash(password, user.CryptoSalt,
+                    user.PasswordCryptoConf);
+            return StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.PasswordKey);
         }
 
         public async Task RemoveUser(string username)
@@ -139,7 +139,7 @@ namespace PenguinUpload.Services.Authentication
             await UpdateUserInDatabase(user);
         }
 
-        public async Task ChangeUserPasswordAsync(RegisteredUser selectedUser, string newPassword)
+        public async Task ChangeUserPasswordAsync(RegisteredUser user, string newPassword)
         {
             await Task.Run(() =>
             {
@@ -148,11 +148,21 @@ namespace PenguinUpload.Services.Authentication
                 var pwSalt = AuthCryptoHelper.GetRandomSalt(AuthCryptoHelper.DefaultSaltLength);
                 var encryptedPassword =
                     AuthCryptoHelper.CalculateUserPasswordHash(newPassword, pwSalt, cryptoConf);
-                selectedUser.CryptoSalt = pwSalt;
-                selectedUser.PasswordCryptoConf = cryptoConf;
-                selectedUser.PasswordKey = encryptedPassword;
+                user.CryptoSalt = pwSalt;
+                user.PasswordCryptoConf = cryptoConf;
+                user.PasswordKey = encryptedPassword;
             });
-            await UpdateUserInDatabase(selectedUser);
+            await UpdateUserInDatabase(user);
+        }
+
+        public async Task GenerateNewApiKeyAsync(RegisteredUser user)
+        {
+            await Task.Run(() =>
+            {
+                // Recompute key
+                user.ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength);
+            });
+            await UpdateUserInDatabase(user);
         }
     }
 }

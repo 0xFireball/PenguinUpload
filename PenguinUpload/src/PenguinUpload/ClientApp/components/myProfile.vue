@@ -1,11 +1,12 @@
 <template>
   <div class="my-profile left">
     <h4>Manage Account ({{ $root.u.name }})</h4>
-    <div>
+    <div class="p-section">
       <h5>API</h5>
       <h6>API Key: <code>{{ $root.u.key }}</code></h6>
+      <md-button class="md-primary md-raised" @click="generateNewApiKey">Generate New</md-button>
     </div>
-    <div>
+    <div class="p-section">
       <h5>Security</h5>
       <form v-on:submit.prevent="tryUpdatePassword">
         <div class="row">
@@ -69,6 +70,20 @@
       }
     },
     methods: {
+      generateNewApiKey: function () {
+        let vm = this
+        vm.$root.showConfirm('Are you sure you want a new API key? The old one will no longer work. You will then be logged out.', 'Confirm Action', function (r) {
+          if (r) {
+            axios.patch('/newkey', {}, vm.authRequestParams)
+              .then((res) => {
+                // done
+                window.setTimeout(function () {
+                  vm.$root.showPopup('New API key generated. You will now be logged out.', 'Success')
+                }, 500)
+              })
+          }
+        })
+      },
       deleteAllFiles: function () {
         let vm = this
         vm.$root.showConfirm('Are you absolutely sure? All files that you have uploaded will be permanently removed. You will then be logged out.', 'Confirm Action', function (r) {
@@ -151,4 +166,8 @@
 </script>
 
 <style scoped>
+.p-section {
+  margin-top: 3%;
+  margin-bottom: 3%;
+}
 </style>

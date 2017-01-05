@@ -26,6 +26,16 @@ namespace PenguinUpload.Modules
                 return Response.AsJsonNet(user);
             });
 
+            // Generate new API key
+            Patch("/newkey", async _ =>
+            {
+                var webUserManager = new WebUserManager();
+                var user = await webUserManager.FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
+                // Update key
+                await webUserManager.GenerateNewApiKeyAsync(user);
+                return Response.AsJsonNet(user);
+            });
+
             // Get list of files
             Get("/userfiles", async _ =>
             {

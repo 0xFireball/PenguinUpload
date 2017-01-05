@@ -30,5 +30,6 @@ namespace PenguinUpload.Services.Authentication
         }
 
         public const int DefaultSaltLength = 64;
+        public const int DefaultApiKeyLength = 24;
     }
 }
