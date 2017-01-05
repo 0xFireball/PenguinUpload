@@ -74,11 +74,13 @@
         let vm = this
         vm.$root.showConfirm('Are you sure you want a new API key? The old one will no longer work. You will then be logged out.', 'Confirm Action', function (r) {
           if (r) {
-            axios.patch('/newkey', {}, vm.authRequestParams)
+            axios.patch('/api/newkey', {}, vm.authRequestParams)
               .then((res) => {
                 // done
+                vm.$root.u.key = ''
                 window.setTimeout(function () {
-                  vm.$root.showPopup('New API key generated. You will now be logged out.', 'Success')
+                  vm.$root.showPopup('New API key generated. Please log in again.', 'Success')
+                  vm.router.replace('/')
                 }, 500)
               })
           }
