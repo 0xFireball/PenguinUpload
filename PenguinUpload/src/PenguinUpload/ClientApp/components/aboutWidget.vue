@@ -2,7 +2,7 @@
   <div class="aboutWidget">
     <h5>About {{ appName }}</h5>
     <p>
-      PenguinUpload is a self-hostable web application that lets users upload and share files.
+      PenguinUpload is a self-hostable, fully featured web application that lets users upload and share files.
     </p>
   </div>
 </template>

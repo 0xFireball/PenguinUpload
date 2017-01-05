@@ -3,7 +3,7 @@
 
 ![screenshot](img/screenshot_upload.png)
 
-Easy file hosting/uploads
+A self-hostable, fully featured file host
 
 ## About
 
