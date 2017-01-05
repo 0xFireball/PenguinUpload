@@ -2,7 +2,7 @@
   <div class="file-upload-widget">
     <div class="container">
       <div class="row">
-        <div class="eight columns offset-by-two">
+        <div class="ten columns offset-by-one">
           <div class="left sep-b">
             <md-button class="md-raised md-primary" @click="viewMyFiles">View all my files</md-button>
           </div>
