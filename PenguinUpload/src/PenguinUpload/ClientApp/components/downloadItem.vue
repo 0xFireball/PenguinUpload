@@ -78,6 +78,11 @@
                   setTimeout(() => {
                     vm.updateFileInfo(r)
                   }, 500)
+                } else {
+                  vm.file.name = 'Incorrect Password'
+                  vm.file.sizeText = 'Access Denied'
+                  vm.loading = false
+                  vm.error = true
                 }
               })
             }
