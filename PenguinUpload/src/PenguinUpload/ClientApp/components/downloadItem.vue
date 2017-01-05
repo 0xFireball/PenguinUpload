@@ -55,7 +55,7 @@
     },
     methods: {
       downloadFile: function () {
-        window.location.href = '/api/download/' + this.file.id + this.file.pass ? '!' + this.file.pass : ''
+        window.location.href = '/api/download/' + this.file.id + (this.file.pass ? '!' + this.file.pass : '')
       },
       updateFileInfo: function (key) {
         let vm = this
