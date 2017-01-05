@@ -40,7 +40,12 @@ const main = [
   },
   {
     path: '/d/:id',
-    name: 'Download',
+    name: 'download',
+    component: Download
+  },
+  {
+    path: '/d/:id/:pass',
+    name: 'download (with pass)',
     component: Download
   }
 ]

@@ -40,7 +40,7 @@
   }
 
   export default {
-    props: ['itemId'],
+    props: ['itemId', 'itemPass'],
     data: function () {
       return {
         loading: true,
@@ -50,7 +50,8 @@
           id: null,
           pass: ''
         },
-        error: false
+        error: false,
+        cItemPass: ''
       }
     },
     methods: {
@@ -92,7 +93,14 @@
       }
     },
     mounted: function () {
-      this.updateFileInfo()
+      if (this.itemPass) {
+        try {
+          this.cItemPass = window.atob(this.itemPass)
+        } catch (e) {
+          this.cItemPass = null
+        }
+      }
+      this.updateFileInfo(this.cItemPass)
     }
   }
 </script>

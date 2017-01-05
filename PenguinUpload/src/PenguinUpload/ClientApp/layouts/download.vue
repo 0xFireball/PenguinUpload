@@ -8,7 +8,7 @@
     </div>
     <div class="row">
       <div class="six columns offset-by-three">
-        <downloadItem :itemId="$route.params.id"></downloadItem>
+        <downloadItem :itemId="$route.params.id" :itemPass="$route.params.pass"></downloadItem>
       </div>
     </div>
     <devCredits></devCredits>
