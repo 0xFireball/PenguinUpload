@@ -78,10 +78,8 @@
               .then((res) => {
                 // done
                 vm.$root.u.key = ''
-                window.setTimeout(function () {
-                  vm.$root.showPopup('New API key generated. Please log in again.', 'Success')
-                  vm.router.replace('/')
-                }, 500)
+                vm.$root.showPopup('New API key generated. Please log in again.', 'Success')
+                vm.$router.replace('/')
               })
           }
         })
