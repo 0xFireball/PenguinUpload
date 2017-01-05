@@ -14,7 +14,7 @@
     </md-dialog-confirm>
 
     <md-dialog-prompt :md-title="prompt.title" :md-ok-text="prompt.ok" :md-cancel-text="prompt.cancel" :md-input-placeholder="prompt.placeholder"
-      @close="onPromptClose" v-model="prompt.result" ref="promptDialog">
+      @close="onPromptClose" v-model="prompt.resp" ref="promptDialog">
     </md-dialog-prompt>
   </div>
 </template>
@@ -45,7 +45,7 @@
           cancel: 'Cancel',
           placeholder: '',
           // maxlength: 0,
-          value: '',
+          resp: '',
           callback: null
         }
       }
@@ -80,14 +80,15 @@
       showPrompt: function (title, placeholder, cb) {
         this.prompt.title = title
         this.prompt.placeholder = placeholder
+        this.prompt.callback = cb
         this.$refs.promptDialog.open()
       },
       onPromptClose: function (result) {
         if (result == 'ok') {
-          this.prompt.callback(this.prompt.value)
+          this.prompt.callback(this.prompt.resp)
         }
 
-        this.prompt.value = ''
+        this.prompt.resp = ''
         this.prompt.callback = null
       },
       onConfirmClose: function (result) {
