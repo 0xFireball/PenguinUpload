@@ -93,7 +93,8 @@
           value: number [0-100],
           fileRef: object [reference to file that is uploading],
           name: string [name of file],
-          xhr: object [xhr object reference]
+          xhr: object [xhr object reference],
+          error: string or null [an error message]
         }
         */
         completedFiles: []
