@@ -90,7 +90,8 @@
       },
       downloadFile: function (ix) {
         let f = this.files[ix]
-        window.location.href = '/api/download/' + f.fileId
+        // use force download to bypass password
+        window.location.href = '/api/fdownload/' + f.fileId
       },
       lockFile: function (ix) {
         let vm = this
