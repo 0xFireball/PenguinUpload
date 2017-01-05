@@ -32,6 +32,14 @@ namespace PenguinUpload.Modules
                 return Response.AsJsonNet(allUsers);
             });
 
+            // Get user account info
+            Post("/accountinfo/{name}", async args =>
+            {
+                var userManager = new WebUserManager();
+                var user = await userManager.FindUserByUsernameAsync((string) args.name);
+                return user == null ? HttpStatusCode.NotFound : Response.AsJsonNet(user);
+            }
+
             // Disable a user's account
             Post("/disableuser/{name}", async args =>
             {

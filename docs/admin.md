@@ -28,6 +28,8 @@ details of all registered users.
 Use this to get a list of all users and their information.
 **The password is securely hashed and encrypted, and cannot be retrieved!**
 
+`/api/admin/accountinfo/{name}` - Get account info for a single user (username is `name`).
+
 `/api/admin/disableuser/{name}` - Disable a user (username is `name`). This
 will disable all API/application access for the user. It is highly recommended
 that you disable a user using this route before making changes to the user or
