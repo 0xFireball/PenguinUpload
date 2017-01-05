@@ -24,24 +24,24 @@ contains the API key of a user with admin privileges.
 
 ### User management
 
-`/api/admin/enumerateusers` - Return a JSON array containing the user
+GET `/api/admin/enumerateusers` - Return a JSON array containing the user
 details of all registered users.
 
 Use this to get a list of all users and their information.
 **The password is securely hashed and encrypted, and cannot be retrieved!**
 
-`/api/admin/accountinfo/{name}` - Get account info for a single user (username is `name`).
+GET `/api/admin/accountinfo/{name}` - Get account info for a single user (username is `name`).
 
-`/api/admin/disableuser/{name}` - Disable a user (username is `name`). This
+PATCH `/api/admin/disableuser/{name}` - Disable a user (username is `name`). This
 will disable all API/application access for the user. It is highly recommended
 that you disable a user using this route before making changes to the user or
 his or her data.
 
-`/api/admin/enableuser/{name}` - Enables a user. Opposite of the previously
+PATCH `/api/admin/enableuser/{name}` - Enables a user. Opposite of the previously
 mentioned `disableuser`.
 
 ### Files
 
-`/api/admin/fileinfo/{id}` - Get file info by ID.
+GET `/api/admin/fileinfo/{id}` - Get file info by ID.
 
-`/api/admin/deletefile/{id}` - Deletes a file by ID.
+DELETE `/api/admin/deletefile/{id}` - Deletes a file by ID.

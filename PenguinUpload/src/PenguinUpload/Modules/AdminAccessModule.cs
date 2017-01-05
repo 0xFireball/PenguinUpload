@@ -40,10 +40,10 @@ namespace PenguinUpload.Modules
                 var userManager = new WebUserManager();
                 var user = await userManager.FindUserByUsernameAsync((string) args.name);
                 return user == null ? HttpStatusCode.NotFound : Response.AsJsonNet(user);
-            }
+            });
 
             // Disable a user's account
-            Post("/disableuser/{name}", async args =>
+            Patch("/disableuser/{name}", async args =>
             {
                 var userManager = new WebUserManager();
                 var user = await userManager.FindUserByUsernameAsync((string) args.name);
@@ -54,7 +54,7 @@ namespace PenguinUpload.Modules
             });
 
             // Enable a user's account
-            Post("/enableuser/{name}", async args =>
+            Patch("/enableuser/{name}", async args =>
             {
                 var userManager = new WebUserManager();
                 var user = await userManager.FindUserByUsernameAsync((string) args.name);
