@@ -14,6 +14,9 @@
               </md-card-header>
               <md-card-content>
                 <div v-if="loadFinished">
+                  <div v-if="noFiles">
+                    <p>No Files</p>
+                  </div>
                   <md-list class="custom-list md-double-line">
                     <md-list-item v-for="(file, ix) in files">
                       <md-icon class="md-primary">cloud_done</md-icon>
@@ -74,6 +77,14 @@
           }
         },
         loadFinished: false
+      }
+    },
+    computed: {
+      filesCount: function () {
+        return this.files.length
+      },
+      noFiles: function () {
+        return this.filesCount == 0
       }
     },
     methods: {
