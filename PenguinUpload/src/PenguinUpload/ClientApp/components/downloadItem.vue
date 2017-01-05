@@ -62,7 +62,7 @@
         let vm = this
         let suffix = key ? '!' + key : ''
         vm.file.id = vm.itemId
-        axios.get('/api/fileInfo/' + vm.file.id + suffix, axiosRequestConfig)
+        axios.get('/api/fileinfo/' + vm.file.id + suffix, axiosRequestConfig)
           .then(function (response) {
             if (response.status == 200) {
               vm.file.name = response.data.name

@@ -22,6 +22,8 @@ Add your username to the `admins` array in the configuration file.
 All API requests must be authenticated with a `apikey` parameter that
 contains the API key of a user with admin privileges.
 
+### User management
+
 `/api/admin/enumerateusers` - Return a JSON array containing the user
 details of all registered users.
 
@@ -37,3 +39,9 @@ his or her data.
 
 `/api/admin/enableuser/{name}` - Enables a user. Opposite of the previously
 mentioned `disableuser`.
+
+### Files
+
+`/api/admin/fileinfo/{id}` - Get file info by ID.
+
+`/api/admin/deletefile/{id}` - Deletes a file by ID.

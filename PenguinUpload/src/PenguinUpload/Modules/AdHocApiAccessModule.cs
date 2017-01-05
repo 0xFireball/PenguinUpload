@@ -10,7 +10,7 @@ namespace PenguinUpload.Modules
     {
         public AdHocApiAccessModule() : base("/api")
         {
-            Get("/fileInfo/{idPass}", async args =>
+            Get("/fileinfo/{idPass}", async args =>
             {
                 var idParts = ((string) args.idPass).Split('!');
                 var id = idParts[0];

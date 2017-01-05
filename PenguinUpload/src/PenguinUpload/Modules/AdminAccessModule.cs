@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using Nancy;
 using Nancy.Security;
+using PenguinUpload.Infrastructure.Upload;
 using PenguinUpload.Services.Authentication;
+using PenguinUpload.Services.FileStorage;
 using PenguinUpload.Utilities;
 
 namespace PenguinUpload.Modules
@@ -59,6 +61,29 @@ namespace PenguinUpload.Modules
                 if (user == null) return HttpStatusCode.BadRequest;
                 // Disable user
                 await userManager.SetEnabled(user, true);
+                return HttpStatusCode.OK;
+            });
+
+            // Get file info (admin override)
+            Delete("/fileinfo/{id}", async args =>
+            {
+                var fileId = (string) args.id;
+                // Get metadata
+                var storedFilesManager = new StoredFilesManager();
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifier(fileId);
+                return Response.AsJsonNet(storedFile);
+            });
+
+            // Delete a file (admin override)
+            Delete("/deletefile/{id}", async args =>
+            {
+                var fileId = (string) args.id;
+                // Remove physical file
+                var fileUploadHandler = new LocalStorageHandler();
+                await fileUploadHandler.DeleteFile(fileId);
+                // Unregister file
+                var storedFilesManager = new StoredFilesManager();
+                await storedFilesManager.UnregisterStoredFileAsync(fileId);
                 return HttpStatusCode.OK;
             });
         }
