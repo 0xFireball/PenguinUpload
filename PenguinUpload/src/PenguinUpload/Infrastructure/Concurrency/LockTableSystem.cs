@@ -8,13 +8,16 @@ namespace PenguinUpload.Infrastructure.Concurrency
 
         public UserLock GetOrCreate(string username)
         {
-            if (UserLockTable.ContainsKey(username))
+            lock (UserLockTable)
             {
-                return UserLockTable[username];
+                if (UserLockTable.ContainsKey(username))
+                {
+                    return UserLockTable[username];
+                }
+                var ret = new UserLock();
+                UserLockTable[username] = ret;
+                return ret;
             }
-            var ret = new UserLock();
-            UserLockTable[username] = ret;
-            return ret;
         }
     }
 }
