@@ -1,4 +1,7 @@
 
+# The annoying Webpack output file
+/src/PenguinUpload/wwwroot/dist/main.js
+
 # Publish output path
 
 /build/
