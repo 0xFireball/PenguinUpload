@@ -10,7 +10,7 @@ namespace PenguinUpload.Infrastructure.Concurrency
 
         public ResourceThrottle(int maxConcurrent)
         {
-            _throttle = new Semaphore(0, maxConcurrent);
+            _throttle = new Semaphore(maxConcurrent, maxConcurrent);
         }
 
         public void Acquire()
