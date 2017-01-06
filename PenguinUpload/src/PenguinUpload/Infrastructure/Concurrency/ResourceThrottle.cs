@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 
 namespace PenguinUpload.Infrastructure.Concurrency
 {
-    public class UploadThrottle
+    public class ResourceThrottle
     {
         private readonly Semaphore _throttle;
 
-        public UploadThrottle(int maxConcurrent)
+        public ResourceThrottle(int maxConcurrent)
         {
             _throttle = new Semaphore(0, maxConcurrent);
         }
