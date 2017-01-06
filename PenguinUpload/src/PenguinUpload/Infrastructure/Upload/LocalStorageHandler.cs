@@ -39,10 +39,10 @@ namespace PenguinUpload.Infrastructure.Upload
             AssertIdentityProvided(); // Quota is affected
             var fileId = Guid.NewGuid().ToString();
             var targetFile = GetTargetFilePath(fileId);
-            var fileSize = stream.Length;
+            var uploadStreamFileSize = stream.Length;
 
             // Make sure user has enough space remaining
-            var afterUploadSpace = _owner?.StorageUsage + fileSize;
+            var afterUploadSpace = _owner?.StorageUsage + uploadStreamFileSize;
             if (afterUploadSpace > _owner?.StorageQuota)
             {
                 throw new QuotaExceededException();
@@ -52,19 +52,21 @@ namespace PenguinUpload.Infrastructure.Upload
             {
                 await stream.CopyToAsync(destinationStream);
             }
+            var fileInfo = await Task.Run(() => new FileInfo(targetFile));
+            var physicalFileSize = fileInfo.Length;
 
             if (_owner != null)
             {
                 // Increase user storage usage
                 var userManager = new WebUserManager();
-                _owner.StorageUsage += fileSize;
+                _owner.StorageUsage += uploadStreamFileSize;
                 await userManager.UpdateUserInDatabase(_owner);
             }
 
             return new FileUploadResult
             {
                 FileId = fileId,
-                Size = fileSize
+                Size = uploadStreamFileSize
             };
         }
 
@@ -99,12 +101,14 @@ namespace PenguinUpload.Infrastructure.Upload
             AssertIdentityProvided(); // Quota is affected
             var filePath = GetTargetFilePath(fileId);
             var fileInfo = await Task.Run(() => new FileInfo(filePath));
+            var fileSize = fileInfo.Length;
             await Task.Run(() => File.Delete(filePath));
             if (_owner != null)
             {
                 // Decrease user storage usage
                 var userManager = new WebUserManager();
-                _owner.StorageUsage -= fileInfo.Length;
+                var prevStorageUsage = _owner.StorageUsage;
+                _owner.StorageUsage -= fileSize;
                 await userManager.UpdateUserInDatabase(_owner);
             }
         }
