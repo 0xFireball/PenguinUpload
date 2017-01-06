@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security;
 using System.Threading.Tasks;
 using PenguinUpload.DataModels.Api;
-using PenguinUpload.DataModels.Auth;
-using PenguinUpload.Infrastructure.Concurrency;
 using PenguinUpload.Services.Authentication;
 
 namespace PenguinUpload.Infrastructure.Upload
@@ -42,32 +39,45 @@ namespace PenguinUpload.Infrastructure.Upload
             var targetFile = GetTargetFilePath(fileId);
             var uploadStreamFileSize = stream.Length;
 
-            // Make sure user has enough space remaining
-            if (_owner != null)
+            try
             {
-                UserLock lockEntry;
-                lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(_owner);
-                await lockEntry.ObtainExclusiveWriteAsync();
-                var userManager = new WebUserManager();
-                var ownerData = await userManager.FindUserByUsernameAsync(_owner);
-                var afterUploadSpace = ownerData.StorageUsage + uploadStreamFileSize;
-                if (afterUploadSpace > ownerData.StorageQuota)
+                // Write file (Wait for upload throttle)
+                await PenguinUploadRegistry.ServiceTable[_owner]
+                    .UploadThrottle.WithResource(async () =>
+                    {
+                        using (var destinationStream = File.Create(targetFile))
+                        {
+                            await stream.CopyToAsync(destinationStream);
+                        }
+                    });
+
+                // Make sure user has enough space remaining
+                if (_owner != null)
                 {
+                    var lockEntry = PenguinUploadRegistry.ServiceTable[_owner].UserLock;
+                    await lockEntry.ObtainExclusiveWriteAsync();
+                    var userManager = new WebUserManager();
+                    var ownerData = await userManager.FindUserByUsernameAsync(_owner);
+                    var afterUploadSpace = ownerData.StorageUsage + uploadStreamFileSize;
+                    if (afterUploadSpace > ownerData.StorageQuota)
+                    {
+                        lockEntry.ReleaseExclusiveWrite();
+                        // Throw exception, catch block will remove file and rethrow
+                        throw new QuotaExceededException();
+                    }
+                    // Increase user storage usage
+                    ownerData.StorageUsage += uploadStreamFileSize;
+                    await userManager.UpdateUserInDatabase(ownerData);
                     lockEntry.ReleaseExclusiveWrite();
-                    throw new QuotaExceededException();
                 }
-                // Increase user storage usage
-                ownerData.StorageUsage += uploadStreamFileSize;
-                await userManager.UpdateUserInDatabase(ownerData);
-                lockEntry.ReleaseExclusiveWrite();
+            }
+            catch (QuotaExceededException)
+            {
+                // Roll back write
+                await Task.Run(() => File.Delete(targetFile));
+                throw;
             }
 
-            using (var destinationStream = File.Create(targetFile))
-            {
-                await stream.CopyToAsync(destinationStream);
-            }
-            var fileInfo = await Task.Run(() => new FileInfo(targetFile));
-            var physicalFileSize = fileInfo.Length;
 
             return new FileUploadResult
             {
@@ -111,8 +121,7 @@ namespace PenguinUpload.Infrastructure.Upload
             await Task.Run(() => File.Delete(filePath));
             if (_owner != null)
             {
-                UserLock lockEntry;
-                lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(_owner);
+                var lockEntry = PenguinUploadRegistry.ServiceTable[_owner].UserLock;
                 // Decrease user storage usage
                 await lockEntry.ObtainExclusiveWriteAsync();
                 var userManager = new WebUserManager();

@@ -172,8 +172,11 @@
               // downloadPage: response.downloadPage // get download page from server response
             })
           } else {
-            progress.message = xhr.responseText
+            // update progress indicator
             progress.error = true
+            // progress.message = xhr.responseText
+            // reactive update
+            vm.$set(progress, 'message', xhr.responseText)
           }
         }
         xhr.upload.onprogress = function (e) {

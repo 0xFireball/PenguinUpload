@@ -15,7 +15,7 @@ namespace PenguinUpload.Services.FileStorage
         {
             return await Task.Run(() =>
             {
-                var userDatabaseLock = PenguinUploadRegistry.LockTable.GetOrCreate(ownerUsername);
+                var userDatabaseLock = PenguinUploadRegistry.ServiceTable.GetOrCreate(ownerUsername).UserLock;
                 userDatabaseLock.ObtainExclusiveWrite();
                 var db = new DatabaseAccessService().OpenOrCreateDefault();
                 var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);

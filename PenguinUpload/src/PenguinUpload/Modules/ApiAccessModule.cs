@@ -1,11 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Responses;
 using Nancy.Security;
 using PenguinUpload.DataModels.Api;
-using PenguinUpload.Infrastructure.Concurrency;
 using PenguinUpload.Infrastructure.Upload;
 using PenguinUpload.Services.Authentication;
 using PenguinUpload.Services.FileStorage;
@@ -26,14 +24,16 @@ namespace PenguinUpload.Modules
             // Get user metadata
             Get("/userinfo", async _ =>
             {
-                var user = await userManager.FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
+                var idUsername = Context.CurrentUser.Identity.Name;
+                var user = await userManager.FindUserByUsernameAsync(idUsername);
                 return Response.AsJsonNet(user);
             });
 
             // Generate new API key
             Patch("/newkey", async _ =>
             {
-                var user = await userManager.FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
+                var idUsername = Context.CurrentUser.Identity.Name;
+                var user = await userManager.FindUserByUsernameAsync(idUsername);
                 // Update key
                 await userManager.GenerateNewApiKeyAsync(user);
                 return Response.AsJsonNet(user);
@@ -42,7 +42,8 @@ namespace PenguinUpload.Modules
             // Get list of files
             Get("/userfiles", async _ =>
             {
-                var user = await userManager.FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
+                var idUsername = Context.CurrentUser.Identity.Name;
+                var user = await userManager.FindUserByUsernameAsync(idUsername);
                 var storedFilesManager = new StoredFilesManager();
                 var userFiles = await storedFilesManager.GetStoredFilesByUser(user);
                 return Response.AsJsonNet(userFiles);
@@ -51,12 +52,14 @@ namespace PenguinUpload.Modules
             // Upload a file
             Post("/upload", async _ =>
             {
+                var idUsername = Context.CurrentUser.Identity.Name;
                 var request = this.Bind<FileUploadRequest>();
-                var fileUploadHandler = new LocalStorageHandler(Context.CurrentUser.Identity.Name);
+                var fileUploadHandler = new LocalStorageHandler(idUsername);
                 FileUploadResult uploadResult;
                 try
                 {
-                    uploadResult = await fileUploadHandler.HandleUpload(request.File.Name, request.File.Value);
+                    uploadResult =
+                        await fileUploadHandler.HandleUpload(request.File.Name, request.File.Value);
                 }
                 catch (QuotaExceededException qEx)
                 {
@@ -66,7 +69,7 @@ namespace PenguinUpload.Modules
                 // Register uploaded file
                 var storedFilesManager = new StoredFilesManager();
                 var storedFile =
-                    await storedFilesManager.RegisterStoredFileAsync(Context.CurrentUser.Identity.Name,
+                    await storedFilesManager.RegisterStoredFileAsync(idUsername,
                         request.File.Name, uploadResult.FileId,
                         uploadResult.Size);
 
@@ -76,11 +79,12 @@ namespace PenguinUpload.Modules
             // Force download, bypass password
             Get("/fdownload/{id}", async args =>
             {
+                var idUsername = Context.CurrentUser.Identity.Name;
                 var storedFilesManager = new StoredFilesManager();
                 var storedFile = await storedFilesManager.GetStoredFileByIdentifier((string) args.id);
                 if (storedFile == null) return HttpStatusCode.NotFound;
 
-                var fileUploadHandler = new LocalStorageHandler(Context.CurrentUser.Identity.Name);
+                var fileUploadHandler = new LocalStorageHandler(idUsername);
                 var fileStream = fileUploadHandler.RetrieveFileStream(storedFile.Identifier);
                 var response = new StreamResponse(() => fileStream, MimeTypes.GetMimeType(storedFile.Name));
                 return response.AsAttachment(storedFile.Name);
@@ -116,9 +120,10 @@ namespace PenguinUpload.Modules
             // Delete a file
             Delete("/delete/{id}", async args =>
             {
+                var idUsername = Context.CurrentUser.Identity.Name;
                 var fileId = (string) args.id;
                 // Remove physical file
-                var fileUploadHandler = new LocalStorageHandler(Context.CurrentUser.Identity.Name);
+                var fileUploadHandler = new LocalStorageHandler(idUsername);
                 await fileUploadHandler.DeleteFile(fileId);
                 // Unregister file
                 var storedFilesManager = new StoredFilesManager();
@@ -131,9 +136,10 @@ namespace PenguinUpload.Modules
             // Delete all a user's files
             Delete("/nuke/files", async _ =>
             {
-                var user = await userManager.FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
+                var idUsername = Context.CurrentUser.Identity.Name;
+                var user = await userManager.FindUserByUsernameAsync(idUsername);
                 var storedFilesManager = new StoredFilesManager();
-                var fileUploadHandler = new LocalStorageHandler(Context.CurrentUser.Identity.Name);
+                var fileUploadHandler = new LocalStorageHandler(idUsername);
                 // Start tasks to nuke user's files
                 var userFiles = await storedFilesManager.GetStoredFilesByUser(user);
                 var nukePhysicalFilesTask = fileUploadHandler.NukeAllFiles(userFiles.Select(x => x.Identifier));
@@ -144,11 +150,12 @@ namespace PenguinUpload.Modules
             // Delete a user and all content
             Delete("/nuke/user", async _ =>
             {
-                var user = await userManager.FindUserByUsernameAsync(Context.CurrentUser.Identity.Name);
+                var idUsername = Context.CurrentUser.Identity.Name;
+                var user = await userManager.FindUserByUsernameAsync(idUsername);
                 // Disable user
                 await userManager.SetEnabled(user, false);
                 var storedFilesManager = new StoredFilesManager();
-                var fileUploadHandler = new LocalStorageHandler(Context.CurrentUser.Identity.Name);
+                var fileUploadHandler = new LocalStorageHandler(idUsername);
                 // Start tasks to nuke user's files
                 var userFiles = await storedFilesManager.GetStoredFilesByUser(user);
                 var nukePhysicalFilesTask = fileUploadHandler.NukeAllFiles(userFiles.Select(x => x.Identifier));
