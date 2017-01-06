@@ -73,6 +73,13 @@ namespace PenguinUpload.Infrastructure.Concurrency
             ReleaseExclusiveWrite();
         }
 
+        public async Task WithExclusiveWrite(Func<Task> action)
+        {
+            await ObtainExclusiveWriteAsync();
+            await action();
+            ReleaseExclusiveWrite();
+        }
+
         public async Task WithExclusiveRead(Task action)
         {
             await ObtainExclusiveReadAsync();
@@ -80,10 +87,24 @@ namespace PenguinUpload.Infrastructure.Concurrency
             ReleaseExclusiveRead();
         }
 
+        public async Task WithExclusiveRead(Func<Task> action)
+        {
+            await ObtainExclusiveReadAsync();
+            await action();
+            ReleaseExclusiveRead();
+        }
+
         public async Task WithConcurrentRead(Task action)
         {
             await ObtainConcurrentReadAsync();
             await action;
+            ReleaseConcurrentRead();
+        }
+
+        public async Task WithConcurrentRead(Func<Task> action)
+        {
+            await ObtainConcurrentReadAsync();
+            await action();
             ReleaseConcurrentRead();
         }
 
