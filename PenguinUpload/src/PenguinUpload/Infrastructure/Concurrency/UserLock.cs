@@ -13,6 +13,7 @@ namespace PenguinUpload.Infrastructure.Concurrency
             var writeAvailableEvent = new AutoResetEvent(!_writeLock);
             writeAvailableEvent.WaitOne();
             _readLock = true;
+            _writeLock = true;
         }
 
         public async Task ObtainExclusiveWriteAsync()
@@ -23,13 +24,15 @@ namespace PenguinUpload.Infrastructure.Concurrency
         public void ReleaseExclusiveWrite()
         {
             _readLock = false;
+            _writeLock = false;
         }
 
         public void ObtainExclusiveRead()
         {
             var readAvailableEvent = new AutoResetEvent(!_readLock);
             readAvailableEvent.WaitOne();
-            _writeLock = true;
+            _readLock = true;
+//            _writeLock = true;
         }
 
         public async Task ObtainExclusiveReadAsync()
@@ -39,7 +42,8 @@ namespace PenguinUpload.Infrastructure.Concurrency
 
         public void ReleaseExclusiveRead()
         {
-            _writeLock = false;
+            _readLock = false;
+//            _writeLock = false;
         }
     }
 }

@@ -15,6 +15,8 @@ namespace PenguinUpload.Services.FileStorage
         {
             return await Task.Run(() =>
             {
+                var userDatabaseLock = PenguinUploadRegistry.LockTable.GetOrCreate(ownerUsername);
+                userDatabaseLock.ObtainExclusiveWrite();
                 var db = new DatabaseAccessService().OpenOrCreateDefault();
                 var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);
                 var result = new StoredFile
@@ -29,6 +31,7 @@ namespace PenguinUpload.Services.FileStorage
                     storedFiles.Insert(result);
                     trans.Commit();
                 }
+                userDatabaseLock.ReleaseExclusiveWrite();
 
                 // Index the database
                 storedFiles.EnsureIndex(x => x.Identifier);
