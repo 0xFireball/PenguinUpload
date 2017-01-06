@@ -54,7 +54,9 @@ namespace PenguinUpload.Modules
                     }
                 }
 
-                var fileUploadHandler = new LocalStorageHandler();
+                // Create unauthenticated storage handler without admin permissions
+                // This is OK because download operatiotn does not affect quota.
+                var fileUploadHandler = new LocalStorageHandler(null, false);
                 var fileStream = fileUploadHandler.RetrieveFileStream(storedFile.Identifier);
                 var response = new StreamResponse(() => fileStream, MimeTypes.GetMimeType(storedFile.Name));
                 return response.AsAttachment(storedFile.Name);

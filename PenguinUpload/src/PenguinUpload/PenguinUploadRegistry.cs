@@ -1,4 +1,7 @@
-﻿using PenguinUpload.Configuration;
+﻿using System.Collections.Generic;
+using PenguinUpload.Configuration;
+using System.Linq;
+using PenguinUpload.Infrastructure.Concurrency;
 
 namespace PenguinUpload
 {
@@ -9,5 +12,12 @@ namespace PenguinUpload
 
         public static string Version = Microsoft.Extensions.PlatformAbstractions
             .PlatformServices.Default.Application.ApplicationVersion;
+
+        public static bool IsAdministrator(string username)
+        {
+            return Configuration.Administrators.Contains(username);
+        }
+
+        public static LockTableSystem LockTable { get; } = new LockTableSystem();
     }
 }

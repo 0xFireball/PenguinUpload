@@ -20,7 +20,7 @@ namespace PenguinUpload.Modules
             Before += (ctx) =>
             {
                 // Make sure user is an admin
-                if (!PenguinUploadRegistry.Configuration.Administrators.Contains(Context.CurrentUser.Identity.Name))
+                if (!PenguinUploadRegistry.IsAdministrator(Context.CurrentUser.Identity.Name))
                 {
                     return HttpStatusCode.Unauthorized;
                 }
@@ -83,7 +83,7 @@ namespace PenguinUpload.Modules
                 var storedFilesManager = new StoredFilesManager();
                 var storedFile = await storedFilesManager.GetStoredFileByIdentifier(fileId);
                 if (storedFile == null) return HttpStatusCode.NotFound;
-                var fileUploadHandler = new LocalStorageHandler();
+                var fileUploadHandler = new LocalStorageHandler(null, true);
                 var fileStream = fileUploadHandler.RetrieveFileStream(storedFile.Identifier);
                 var response = new StreamResponse(() => fileStream, MimeTypes.GetMimeType(storedFile.Name));
                 return response.AsAttachment(storedFile.Name);
@@ -94,7 +94,7 @@ namespace PenguinUpload.Modules
             {
                 var fileId = (string) args.id;
                 // Remove physical file
-                var fileUploadHandler = new LocalStorageHandler();
+                var fileUploadHandler = new LocalStorageHandler(null, true);
                 await fileUploadHandler.DeleteFile(fileId);
                 // Unregister file
                 var storedFilesManager = new StoredFilesManager();

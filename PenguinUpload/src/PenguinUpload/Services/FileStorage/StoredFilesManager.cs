@@ -10,11 +10,13 @@ namespace PenguinUpload.Services.FileStorage
 {
     public class StoredFilesManager
     {
-        public async Task<StoredFile> RegisterStoredFileAsync(RegisteredUser owner, string name, string identifier,
+        public async Task<StoredFile> RegisterStoredFileAsync(string ownerUsername, string name, string identifier,
             double fileSize)
         {
             return await Task.Run(() =>
             {
+                var userDatabaseLock = PenguinUploadRegistry.LockTable.GetOrCreate(ownerUsername);
+                userDatabaseLock.ObtainExclusiveWrite();
                 var db = new DatabaseAccessService().OpenOrCreateDefault();
                 var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);
                 var result = new StoredFile
@@ -22,13 +24,14 @@ namespace PenguinUpload.Services.FileStorage
                     Name = name,
                     Identifier = identifier,
                     HumanReadableSize = HumanReadableFileSize.FromLength(fileSize),
-                    OwnerUsername = owner.Username
+                    OwnerUsername = ownerUsername
                 };
                 using (var trans = db.BeginTrans())
                 {
                     storedFiles.Insert(result);
                     trans.Commit();
                 }
+                userDatabaseLock.ReleaseExclusiveWrite();
 
                 // Index the database
                 storedFiles.EnsureIndex(x => x.Identifier);

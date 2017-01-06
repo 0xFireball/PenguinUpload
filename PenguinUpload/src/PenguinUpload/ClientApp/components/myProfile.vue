@@ -2,6 +2,20 @@
   <div class="my-profile left">
     <h4>Manage Account ({{ $root.u.name }})</h4>
     <div class="p-section">
+      <h5>Resource Usage</h5>
+      <div v-if="uInfo.loaded">
+        <p>
+          Using
+          <b>{{ uInfo.usage }}</b> of <b>{{ uInfo.quota }}</b>
+        </p>
+      </div>
+      <div v-else>
+        <md-spinner md-indeterminate></md-spinner>
+        <p>Retrieving Data</p>
+      </div>
+      <p></p>
+    </div>
+    <div class="p-section">
       <h5>API</h5>
       <h6>API Key: <code>{{ $root.u.key }}</code></h6>
       <md-button class="md-primary md-raised" @click="generateNewApiKey">Generate New</md-button>
@@ -66,6 +80,11 @@
           params: {
             apikey: ''
           }
+        },
+        uInfo: {
+          quota: null,
+          usage: null,
+          loaded: false
         }
       }
     },
@@ -161,6 +180,16 @@
       // load files from server
       let vm = this
       vm.authRequestParams.params.apikey = vm.$root.u.key
+      // load user info
+      axios.get('/api/userinfo', vm.authRequestParams)
+        .then(function (res) {
+          // fetched data
+          vm.uInfo = {
+            quota: vm.$root.humanFileSize(res.data.quota),
+            usage: vm.$root.humanFileSize(res.data.usage),
+            loaded: true
+          }
+        })
     }
   }
 </script>
