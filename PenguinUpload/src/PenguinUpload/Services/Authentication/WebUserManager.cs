@@ -41,15 +41,15 @@ namespace PenguinUpload.Services.Authentication
         }
 
         /// <summary>
-        /// Warning: Use the LockTable system!
+        /// Warning: Callers are expected to use their own locks before calling this method!
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
         public async Task<bool> UpdateUserInDatabase(RegisteredUser user)
         {
-            return await Task.Run(() =>
+            var result = false;
+            await Task.Run(() =>
             {
-                bool result;
                 var db = new DatabaseAccessService().OpenOrCreateDefault();
                 var registeredUsers =
                     db.GetCollection<RegisteredUser>(DatabaseAccessService.UsersCollectionDatabaseKey);
@@ -58,8 +58,8 @@ namespace PenguinUpload.Services.Authentication
                     result = registeredUsers.Update(user);
                     trans.Commit();
                 }
-                return result;
             });
+            return result;
         }
 
         /// <summary>
@@ -112,19 +112,19 @@ namespace PenguinUpload.Services.Authentication
 
         public async Task<bool> CheckPasswordAsync(string password, RegisteredUser user)
         {
-            return await Task.Run(() => CheckPassword(password, user));
-        }
-
-        private static bool CheckPassword(string password, RegisteredUser user)
-        {
+            var ret = false;
             var lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(user.Username);
-            lockEntry.ObtainConcurrentRead();
-            //Calculate hash and compare
-            var pwKey =
-                AuthCryptoHelper.CalculateUserPasswordHash(password, user.CryptoSalt,
-                    user.PasswordCryptoConf);
-            lockEntry.ReleaseConcurrentRead();
-            return StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.PasswordKey);
+            await lockEntry.WithConcurrentRead(Task.Run(() =>
+            {
+                lockEntry.ObtainConcurrentRead();
+                //Calculate hash and compare
+                var pwKey =
+                    AuthCryptoHelper.CalculateUserPasswordHash(password, user.CryptoSalt,
+                        user.PasswordCryptoConf);
+                lockEntry.ReleaseConcurrentRead();
+                ret = StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.PasswordKey);
+            }));
+            return ret;
         }
 
         public async Task RemoveUser(string username)
@@ -154,8 +154,7 @@ namespace PenguinUpload.Services.Authentication
         public async Task ChangeUserPasswordAsync(RegisteredUser user, string newPassword)
         {
             var lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(user.Username);
-            await lockEntry.ObtainExclusiveWriteAsync();
-            await Task.Run(() =>
+            await lockEntry.WithExclusiveWrite(Task.Run(() =>
             {
                 // Recompute password crypto
                 var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
@@ -165,22 +164,17 @@ namespace PenguinUpload.Services.Authentication
                 user.CryptoSalt = pwSalt;
                 user.PasswordCryptoConf = cryptoConf;
                 user.PasswordKey = encryptedPassword;
-            });
-            await UpdateUserInDatabase(user);
-            lockEntry.ReleaseExclusiveWrite();
+            }));
         }
 
         public async Task GenerateNewApiKeyAsync(RegisteredUser user)
         {
             var lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(user.Username);
-            await lockEntry.ObtainExclusiveWriteAsync();
-            await Task.Run(() =>
+            await lockEntry.WithExclusiveWrite(Task.Run(() =>
             {
                 // Recompute key
                 user.ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength);
-            });
-            await UpdateUserInDatabase(user);
-            lockEntry.ReleaseExclusiveWrite();
+            }));
         }
 
         public async Task<IEnumerable<RegisteredUser>> GetAllUsersAsync()
