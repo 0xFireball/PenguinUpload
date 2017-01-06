@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PenguinUpload.Infrastructure.Concurrency
@@ -27,10 +28,10 @@ namespace PenguinUpload.Infrastructure.Concurrency
             _throttle.Release();
         }
 
-        public async Task WithResource(Task action)
+        public async Task WithResource(Func<Task> action)
         {
             await AcquireAsync();
-            await action;
+            await action();
             Release();
         }
     }

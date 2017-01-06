@@ -19,5 +19,7 @@ namespace PenguinUpload.Infrastructure.Concurrency
                 return ret;
             }
         }
+
+        public UserServices this[string username] => GetOrCreate(username);
     }
 }

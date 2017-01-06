@@ -42,16 +42,20 @@ namespace PenguinUpload.Infrastructure.Upload
 
             try
             {
-                // Write file
-                using (var destinationStream = File.Create(targetFile))
-                {
-                    await stream.CopyToAsync(destinationStream);
-                }
+                // Write file (Wait for upload throttle)
+                await PenguinUploadRegistry.ServiceTable[_owner]
+                    .UploadThrottle.WithResource(async () =>
+                    {
+                        using (var destinationStream = File.Create(targetFile))
+                        {
+                            await stream.CopyToAsync(destinationStream);
+                        }
+                    });
 
                 // Make sure user has enough space remaining
                 if (_owner != null)
                 {
-                    var lockEntry = PenguinUploadRegistry.UserServiceTable.GetOrCreate(_owner).UserLock;
+                    var lockEntry = PenguinUploadRegistry.ServiceTable.GetOrCreate(_owner).UserLock;
                     await lockEntry.ObtainExclusiveWriteAsync();
                     var userManager = new WebUserManager();
                     var ownerData = await userManager.FindUserByUsernameAsync(_owner);
@@ -118,7 +122,7 @@ namespace PenguinUpload.Infrastructure.Upload
             await Task.Run(() => File.Delete(filePath));
             if (_owner != null)
             {
-                var lockEntry = PenguinUploadRegistry.UserServiceTable.GetOrCreate(_owner).UserLock;
+                var lockEntry = PenguinUploadRegistry.ServiceTable.GetOrCreate(_owner).UserLock;
                 // Decrease user storage usage
                 await lockEntry.ObtainExclusiveWriteAsync();
                 var userManager = new WebUserManager();

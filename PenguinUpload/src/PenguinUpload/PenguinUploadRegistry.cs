@@ -18,6 +18,6 @@ namespace PenguinUpload
             return Configuration.Administrators.Contains(username);
         }
 
-        public static UserServiceTable UserServiceTable { get; } = new UserServiceTable();
+        public static UserServiceTable ServiceTable { get; } = new UserServiceTable();
     }
 }
