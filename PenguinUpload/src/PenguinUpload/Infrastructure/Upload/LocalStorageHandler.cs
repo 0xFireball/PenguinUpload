@@ -5,16 +5,17 @@ using System.Security;
 using System.Threading.Tasks;
 using PenguinUpload.DataModels.Api;
 using PenguinUpload.DataModels.Auth;
+using PenguinUpload.Infrastructure.Concurrency;
 using PenguinUpload.Services.Authentication;
 
 namespace PenguinUpload.Infrastructure.Upload
 {
     public class LocalStorageHandler : IFileUploadHandler
     {
-        private readonly RegisteredUser _owner;
+        private readonly string _owner;
         private readonly bool _adminOverride;
 
-        public LocalStorageHandler(RegisteredUser owner, bool adminOverride = false)
+        public LocalStorageHandler(string owner, bool adminOverride = false)
         {
             _owner = owner;
             _adminOverride = adminOverride;
@@ -42,10 +43,24 @@ namespace PenguinUpload.Infrastructure.Upload
             var uploadStreamFileSize = stream.Length;
 
             // Make sure user has enough space remaining
-            var afterUploadSpace = _owner?.StorageUsage + uploadStreamFileSize;
-            if (afterUploadSpace > _owner?.StorageQuota)
+            if (_owner != null)
             {
-                throw new QuotaExceededException();
+                UserLock lockEntry;
+                lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(_owner);
+                await lockEntry.ObtainExclusiveReadAsync();
+                var userManager = new WebUserManager();
+                var ownerData = await userManager.FindUserByUsernameAsync(_owner);
+                var afterUploadSpace = ownerData.StorageUsage + uploadStreamFileSize;
+                if (afterUploadSpace > ownerData.StorageQuota)
+                {
+                    throw new QuotaExceededException();
+                }
+                lockEntry.ReleaseExclusiveRead();
+                await lockEntry.ObtainExclusiveWriteAsync();
+                // Increase user storage usage
+                ownerData.StorageUsage += uploadStreamFileSize;
+                await userManager.UpdateUserInDatabase(ownerData);
+                lockEntry.ReleaseExclusiveWrite();
             }
 
             using (var destinationStream = File.Create(targetFile))
@@ -54,14 +69,6 @@ namespace PenguinUpload.Infrastructure.Upload
             }
             var fileInfo = await Task.Run(() => new FileInfo(targetFile));
             var physicalFileSize = fileInfo.Length;
-
-            if (_owner != null)
-            {
-                // Increase user storage usage
-                var userManager = new WebUserManager();
-                _owner.StorageUsage += uploadStreamFileSize;
-                await userManager.UpdateUserInDatabase(_owner);
-            }
 
             return new FileUploadResult
             {
@@ -105,11 +112,18 @@ namespace PenguinUpload.Infrastructure.Upload
             await Task.Run(() => File.Delete(filePath));
             if (_owner != null)
             {
+                UserLock lockEntry;
+                lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(_owner);
                 // Decrease user storage usage
+                await lockEntry.ObtainExclusiveReadAsync();
                 var userManager = new WebUserManager();
-                var prevStorageUsage = _owner.StorageUsage;
-                _owner.StorageUsage -= fileSize;
-                await userManager.UpdateUserInDatabase(_owner);
+                var ownerData = await userManager.FindUserByUsernameAsync(_owner);
+                var prevStorageUsage = ownerData.StorageUsage;
+                ownerData.StorageUsage -= fileSize;
+                lockEntry.ReleaseExclusiveRead();
+                await lockEntry.ObtainExclusiveWriteAsync();
+                await userManager.UpdateUserInDatabase(ownerData);
+                lockEntry.ReleaseExclusiveWrite();
             }
         }
 

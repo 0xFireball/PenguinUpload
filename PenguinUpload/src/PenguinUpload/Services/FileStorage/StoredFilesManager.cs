@@ -10,7 +10,7 @@ namespace PenguinUpload.Services.FileStorage
 {
     public class StoredFilesManager
     {
-        public async Task<StoredFile> RegisterStoredFileAsync(RegisteredUser owner, string name, string identifier,
+        public async Task<StoredFile> RegisterStoredFileAsync(string ownerUsername, string name, string identifier,
             double fileSize)
         {
             return await Task.Run(() =>
@@ -22,7 +22,7 @@ namespace PenguinUpload.Services.FileStorage
                     Name = name,
                     Identifier = identifier,
                     HumanReadableSize = HumanReadableFileSize.FromLength(fileSize),
-                    OwnerUsername = owner.Username
+                    OwnerUsername = ownerUsername
                 };
                 using (var trans = db.BeginTrans())
                 {

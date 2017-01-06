@@ -4,8 +4,17 @@ namespace PenguinUpload.Infrastructure.Concurrency
 {
     public class LockTableSystem
     {
-        public static Dictionary<string, UserLock> UserLockTable = new Dictionary<string, UserLock>();
+        public Dictionary<string, UserLock> UserLockTable = new Dictionary<string, UserLock>();
 
-        
+        public UserLock GetOrCreate(string username)
+        {
+            if (UserLockTable.ContainsKey(username))
+            {
+                return UserLockTable[username];
+            }
+            var ret = new UserLock();
+            UserLockTable[username] = ret;
+            return ret;
+        }
     }
 }

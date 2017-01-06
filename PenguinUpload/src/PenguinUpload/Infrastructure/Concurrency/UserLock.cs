@@ -5,8 +5,8 @@ namespace PenguinUpload.Infrastructure.Concurrency
 {
     public class UserLock
     {
-        public bool _readLock = false;
-        public bool _writeLock = false;
+        private bool _readLock = false;
+        private bool _writeLock = false;
 
         public void ObtainExclusiveWrite()
         {
