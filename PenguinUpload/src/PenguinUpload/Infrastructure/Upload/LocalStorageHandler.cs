@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security;
 using System.Threading.Tasks;
 using PenguinUpload.DataModels.Api;
-using PenguinUpload.DataModels.Auth;
-using PenguinUpload.Infrastructure.Concurrency;
 using PenguinUpload.Services.Authentication;
 
 namespace PenguinUpload.Infrastructure.Upload
