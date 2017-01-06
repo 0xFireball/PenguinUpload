@@ -32,6 +32,9 @@ Vue Material as a frontend.
   - Pages for login, upload, download, profile, file management, and more
 - Concurrent, streamed file transfer
   - Multiple uploads/downloads at a time
+- Advanced user management
+  - User privileges, advanced admin API
+  - File storage quotas
 
 ## Install
 
