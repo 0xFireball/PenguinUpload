@@ -113,15 +113,13 @@ namespace PenguinUpload.Services.Authentication
         public async Task<bool> CheckPasswordAsync(string password, RegisteredUser user)
         {
             var ret = false;
-            var lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(user.Username);
+            var lockEntry = PenguinUploadRegistry.UserServiceTable.GetOrCreate(user.Username).UserLock;
             await lockEntry.WithConcurrentRead(Task.Run(() =>
             {
-                lockEntry.ObtainConcurrentRead();
                 //Calculate hash and compare
                 var pwKey =
                     AuthCryptoHelper.CalculateUserPasswordHash(password, user.CryptoSalt,
                         user.PasswordCryptoConf);
-                lockEntry.ReleaseConcurrentRead();
                 ret = StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.PasswordKey);
             }));
             return ret;
@@ -144,7 +142,7 @@ namespace PenguinUpload.Services.Authentication
 
         public async Task SetEnabled(RegisteredUser user, bool status)
         {
-            var lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(user.Username);
+            var lockEntry = PenguinUploadRegistry.UserServiceTable.GetOrCreate(user.Username).UserLock;
             await lockEntry.ObtainExclusiveWriteAsync();
             user.Enabled = status;
             await UpdateUserInDatabase(user);
@@ -153,7 +151,7 @@ namespace PenguinUpload.Services.Authentication
 
         public async Task ChangeUserPasswordAsync(RegisteredUser user, string newPassword)
         {
-            var lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(user.Username);
+            var lockEntry = PenguinUploadRegistry.UserServiceTable.GetOrCreate(user.Username).UserLock;
             await lockEntry.WithExclusiveWrite(Task.Run(() =>
             {
                 // Recompute password crypto
@@ -169,7 +167,7 @@ namespace PenguinUpload.Services.Authentication
 
         public async Task GenerateNewApiKeyAsync(RegisteredUser user)
         {
-            var lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(user.Username);
+            var lockEntry = PenguinUploadRegistry.UserServiceTable.GetOrCreate(user.Username).UserLock;
             await lockEntry.WithExclusiveWrite(Task.Run(() =>
             {
                 // Recompute key

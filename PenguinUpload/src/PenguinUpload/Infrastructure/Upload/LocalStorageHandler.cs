@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using PenguinUpload.DataModels.Api;
 using PenguinUpload.Services.Authentication;
@@ -50,7 +51,7 @@ namespace PenguinUpload.Infrastructure.Upload
                 // Make sure user has enough space remaining
                 if (_owner != null)
                 {
-                    var lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(_owner);
+                    var lockEntry = PenguinUploadRegistry.UserServiceTable.GetOrCreate(_owner).UserLock;
                     await lockEntry.ObtainExclusiveWriteAsync();
                     var userManager = new WebUserManager();
                     var ownerData = await userManager.FindUserByUsernameAsync(_owner);
@@ -117,7 +118,7 @@ namespace PenguinUpload.Infrastructure.Upload
             await Task.Run(() => File.Delete(filePath));
             if (_owner != null)
             {
-                var lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(_owner);
+                var lockEntry = PenguinUploadRegistry.UserServiceTable.GetOrCreate(_owner).UserLock;
                 // Decrease user storage usage
                 await lockEntry.ObtainExclusiveWriteAsync();
                 var userManager = new WebUserManager();

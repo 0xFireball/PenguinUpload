@@ -18,6 +18,6 @@ namespace PenguinUpload
             return Configuration.Administrators.Contains(username);
         }
 
-        public static LockTableSystem LockTable { get; } = new LockTableSystem();
+        public static UserServiceTable UserServiceTable { get; } = new UserServiceTable();
     }
 }
