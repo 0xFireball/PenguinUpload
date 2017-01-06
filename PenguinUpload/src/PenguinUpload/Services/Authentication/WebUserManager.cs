@@ -40,6 +40,11 @@ namespace PenguinUpload.Services.Authentication
             return storedUserRecord ?? null;
         }
 
+        /// <summary>
+        /// Warning: Use the LockTable system!
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task<bool> UpdateUserInDatabase(RegisteredUser user)
         {
             return await Task.Run(() =>
@@ -136,12 +141,17 @@ namespace PenguinUpload.Services.Authentication
 
         public async Task SetEnabled(RegisteredUser user, bool status)
         {
+            var lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(user.Username);
+            await lockEntry.ObtainExclusiveWriteAsync();
             user.Enabled = status;
             await UpdateUserInDatabase(user);
+            lockEntry.ReleaseExclusiveWrite();
         }
 
         public async Task ChangeUserPasswordAsync(RegisteredUser user, string newPassword)
         {
+            var lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(user.Username);
+            await lockEntry.ObtainExclusiveWriteAsync();
             await Task.Run(() =>
             {
                 // Recompute password crypto
@@ -154,16 +164,20 @@ namespace PenguinUpload.Services.Authentication
                 user.PasswordKey = encryptedPassword;
             });
             await UpdateUserInDatabase(user);
+            lockEntry.ReleaseExclusiveWrite();
         }
 
         public async Task GenerateNewApiKeyAsync(RegisteredUser user)
         {
+            var lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(user.Username);
+            await lockEntry.ObtainExclusiveWriteAsync();
             await Task.Run(() =>
             {
                 // Recompute key
                 user.ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength);
             });
             await UpdateUserInDatabase(user);
+            lockEntry.ReleaseExclusiveWrite();
         }
 
         public async Task<IEnumerable<RegisteredUser>> GetAllUsersAsync()

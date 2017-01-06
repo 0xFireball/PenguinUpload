@@ -10,6 +10,7 @@ namespace PenguinUpload.Infrastructure.Concurrency
 
         public void ObtainExclusiveWrite()
         {
+            // Wait for exclusive read and write
             _writeFree.WaitOne();
             _readFree.WaitOne();
         }
@@ -21,6 +22,7 @@ namespace PenguinUpload.Infrastructure.Concurrency
 
         public void ReleaseExclusiveWrite()
         {
+            // Release exclusive read and write
             _writeFree.Set();
             _readFree.Set();
         }
@@ -38,6 +40,23 @@ namespace PenguinUpload.Infrastructure.Concurrency
         public void ReleaseExclusiveRead()
         {
             _readFree.Set();
+        }
+
+        public void ObtainConcurrentRead()
+        {
+            // Lock writing, and allow multiple concurrent reads
+            _writeFree.WaitOne();
+        }
+
+        public async Task ObtainConcurrentReadAsync()
+        {
+            await Task.Run(() => ObtainConcurrentRead());
+        }
+
+        public void ReleaseConcurrentRead()
+        {
+            // Allow writing again
+            _writeFree.Set();
         }
     }
 }
