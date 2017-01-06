@@ -117,10 +117,13 @@ namespace PenguinUpload.Services.Authentication
 
         private static bool CheckPassword(string password, RegisteredUser user)
         {
+            var lockEntry = PenguinUploadRegistry.LockTable.GetOrCreate(user.Username);
+            lockEntry.ObtainConcurrentRead();
             //Calculate hash and compare
             var pwKey =
                 AuthCryptoHelper.CalculateUserPasswordHash(password, user.CryptoSalt,
                     user.PasswordCryptoConf);
+            lockEntry.ReleaseConcurrentRead();
             return StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.PasswordKey);
         }
 
