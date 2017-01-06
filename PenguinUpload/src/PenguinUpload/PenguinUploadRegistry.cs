@@ -1,5 +1,7 @@
-﻿using PenguinUpload.Configuration;
+﻿using System.Collections.Generic;
+using PenguinUpload.Configuration;
 using System.Linq;
+using PenguinUpload.Infrastructure.Concurrency;
 
 namespace PenguinUpload
 {
@@ -15,5 +17,7 @@ namespace PenguinUpload
         {
             return Configuration.Administrators.Contains(username);
         }
+
+        public static LockTableSystem LockTable { get; } = new LockTableSystem();
     }
 }
