@@ -24,6 +24,6 @@ namespace PenguinUpload.Configuration
         /// Max file storage quota (in bytes)
         /// </summary>
         [JsonProperty("defaultQuota")]
-        public int DefaultQuota { get; set; } = 1 << 30; // (1 GiB NOT 1 GB [see GIBIBYTES])
+            public int DefaultQuota { get; set; } = 1 << 30; // (1 GiB NOT 1 GB [see GIBIBYTES]). 1073741824 bytes
     }
 }

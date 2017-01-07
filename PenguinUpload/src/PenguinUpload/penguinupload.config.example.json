@@ -13,5 +13,10 @@
     // Be careful only to add the usernames of existing users!
     // Please refer to the Admininistration Documentation (docs/admin.md)
     // for more information.
-    "admins": []
+    "admins": [],
+    // The maximum number of concurrent uploads to allow per user
+    "userMaxConcurrentUploads": 4,
+    // The default quota for newly created user accounts.
+    // The default value is 2^30, or 1 GiB, about 1.07 GB
+    "defaultQuota": 1073741824
 }
