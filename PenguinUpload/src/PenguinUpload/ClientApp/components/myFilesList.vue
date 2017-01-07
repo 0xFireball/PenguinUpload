@@ -127,7 +127,7 @@ your link will need to enter the file password to view the file.
         axios.get('/api/getpass/' + f.fileId, vm.authRequestParams)
           .then(function (res) {
             // password should be returned
-            let dlPage = window.location.href.split("#")[0] + '#/d/' + f.fileId + '!' + btoa(res.data)
+            let dlPage = window.location.href.split("#")[0] + '#/d/' + f.fileId + '/' + window.btoa(res.data)
             vm.$root.showPopup(`
 Download link with password encoded:<br>
 <a target="_blank" href="${dlPage}">${dlPage}</a>

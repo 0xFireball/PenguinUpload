@@ -39,13 +39,13 @@ const main = [
     component: Profile
   },
   {
-    path: '/d/:id',
-    name: 'download',
+    path: '/d/:id/:pass',
+    name: 'download (with pass)',
     component: Download
   },
   {
-    path: '/d/:id/:pass',
-    name: 'download (with pass)',
+    path: '/d/:id',
+    name: 'download',
     component: Download
   }
 ]
