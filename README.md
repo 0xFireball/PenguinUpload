@@ -40,7 +40,9 @@ Vue Material as a frontend.
     passwords.
 - Advanced user management
   - User privileges, advanced admin API
-  - File storage quotas
+  - File storage quotas and enforcement
+- Optional resource usage control
+  - Limit concurrent uploads per user
 
 ## Install
 
