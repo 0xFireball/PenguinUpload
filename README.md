@@ -32,6 +32,12 @@ Vue Material as a frontend.
   - Pages for login, upload, download, profile, file management, and more
 - Concurrent, streamed file transfer
   - Multiple uploads/downloads at a time
+- Uploaded file management
+  - Download previously uploaded files
+  - Protect uploaded files with custom passwords
+  - Share download links, even to password protected files, which will
+    prompt for the password. Links can also be generated containing encoded
+    passwords.
 - Advanced user management
   - User privileges, advanced admin API
   - File storage quotas
