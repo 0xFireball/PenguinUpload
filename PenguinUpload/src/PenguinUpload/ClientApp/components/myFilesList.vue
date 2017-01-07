@@ -96,8 +96,43 @@
       },
       visitDownloadPage: function (ix) {
         let f = this.files[ix]
-        let dlPage = '/#/d/' + f.fileId
-        window.open(dlPage, '_blank')
+        if (f.locked) {
+          let vm = this
+          vm.$root.showConfirm(`
+This file is password protected. Do you want to encode the <br>
+password in the link? If you don't do this, anyone who visits <br>
+your link will need to enter the file password to view the file.
+`,
+            'Include password?', function (r) {
+              if (r) {
+                // include password
+                setTimeout(function () {
+                  vm.showDownloadLinkWithPass(ix)
+                }, 400)
+              } else {
+                // just go to link
+                let dlPage = '/#/d/' + f.fileId
+                window.open(dlPage, '_blank')
+              }
+            }, 'Yes', 'No')
+        } else {
+          // just open the page
+          let dlPage = '/#/d/' + f.fileId
+          window.open(dlPage, '_blank')
+        }
+      },
+      showDownloadLinkWithPass: function (ix) {
+        let vm = this
+        let f = vm.files[ix]
+        axios.get('/api/getpass/' + f.fileId, vm.authRequestParams)
+          .then(function (res) {
+            // password should be returned
+            let dlPage = window.location.href.split("#")[0] + '#/d/' + f.fileId + '!' + btoa(res.data)
+            vm.$root.showPopup(`
+Download link with password encoded:<br>
+<a target="_blank" href="${dlPage}">${dlPage}</a>
+            `, 'Link Created')
+          })
       },
       downloadFile: function (ix) {
         let f = this.files[ix]

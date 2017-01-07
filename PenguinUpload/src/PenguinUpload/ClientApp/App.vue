@@ -71,7 +71,11 @@
         this.dialog.title = title
         this.$refs.modalDialog.open()
       },
-      showConfirm: function (content, title, cb) {
+      showConfirm: function (content, title, cb, y, n) {
+        y = y || 'OK'
+        n = n || 'Cancel'
+        this.confirm.ok = y
+        this.confirm.cancel = n
         this.confirm.content = content
         this.confirm.title = title
         this.confirm.callback = cb
