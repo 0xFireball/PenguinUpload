@@ -97,6 +97,11 @@ namespace PenguinUpload.Modules
                 if (idParts.Length < 2) return HttpStatusCode.BadRequest;
                 var id = idParts[0];
                 var pass = idParts[1];
+                if (pass.Length > 128)
+                {
+                    return Response.AsText("Password cannot exceed 128 characters.")
+                        .WithStatusCode(HttpStatusCode.BadRequest);
+                }
                 // Update file metadata
                 var storedFilesManager = new StoredFilesManager();
                 var storedFile = await storedFilesManager.GetStoredFileByIdentifier(id);
