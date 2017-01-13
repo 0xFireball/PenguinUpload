@@ -40,6 +40,10 @@ var sharedConfig = {
         loader: 'json'
       },
       {
+          test: /\.s[a|c]ss$/,
+          loader: 'style!css!sass'
+      },
+      {
         test: /\.html$/,
         loader: 'vue-html'
       },
@@ -60,6 +64,11 @@ var sharedConfig = {
         }
       }
     ]
+  },
+  vue: {
+      loaders: {
+          scss: 'style!css!sass'
+      }
   }
 };
 

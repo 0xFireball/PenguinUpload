@@ -1,24 +1,23 @@
 <template>
   <div>
-    <toolbar></toolbar>
-
-    <transition name="md-router">
-      <router-view></router-view>
-    </transition>
-
+    <div class="content-container">
+      <toolbar></toolbar>
+      <transition name="md-router">
+        <div class="page-content page-view">
+          <router-view></router-view>
+        </div>
+      </transition>
+    </div>
     <md-dialog-alert :md-title="dialog.title" :md-content-html="dialog.content" ref="modalDialog">
     </md-dialog-alert>
-
     <md-dialog-confirm :md-title="confirm.title" :md-content-html="confirm.content" :md-ok-text="confirm.ok" :md-cancel-text="confirm.cancel"
       @close="onConfirmClose" ref="confirmDialog">
-    </md-dialog-confirm>
-
-    <md-dialog-prompt :md-title="prompt.title" :md-ok-text="prompt.ok" :md-cancel-text="prompt.cancel" :md-input-placeholder="prompt.placeholder"
-      @close="onPromptClose" v-model="prompt.resp" ref="promptDialog">
-    </md-dialog-prompt>
+      </md-dialog-confirm>
+      <md-dialog-prompt :md-title="prompt.title" :md-ok-text="prompt.ok" :md-cancel-text="prompt.cancel" :md-input-placeholder="prompt.placeholder"
+        @close="onPromptClose" v-model="prompt.resp" ref="promptDialog">
+        </md-dialog-prompt>
   </div>
 </template>
-
 <script>
   import Toolbar from './components/toolbar'
   export default {
@@ -109,7 +108,7 @@
         var u = -1
         do {
           bytes /= thresh
-          ++u
+            ++u
         } while (Math.abs(bytes) >= thresh && u < units.length - 1)
         return bytes.toFixed(2) + ' ' + units[u]
       }
@@ -122,8 +121,7 @@
     }
   }
 </script>
-
-<style>
+<style lang="scss">
   body {
     background: #f7f7f7;
   }
@@ -136,19 +134,19 @@
     margin-top: 5%;
     margin-bottom: 5%;
   }
-
+  
   .sep-b {
     margin-bottom: 10px;
   }
-
+  
   .left {
     text-align: left;
   }
-
+  
   .center {
     text-align: center;
   }
-
+  
   .right {
     text-align: right;
   }

@@ -36,7 +36,7 @@
         </md-button>
       </div>
     </md-toolbar>
-    <md-sidenav class="md-left" ref="leftSidenav">
+    <md-sidenav class="main-sidenav md-left md-fixed" ref="leftSidenav">
       <md-toolbar class="md-large">
         <div class="md-toolbar-container">
           <h2 class="md-title">{{ appName }}</h2>
