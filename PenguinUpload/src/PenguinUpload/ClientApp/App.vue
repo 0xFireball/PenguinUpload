@@ -121,7 +121,7 @@
     }
   }
 </script>
-<style lang="scss">
+<style>
   body {
     background: #f7f7f7;
   }
