@@ -45,27 +45,30 @@
       <div class="toolbar-content">
         <div class="sidebar-links">
           <md-list class="md-dense">
-            <md-list-item @click="closeSidenav" v-if="$root.loggedIn">
-              <router-link exact to="/u">Dashboard</router-link>
-            </md-list-item>
-
+            <template v-if="$root.loggedIn">
+              <md-list-item @click="closeSidenav">
+                <router-link exact to="/p">Profile</router-link>
+              </md-list-item>
+              <md-list-item @click="closeSidenav">
+                <router-link exact to="/u">Dashboard</router-link>
+              </md-list-item>
+              <md-list-item @click="closeSidenav">
+                <router-link exact to="/files">Files</router-link>
+              </md-list-item>
+            </template>
             <md-list-item @click="closeSidenav" v-else>
               <router-link exact to="/">Home</router-link>
             </md-list-item>
-
             <md-list-item @click="closeSidenav">
               <router-link exact to="/about">About</router-link>
             </md-list-item>
-
             <md-list-item>
               <span>Support</span>
-
               <md-list-expand>
                 <md-list>
                   <md-list-item class="md-inset" target="_blank" href="https://github.com/0xFireball/PenguinUpload">
                     GitHub
                   </md-list-item>
-
                   <md-list-item class="md-inset" href="https://github.com/0xFireball">
                     Donate
                   </md-list-item>
@@ -78,7 +81,6 @@
     </md-sidenav>
   </div>
 </template>
-
 <script>
   import axios from 'axios'
 
@@ -116,12 +118,12 @@
     }
   }
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .toolbar-title {
     flex: 1;
   }
+  
   .account-username {
     margin-left: 10px;
   }
