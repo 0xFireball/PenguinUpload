@@ -8,7 +8,6 @@
           </div>
           <div class="uploaded-files-list">
             <div class="md-title">All My Files</div>
-            <div class="md-subtitle">Files</div>
             <div v-if="loadFinished">
               <div v-if="noFiles">
                 <p>No Files</p>

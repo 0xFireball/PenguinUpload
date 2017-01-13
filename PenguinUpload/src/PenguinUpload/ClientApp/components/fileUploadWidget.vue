@@ -4,7 +4,7 @@
       <div class="row">
         <div class="ten columns offset-by-one">
           <div class="left sep-b">
-            <md-button class="md-raised md-primary" @click="viewMyFiles">View all my files</md-button>
+            <md-button class="md-raised md-primary" @click="viewMyFiles">View my files</md-button>
           </div>
           <div class="upload-here" @drop.stop.prevent="handleDragDropUpload" @dragenter.stop.prevent @dragleave.stop.prevent @dragover.stop.prevent>
             <!--<a class="target">Drag and drop or click to upload files</a>-->
