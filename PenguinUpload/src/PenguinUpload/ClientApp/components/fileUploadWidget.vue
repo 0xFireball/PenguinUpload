@@ -8,67 +8,48 @@
           </div>
           <div class="upload-here" @drop.stop.prevent="handleDragDropUpload" @dragenter.stop.prevent @dragleave.stop.prevent @dragover.stop.prevent>
             <!--<a class="target">Drag and drop or click to upload files</a>-->
-            <md-card>
-              <md-card-header>
-                <div class="md-title">Upload Files</div>
-                <div class="md-subhead">Drag and drop or click</div>
-              </md-card-header>
-              <div class="upload-area-padding" @click="browseForFiles">
-              </div>
-              <md-card-actions>
-                <md-button class="md-fab" @click="browseForFiles">
-                  <md-icon>cloud_upload</md-icon>
-                </md-button>
-              </md-card-actions>
-              <md-card-content>
-                <div class="upload-progress-indicators">
-                  <!--<md-spinner md-size="60" :md-progress="progressIndicator.value" class="md-warn"></md-spinner>
+            <div class="md-title">Upload Files</div>
+            <div class="md-subhead">Drag and drop or click</div>
+            <div class="upload-area-padding" @click="browseForFiles">
+            </div>
+            <div class="upload-progress-indicators">
+              <!--<md-spinner md-size="60" :md-progress="progressIndicator.value" class="md-warn"></md-spinner>
                   <p>{{ progressMessage }}</p>-->
-                  <md-list class="custom-list md-double-line">
-                    <!--Uploading file-->
-                    <md-subheader v-if="progressIndicators.length > 0">Uploading</md-subheader>
-                    <md-list-item v-for="(prInd, ix) in progressIndicators">
-                      <md-icon class="md-primary" v-if="!prInd.error">cloud_queue</md-icon>
-                      <md-icon class="md-primary" v-else>error</md-icon>
-
-                      <div class="md-list-text-container">
-                        <span> {{ prInd.name }} </span>
-                        <span v-if="!prInd.error"> {{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Uploaded, Processing...' }}</span>
-                        <span v-else> {{ 'Upload error: ' + prInd.message }}</span>
-                      </div>
-
-                      <md-button class="md-icon-button md-list-action" @click="cancelUpload(prInd)">
-                        <md-icon class="md-primary">cancel</md-icon>
-                      </md-button>
-
-                      <md-button class="md-icon-button md-list-action">
-                        <md-icon class="md-primary">file_upload</md-icon>
-                      </md-button>
-
-                      <md-divider class="md-inset"></md-divider>
-                    </md-list-item>
-
-                    <!--Upload completed files-->
-                    <md-subheader v-if="completedFiles.length > 0">Completed</md-subheader>
-                    <md-list-item v-for="(cmplFile, ix) in completedFiles" @click="visitUrl(cmplFile.downloadPage)">
-                      <md-icon class="md-primary">cloud_done</md-icon>
-
-                      <div class="md-list-text-container">
-                        <span> {{ cmplFile.name }}</span>
-                        <span>Upload Complete!</span>
-                      </div>
-
-                      <md-button class="md-icon-button md-list-action">
-                        <md-icon class="md-primary">done</md-icon>
-                      </md-button>
-
-                      <md-divider class="md-inset"></md-divider>
-                    </md-list-item>
-                  </md-list>
-                  <md-button v-if="completedFiles.length > 0" @click="completedFiles = []">Clear All</md-button>
-                </div>
-              </md-card-content>
-            </md-card>
+              <md-list class="custom-list md-double-line">
+                <!--Uploading file-->
+                <md-subheader v-if="progressIndicators.length > 0">Uploading</md-subheader>
+                <md-list-item v-for="(prInd, ix) in progressIndicators">
+                  <md-icon class="md-primary" v-if="!prInd.error">cloud_queue</md-icon>
+                  <md-icon class="md-primary" v-else>error</md-icon>
+                  <div class="md-list-text-container">
+                    <span> {{ prInd.name }} </span>
+                    <span v-if="!prInd.error"> {{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Uploaded, Processing...' }}</span>
+                    <span v-else> {{ 'Upload error: ' + prInd.message }}</span>
+                  </div>
+                  <md-button class="md-icon-button md-list-action" @click="cancelUpload(prInd)">
+                    <md-icon class="md-primary">cancel</md-icon>
+                  </md-button>
+                  <md-button class="md-icon-button md-list-action">
+                    <md-icon class="md-primary">file_upload</md-icon>
+                  </md-button>
+                  <md-divider class="md-inset"></md-divider>
+                </md-list-item>
+                <!--Upload completed files-->
+                <md-subheader v-if="completedFiles.length > 0">Completed</md-subheader>
+                <md-list-item v-for="(cmplFile, ix) in completedFiles" @click="visitUrl(cmplFile.downloadPage)">
+                  <md-icon class="md-primary">cloud_done</md-icon>
+                  <div class="md-list-text-container">
+                    <span> {{ cmplFile.name }}</span>
+                    <span>Upload Complete!</span>
+                  </div>
+                  <md-button class="md-icon-button md-list-action">
+                    <md-icon class="md-primary">done</md-icon>
+                  </md-button>
+                  <md-divider class="md-inset"></md-divider>
+                </md-list-item>
+              </md-list>
+              <md-button v-if="completedFiles.length > 0" @click="completedFiles = []">Clear All</md-button>
+            </div>
             <input type="file" class="invisible" ref="browse" @change="onFilesUploaded" multiple />
           </div>
         </div>
@@ -76,7 +57,6 @@
     </div>
   </div>
 </template>
-
 <script>
   import axios from 'axios'
 
@@ -102,7 +82,7 @@
         */
         completedFiles: []
         /* schema:
-        */
+         */
       }
     },
     computed: {
@@ -195,15 +175,14 @@
     }
   }
 </script>
-
 <style scoped>
-
-.upload-area-padding {
-  padding: 8%;
-}
-
-.upload-progress-indicators {
-  text-align: center;
-}
-
+  .upload-area-padding {
+    margin: 20px;
+    padding: 14%;
+    background: #f3f3f3;
+  }
+  
+  .upload-progress-indicators {
+    text-align: center;
+  }
 </style>
