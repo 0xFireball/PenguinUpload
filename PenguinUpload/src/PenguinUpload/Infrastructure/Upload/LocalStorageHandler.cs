@@ -1,9 +1,9 @@
-﻿using System;
+﻿using PenguinUpload.DataModels.Api;
+using PenguinUpload.Services.Authentication;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using PenguinUpload.DataModels.Api;
-using PenguinUpload.Services.Authentication;
 
 namespace PenguinUpload.Infrastructure.Upload
 {
@@ -77,7 +77,6 @@ namespace PenguinUpload.Infrastructure.Upload
                 await Task.Run(() => File.Delete(targetFile));
                 throw;
             }
-
 
             return new FileUploadResult
             {

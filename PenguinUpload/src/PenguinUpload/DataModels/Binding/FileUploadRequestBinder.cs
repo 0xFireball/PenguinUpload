@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
-using Nancy;
+﻿using Nancy;
 using Nancy.ModelBinding;
 using PenguinUpload.DataModels.Api;
+using System;
+using System.Linq;
 
 namespace PenguinUpload.DataModels.Binding
 {

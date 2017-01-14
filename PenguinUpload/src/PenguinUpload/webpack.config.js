@@ -23,12 +23,14 @@ var sharedConfig = {
     publicPath: '/dist/' // Webpack dev middleware, if enabled, handles requests for this URL prefix
   },
   module: {
-    loaders: [
-      {
+    loaders: [{
         test: /\.vue$/,
         loader: 'vue'
       },
-      { test: /\.css$/, loader: "style-loader!css-loader" },
+      {
+        test: /\.css$/,
+        loader: "style-loader!css-loader"
+      },
       {
         test: /\.js$/,
         loader: 'babel',
@@ -40,8 +42,8 @@ var sharedConfig = {
         loader: 'json'
       },
       {
-          test: /\.s[a|c]ss$/,
-          loader: 'style!css!sass'
+        test: /\.s[a|c]ss$/,
+        loader: 'style!css!sass'
       },
       {
         test: /\.html$/,
@@ -66,9 +68,9 @@ var sharedConfig = {
     ]
   },
   vue: {
-      loaders: {
-          scss: 'style!css!sass'
-      }
+    loaders: {
+      scss: 'style!css!sass'
+    }
   }
 };
 
@@ -79,7 +81,9 @@ var clientBundleConfig = merge(sharedConfig, {
     // The loader will follow all chains of reference from this entry point...
     main: ['./ClientApp/main.js']
   },
-  output: { path: path.join(__dirname, './wwwroot/dist') },
+  output: {
+    path: path.join(__dirname, './wwwroot/dist')
+  },
   devtool: isDevBuild ? 'inline-source-map' : null,
   plugins: [
     //new webpack.DllReferencePlugin({
@@ -111,7 +115,9 @@ var serverBundleConfig = merge(sharedConfig, {
   },
   target: 'node',
   devtool: 'inline-source-map',
-  externals: [nodeExternals({ whitelist: [allFilenamesExceptJavaScript] })] // Don't bundle .js files from node_modules
+  externals: [nodeExternals({
+    whitelist: [allFilenamesExceptJavaScript]
+  })] // Don't bundle .js files from node_modules
 });
 
 module.exports = [clientBundleConfig, serverBundleConfig];

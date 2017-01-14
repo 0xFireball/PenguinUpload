@@ -10,7 +10,6 @@ namespace PenguinUpload.Services.Database
         public const string UsersCollectionDatabaseKey = "Users";
         public const string StoredFilesCollectionDatabaseKey = "StoredFiles";
 
-
         private static LiteDatabase _dbInstance;
 
         public LiteDatabase OpenOrCreateDefault()

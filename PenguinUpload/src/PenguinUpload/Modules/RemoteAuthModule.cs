@@ -1,10 +1,10 @@
-﻿using System;
-using System.Security;
-using Nancy;
+﻿using Nancy;
 using Nancy.ModelBinding;
 using PenguinUpload.DataModels.Auth;
 using PenguinUpload.Services.Authentication;
 using PenguinUpload.Utilities;
+using System;
+using System.Security;
 
 namespace PenguinUpload.Modules
 {

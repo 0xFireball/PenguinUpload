@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Nancy;
+﻿using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Responses;
 using Nancy.Security;
@@ -8,6 +7,7 @@ using PenguinUpload.Infrastructure.Upload;
 using PenguinUpload.Services.Authentication;
 using PenguinUpload.Services.FileStorage;
 using PenguinUpload.Utilities;
+using System.Linq;
 
 namespace PenguinUpload.Modules
 {
@@ -81,7 +81,7 @@ namespace PenguinUpload.Modules
             {
                 var idUsername = Context.CurrentUser.Identity.Name;
                 var storedFilesManager = new StoredFilesManager();
-                var storedFile = await storedFilesManager.GetStoredFileByIdentifier((string) args.id);
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifier((string)args.id);
                 if (storedFile == null) return HttpStatusCode.NotFound;
 
                 var fileUploadHandler = new LocalStorageHandler(idUsername);
@@ -93,7 +93,7 @@ namespace PenguinUpload.Modules
             // Set a password on a file
             Patch("/lock/{idPass}", async args =>
             {
-                var idParts = ((string) args.idPass).Split('!');
+                var idParts = ((string)args.idPass).Split('!');
                 if (idParts.Length < 2) return HttpStatusCode.BadRequest;
                 var id = idParts[0];
                 var pass = idParts[1];
@@ -114,7 +114,7 @@ namespace PenguinUpload.Modules
             Get("/getpass/{id}", async args =>
             {
                 var storedFilesManager = new StoredFilesManager();
-                var storedFile = await storedFilesManager.GetStoredFileByIdentifier((string) args.id);
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifier((string)args.id);
                 if (storedFile == null || !storedFile.IsPasswordProtected) return HttpStatusCode.BadRequest;
                 return storedFile.Password;
             });
@@ -122,7 +122,7 @@ namespace PenguinUpload.Modules
             // Unset a password on a file
             Patch("/unlock/{id}", async args =>
             {
-                var id = (string) args.id;
+                var id = (string)args.id;
                 // Update file metadata
                 var storedFilesManager = new StoredFilesManager();
                 var storedFile = await storedFilesManager.GetStoredFileByIdentifier(id);
@@ -135,7 +135,7 @@ namespace PenguinUpload.Modules
             Delete("/delete/{id}", async args =>
             {
                 var idUsername = Context.CurrentUser.Identity.Name;
-                var fileId = (string) args.id;
+                var fileId = (string)args.id;
                 // Remove physical file
                 var fileUploadHandler = new LocalStorageHandler(idUsername);
                 await fileUploadHandler.DeleteFile(fileId);

@@ -12,7 +12,7 @@ namespace PenguinUpload.Modules
         {
             Get("/fileinfo/{idPass}", async args =>
             {
-                var idParts = ((string) args.idPass).Split('!');
+                var idParts = ((string)args.idPass).Split('!');
                 var id = idParts[0];
                 string pass = null;
                 if (idParts.Length > 1)
@@ -35,7 +35,7 @@ namespace PenguinUpload.Modules
 
             Get("/download/{idPass}", async args =>
             {
-                var idParts = ((string) args.idPass).Split('!');
+                var idParts = ((string)args.idPass).Split('!');
                 var id = idParts[0];
                 string pass = null;
                 if (idParts.Length > 1)

@@ -62,7 +62,7 @@ namespace PenguinUpload.Infrastructure.Concurrency
             _writeFree.Set();
         }
 
-        #endregion
+        #endregion Basic Functionality
 
         #region Nicer API
 
@@ -108,6 +108,6 @@ namespace PenguinUpload.Infrastructure.Concurrency
             ReleaseConcurrentRead();
         }
 
-        #endregion
+        #endregion Nicer API
     }
 }

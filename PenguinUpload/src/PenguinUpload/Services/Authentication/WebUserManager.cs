@@ -1,11 +1,11 @@
-﻿using System;
+﻿using PenguinUpload.DataModels.Auth;
+using PenguinUpload.Services.Database;
+using PenguinUpload.Utilities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security;
 using System.Threading.Tasks;
-using PenguinUpload.DataModels.Auth;
-using PenguinUpload.Services.Database;
-using PenguinUpload.Utilities;
 
 namespace PenguinUpload.Services.Authentication
 {

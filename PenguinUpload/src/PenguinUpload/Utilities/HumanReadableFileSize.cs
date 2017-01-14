@@ -9,7 +9,7 @@
         /// <returns></returns>
         public static string FromLength(double len)
         {
-            string[] sizes = {"B", "KiB", "MiB", "GiB", "TiB"};
+            string[] sizes = { "B", "KiB", "MiB", "GiB", "TiB" };
             var order = 0;
             while (len >= 1024 && order < sizes.Length)
             {
