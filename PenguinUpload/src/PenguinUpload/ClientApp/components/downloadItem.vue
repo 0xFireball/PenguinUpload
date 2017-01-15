@@ -1,36 +1,26 @@
 <template>
   <div class="download-item">
-    <md-card>
-
-      <md-card-header>
-        <div class="md-title">File Download</div>
-      </md-card-header>
-      <div v-if="loading">
-        <md-card-content>
-          <md-spinner md-indeterminate></md-spinner>
-          <h5>Loading File Information</h5>
-        </md-card-content>
-      </div>
-      <div v-else>
-        <md-card-content>
-          <md-icon md-theme="light-blue" class="md-primary">insert_drive_file</md-icon>
-          <h5>{{ file.name }}</h5>
-          <p>{{ file.sizeText }}</p>
-        </md-card-content>
-        <md-card-actions v-if="!error">
-          <md-button @click="downloadFile">
-            <md-icon v-if="file.pass.length > 0">lock</md-icon>
-            <span>
+    <div class="md-title">File Download</div>
+    <div v-if="loading">
+      <md-spinner md-indeterminate></md-spinner>
+      <h5>Loading File Information</h5>
+    </div>
+    <div v-else>
+      <md-icon md-theme="light-blue" class="md-primary">insert_drive_file</md-icon>
+      <h5>{{ file.name }}</h5>
+      <p>{{ file.sizeText }}</p>
+      <div v-if="!error">
+        <md-button @click="downloadFile">
+          <md-icon v-if="file.pass.length > 0">lock</md-icon>
+          <span>
               Download
             </span>
-          </md-button>
-          <!--<md-button>Copy Link</md-button>-->
-        </md-card-actions>
+        </md-button>
+        <!--<md-button>Copy Link</md-button>-->
       </div>
-    </md-card>
+    </div>
   </div>
 </template>
-
 <script>
   import axios from 'axios'
   let axiosRequestConfig = {
@@ -109,7 +99,6 @@
     }
   }
 </script>
-
 <style scoped>
   .download-item {
     margin: 2%;
