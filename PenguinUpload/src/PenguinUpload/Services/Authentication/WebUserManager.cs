@@ -110,11 +110,6 @@ namespace PenguinUpload.Services.Authentication
             return newUserRecord;
         }
 
-        internal Task SetQuota(RegisteredUser user, int quota)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<bool> CheckPasswordAsync(string password, RegisteredUser user)
         {
             var ret = false;
