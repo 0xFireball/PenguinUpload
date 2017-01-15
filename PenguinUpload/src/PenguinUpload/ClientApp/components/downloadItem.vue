@@ -1,22 +1,26 @@
 <template>
   <div class="download-item">
     <div class="md-title">File Download</div>
-    <div v-if="loading">
-      <md-spinner md-indeterminate></md-spinner>
-      <h5>Loading File Information</h5>
-    </div>
-    <div v-else>
-      <md-icon md-theme="light-blue" class="md-primary">insert_drive_file</md-icon>
-      <h5>{{ file.name }}</h5>
-      <p>{{ file.sizeText }}</p>
-      <div v-if="!error">
-        <md-button @click="downloadFile">
-          <md-icon v-if="file.pass.length > 0">lock</md-icon>
-          <span>
+    <div class="download-area-padding">
+      <div v-if="loading">
+        <md-spinner md-indeterminate></md-spinner>
+        <h5>Loading File Information</h5>
+      </div>
+      <div v-else>
+        <md-icon md-theme="light-blue" class="md-primary">insert_drive_file</md-icon>
+        <h5>{{ file.name }}</h5>
+        <p>{{ file.sizeText }}</p>
+        <div v-if="!error">
+          <div class="right">
+            <md-button @click="downloadFile">
+              <md-icon v-if="file.pass.length > 0">lock</md-icon>
+              <span>
               Download
             </span>
-        </md-button>
-        <!--<md-button>Copy Link</md-button>-->
+            </md-button>
+            <!--<md-button>Copy Link</md-button>-->
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -102,5 +106,12 @@
 <style scoped>
   .download-item {
     margin: 2%;
+  }
+  
+  .download-area-padding {
+    margin: 20px;
+    padding: 2%;
+    padding-top: 10%;
+    background: #f7f7f7;
   }
 </style>

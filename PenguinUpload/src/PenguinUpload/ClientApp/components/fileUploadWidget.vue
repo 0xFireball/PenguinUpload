@@ -179,7 +179,7 @@
   .upload-area-padding {
     margin: 20px;
     padding: 14%;
-    background: #f3f3f3;
+    background: #f7f7f7;
   }
   
   .upload-progress-indicators {
