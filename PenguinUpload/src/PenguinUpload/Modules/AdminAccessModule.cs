@@ -100,6 +100,17 @@ namespace PenguinUpload.Modules
                 await storedFilesManager.UnregisterStoredFileAsync(fileId);
                 return HttpStatusCode.OK;
             });
+
+            // Quota management
+            Patch("/updatequota/{name}/{quota}", async args =>
+            {
+                var userManager = new WebUserManager();
+                var user = await userManager.FindUserByUsernameAsync((string)args.name);
+                if (user == null) return HttpStatusCode.BadRequest;
+                // Disable user
+                await userManager.SetQuota(user, (int)args.quota);
+                return HttpStatusCode.OK;
+            });
         }
     }
 }

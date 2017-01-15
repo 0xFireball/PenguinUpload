@@ -110,6 +110,11 @@ namespace PenguinUpload.Services.Authentication
             return newUserRecord;
         }
 
+        internal Task SetQuota(RegisteredUser user, int quota)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> CheckPasswordAsync(string password, RegisteredUser user)
         {
             var ret = false;
@@ -138,6 +143,15 @@ namespace PenguinUpload.Services.Authentication
                     trans.Commit();
                 }
             });
+        }
+
+        public async Task SetQuota(RegisteredUser user, long quota)
+        {
+            var lockEntry = PenguinUploadRegistry.ServiceTable.GetOrCreate(user.Username).UserLock;
+            await lockEntry.ObtainExclusiveWriteAsync();
+            user.StorageQuota = quota;
+            await UpdateUserInDatabase(user);
+            lockEntry.ReleaseExclusiveWrite();
         }
 
         public async Task SetEnabled(RegisteredUser user, bool status)
