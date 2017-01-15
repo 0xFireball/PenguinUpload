@@ -3,7 +3,7 @@
     <div class="md-title">File Download</div>
     <div class="download-area-padding">
       <div v-if="loading">
-        <md-spinner md-indeterminate></md-spinner>
+        <md-spinner md-stroke="1.5" md-indeterminate></md-spinner>
         <h5>Loading File Information</h5>
       </div>
       <div v-else>
@@ -68,6 +68,7 @@
             } else if (response.status == 401) {
               // file is password protected
               vm.$root.showPrompt('Enter password', 'File password', function (r) {
+                responded = true
                 if (r) {
                   setTimeout(() => {
                     vm.updateFileInfo(r)
