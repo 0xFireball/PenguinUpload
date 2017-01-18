@@ -68,7 +68,7 @@
             } else if (response.status == 401) {
               // file is password protected
               vm.$root.showPrompt('Enter password', 'File password', function (r) {
-                responded = true
+                let responded = true
                 if (r) {
                   setTimeout(() => {
                     vm.updateFileInfo(r)
