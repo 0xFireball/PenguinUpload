@@ -26,11 +26,11 @@
         "Microsoft.Extensions.Logging": "1.0.0",
         "Microsoft.Extensions.Logging.Debug": "1.0.0",
         "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
-        "Nancy": "2.0.0-barneyrubble",
-        "Nancy.Authentication.Stateless": "2.0.0-barneyrubble",
+        "Nancy": "2.0.0-clienteastwood",
+        "Nancy.Authentication.Stateless": "2.0.0-clienteastwood",
         "Microsoft.AspNetCore.Owin": "1.0.0",
         "Newtonsoft.Json": "9.0.2-beta1",
-        "LiteDB": "3.0.0-beta3",
+        "LiteDB": "3.0.0",
         "System.Linq": "4.3.0"
     },
 
