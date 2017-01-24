@@ -22,7 +22,7 @@ echo "Building project..."
 # Build
 dotnet build -c Release PenguinUpload/src/PenguinUpload
 
-echo "Running tests...
+echo "Running tests..."
 
 echo "Publishing project..."
 
