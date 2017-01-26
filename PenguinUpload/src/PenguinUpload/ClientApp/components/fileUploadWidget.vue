@@ -23,7 +23,11 @@
                   <md-icon class="md-primary" v-else>error</md-icon>
                   <div class="md-list-text-container">
                     <span> {{ prInd.name }} </span>
-                    <span v-if="!prInd.error"> {{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Uploaded, Processing...' }}</span>
+                    <!--<span v-if="!prInd.error"> {{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Uploaded, Processing...' }}</span>-->
+                    <template class="upload-progress-bar" v-if="!prInd.error">
+                      <span>{{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Uploaded, Processing...' }}</span>
+                      <md-progress :md-progress="prInd.value"></md-progress>
+                    </template>
                     <span v-else> {{ 'Upload error: ' + prInd.message }}</span>
                   </div>
                   <md-button class="md-icon-button md-list-action" @click="cancelUpload(prInd)">
@@ -184,5 +188,9 @@
   
   .upload-progress-indicators {
     text-align: center;
+  }
+  
+  .upload-progress-bar {
+    padding: 5px;
   }
 </style>
