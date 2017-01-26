@@ -30,7 +30,8 @@
         "Microsoft.AspNetCore.Owin": "1.0.0",
         "Newtonsoft.Json": "9.0.2-beta1",
         "LiteDB": "3.0.0",
-        "System.Linq": "4.3.0"
+      "System.Linq": "4.3.0",
+      "Nancy": "2.0.0-clinteastwood"
     },
 
     "tools": {
