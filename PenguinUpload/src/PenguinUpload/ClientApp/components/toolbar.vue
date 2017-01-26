@@ -47,7 +47,7 @@
           <md-list class="md-dense">
             <template v-if="$root.loggedIn">
               <md-list-item @click="closeSidenav">
-                <router-link exact to="/p">Profile</router-link>
+                <router-link exact to="/p">Account</router-link>
               </md-list-item>
               <md-list-item @click="closeSidenav">
                 <router-link exact to="/u">Dashboard</router-link>
