@@ -24,5 +24,8 @@ namespace PenguinUpload.Configuration
         /// </summary>
         [JsonProperty("defaultQuota")]
         public long? DefaultQuota { get; set; } = 1 << 30; // (1 GiB NOT 1 GB [see GIBIBYTES]). 1073741824 bytes
+
+        [JsonProperty("tosText")]
+        public string TermsOfService { get; set; } = "Terms of service";
     }
 }

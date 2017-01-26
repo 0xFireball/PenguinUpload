@@ -42,7 +42,7 @@
               </md-list>
             </div>
             <div v-else>
-              <md-spinner md-stroke="1.5" md-indeterminate></md-spinner>
+              <md-spinner :md-stroke="1.5" md-indeterminate></md-spinner>
               <h5>Retrieving Data</h5>
             </div>
           </div>
