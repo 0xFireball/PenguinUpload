@@ -25,7 +25,7 @@ namespace PenguinUpload.Modules
                 if (storedFile.IsPasswordProtected)
                 {
                     // Make sure password matches
-                    if (storedFile.Password != pass)
+                    if (!storedFile.CheckPassword(pass))
                     {
                         return HttpStatusCode.Unauthorized;
                     }
@@ -48,7 +48,7 @@ namespace PenguinUpload.Modules
                 if (storedFile.IsPasswordProtected)
                 {
                     // Make sure password matches
-                    if (storedFile.Password != pass)
+                    if (!storedFile.CheckPassword(pass))
                     {
                         return HttpStatusCode.Unauthorized;
                     }

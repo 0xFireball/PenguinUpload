@@ -110,15 +110,6 @@ namespace PenguinUpload.Modules
                 return HttpStatusCode.OK;
             });
 
-            // Get the password on a file
-            Get("/getpass/{id}", async args =>
-            {
-                var storedFilesManager = new StoredFilesManager();
-                var storedFile = await storedFilesManager.GetStoredFileByIdentifier((string)args.id);
-                if (storedFile == null || !storedFile.IsPasswordProtected) return HttpStatusCode.BadRequest;
-                return storedFile.Password;
-            });
-
             // Unset a password on a file
             Patch("/unlock/{id}", async args =>
             {

@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using PenguinUpload.DataModels.Auth;
+using PenguinUpload.Services.Authentication;
 using System;
 
 namespace PenguinUpload.DataModels.Files
@@ -18,9 +20,14 @@ namespace PenguinUpload.DataModels.Files
         public string HumanReadableSize { get; set; }
 
         [JsonIgnore]
-        public string Password { get; set; }
+        public ItemCrypto Crypto { get; set; }
 
         [JsonProperty("locked")]
-        public bool IsPasswordProtected => Password != null;
+        public bool IsPasswordProtected => Crypto != null;
+
+        public bool CheckPassword(string pass)
+        {
+            var cryptoHelper = new AuthCryptoHelper(Crypto.Conf);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using PenguinUpload.DataModels.Auth;
 using PenguinUpload.DataModels.Files;
+using PenguinUpload.Services.Authentication;
 using PenguinUpload.Services.Database;
 using PenguinUpload.Utilities;
 using System.Collections.Generic;
@@ -74,7 +75,7 @@ namespace PenguinUpload.Services.FileStorage
                 Name = storedFile.Name,
                 UploadedDate = storedFile.UploadedDate,
                 HumanReadableSize = storedFile.HumanReadableSize,
-                Password = storedFile.Password,
+                Crypto = storedFile.Crypto,
             };
         }
 
@@ -140,7 +141,15 @@ namespace PenguinUpload.Services.FileStorage
 
         public async Task SetFilePassword(StoredFile file, string pass)
         {
-            file.Password = pass;
+            var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
+            var cryptoHelper = new AuthCryptoHelper(cryptoConf);
+            var pwSalt = cryptoHelper.GenerateSalt();
+            file.Crypto = new ItemCrypto
+            {
+                Conf = cryptoConf,
+                Salt = pwSalt,
+                Key = cryptoHelper.CalculateUserPasswordHash(pass, pwSalt)
+            };
             await UpdateStoredFileInDatabase(file);
         }
     }
