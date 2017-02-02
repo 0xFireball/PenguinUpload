@@ -94,9 +94,12 @@ namespace PenguinUpload.Services.Authentication
                     Identifier = Guid.NewGuid().ToString(),
                     Username = regRequest.Username,
                     ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength),
-                    CryptoSalt = pwSalt,
-                    PasswordCryptoConf = cryptoConf,
-                    PasswordKey = encryptedPassword
+                    Crypto = new ItemCrypto
+                    {
+                        Salt = pwSalt,
+                        Conf = cryptoConf,
+                        Key = encryptedPassword
+                    }
                 };
                 // Add the user to the database
                 registeredUsers.Insert(newUserRecord);
@@ -118,10 +121,10 @@ namespace PenguinUpload.Services.Authentication
             await lockEntry.WithConcurrentRead(Task.Run(() =>
             {
                 //Calculate hash and compare
-                var cryptoHelper = new AuthCryptoHelper(user.PasswordCryptoConf);
+                var cryptoHelper = new AuthCryptoHelper(user.Crypto.Conf);
                 var pwKey =
-                    cryptoHelper.CalculateUserPasswordHash(password, user.CryptoSalt);
-                ret = StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.PasswordKey);
+                    cryptoHelper.CalculateUserPasswordHash(password, user.Crypto.Salt);
+                ret = StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.Crypto.Key);
             }));
             return ret;
         }
@@ -170,9 +173,12 @@ namespace PenguinUpload.Services.Authentication
                 var pwSalt = cryptoHelper.GenerateSalt();
                 var encryptedPassword =
                     cryptoHelper.CalculateUserPasswordHash(newPassword, pwSalt);
-                user.CryptoSalt = pwSalt;
-                user.PasswordCryptoConf = cryptoConf;
-                user.PasswordKey = encryptedPassword;
+                user.Crypto = new ItemCrypto
+                {
+                    Salt = pwSalt,
+                    Conf = cryptoConf,
+                    Key = encryptedPassword
+                };
             }));
         }
 
