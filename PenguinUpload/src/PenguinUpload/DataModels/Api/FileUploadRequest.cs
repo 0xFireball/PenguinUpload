@@ -6,5 +6,6 @@ namespace PenguinUpload.DataModels.Api
     {
         public HttpFile File { get; set; }
         public string ApiKey { get; set; }
+        public string TargetDirectory { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace PenguinUpload.DataModels.Binding
 
             fileUploadRequest.ApiKey = form["apikey"];
             fileUploadRequest.File = context.Request.Files.FirstOrDefault();
+            fileUploadRequest.TargetDirectory = form["dir"];
 
             return fileUploadRequest;
         }
