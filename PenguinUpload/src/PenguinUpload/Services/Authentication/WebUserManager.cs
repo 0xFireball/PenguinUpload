@@ -84,9 +84,10 @@ namespace PenguinUpload.Services.Authentication
             {
                 // Calculate cryptographic info
                 var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
-                var pwSalt = AuthCryptoHelper.GetRandomSalt(AuthCryptoHelper.DefaultSaltLength);
+                var cryptoHelper = new AuthCryptoHelper(cryptoConf);
+                var pwSalt = cryptoHelper.GenerateSalt();
                 var encryptedPassword =
-                    AuthCryptoHelper.CalculateUserPasswordHash(regRequest.Password, pwSalt, cryptoConf);
+                    cryptoHelper.CalculateUserPasswordHash(regRequest.Password, pwSalt);
                 // Create user
                 newUserRecord = new RegisteredUser
                 {
@@ -117,9 +118,9 @@ namespace PenguinUpload.Services.Authentication
             await lockEntry.WithConcurrentRead(Task.Run(() =>
             {
                 //Calculate hash and compare
+                var cryptoHelper = new AuthCryptoHelper(user.PasswordCryptoConf);
                 var pwKey =
-                    AuthCryptoHelper.CalculateUserPasswordHash(password, user.CryptoSalt,
-                        user.PasswordCryptoConf);
+                    cryptoHelper.CalculateUserPasswordHash(password, user.CryptoSalt);
                 ret = StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.PasswordKey);
             }));
             return ret;
@@ -165,9 +166,10 @@ namespace PenguinUpload.Services.Authentication
             {
                 // Recompute password crypto
                 var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
-                var pwSalt = AuthCryptoHelper.GetRandomSalt(AuthCryptoHelper.DefaultSaltLength);
+                var cryptoHelper = new AuthCryptoHelper(cryptoConf);
+                var pwSalt = cryptoHelper.GenerateSalt();
                 var encryptedPassword =
-                    AuthCryptoHelper.CalculateUserPasswordHash(newPassword, pwSalt, cryptoConf);
+                    cryptoHelper.CalculateUserPasswordHash(newPassword, pwSalt);
                 user.CryptoSalt = pwSalt;
                 user.PasswordCryptoConf = cryptoConf;
                 user.PasswordKey = encryptedPassword;
