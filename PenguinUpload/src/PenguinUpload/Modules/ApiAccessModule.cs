@@ -70,7 +70,7 @@ namespace PenguinUpload.Modules
                 var storedFilesManager = new StoredFilesManager();
                 var storedFile =
                     await storedFilesManager.RegisterStoredFileAsync(idUsername,
-                        request.File.Name, uploadResult.FileId,
+                        request.File.Name, request.TargetDirectory, uploadResult.FileId,
                         uploadResult.Size);
 
                 return Response.AsJsonNet(storedFile);

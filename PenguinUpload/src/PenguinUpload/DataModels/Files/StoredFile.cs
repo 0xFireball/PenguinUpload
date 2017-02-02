@@ -18,6 +18,9 @@ namespace PenguinUpload.DataModels.Files
         [JsonProperty("hrSize")]
         public string HumanReadableSize { get; set; }
 
+        [JsonProperty("userPath")]
+        public string UserPath { get; set; }
+
         [JsonIgnore]
         public string OwnerUsername { get; set; }
 

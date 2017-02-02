@@ -10,21 +10,31 @@ namespace PenguinUpload.Services.FileStorage
 {
     public class StoredFilesManager
     {
-        public async Task<StoredFile> RegisterStoredFileAsync(string ownerUsername, string name, string identifier,
+        /// <summary>
+        /// Registers a stored file
+        /// </summary>
+        /// <param name="ownerName"></param>
+        /// <param name="fileName"></param>
+        /// <param name="path"></param>
+        /// <param name="identifier"></param>
+        /// <param name="fileSize"></param>
+        /// <returns></returns>
+        public async Task<StoredFile> RegisterStoredFileAsync(string ownerName, string fileName, string userPath, string identifier,
             double fileSize)
         {
             return await Task.Run(() =>
             {
-                var userDatabaseLock = PenguinUploadRegistry.ServiceTable.GetOrCreate(ownerUsername).UserLock;
+                var userDatabaseLock = PenguinUploadRegistry.ServiceTable.GetOrCreate(ownerName).UserLock;
                 userDatabaseLock.ObtainExclusiveWrite();
                 var db = new DatabaseAccessService().OpenOrCreateDefault();
                 var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);
                 var result = new StoredFile
                 {
-                    Name = name,
+                    Name = fileName,
                     Identifier = identifier,
                     HumanReadableSize = HumanReadableFileSize.FromLength(fileSize),
-                    OwnerUsername = ownerUsername
+                    OwnerUsername = ownerName,
+                    UserPath = userPath
                 };
                 using (var trans = db.BeginTrans())
                 {
