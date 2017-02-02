@@ -60,6 +60,24 @@ namespace PenguinUpload.Services.FileStorage
             });
         }
 
+        /// <summary>
+        /// Retrieves metadata for public access to a file
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<PublicFile> GetPublicStoredFileByIdentifier(string id)
+        {
+            var storedFile = await GetStoredFileByIdentifier(id);
+            return new PublicFile
+            {
+                Identifier = storedFile.Identifier,
+                Name = storedFile.Name,
+                UploadedDate = storedFile.UploadedDate,
+                HumanReadableSize = storedFile.HumanReadableSize,
+                Password = storedFile.Password,
+            };
+        }
+
         public async Task<IEnumerable<StoredFile>> GetStoredFilesByUser(RegisteredUser user)
         {
             return await Task.Run(() =>

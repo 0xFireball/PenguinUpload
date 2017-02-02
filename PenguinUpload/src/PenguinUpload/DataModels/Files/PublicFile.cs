@@ -1,10 +1,9 @@
-﻿using LiteDB;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 
 namespace PenguinUpload.DataModels.Files
 {
-    public class StoredFile : DatabaseObject
+    public class PublicFile
     {
         [JsonProperty("fileId")]
         public string Identifier { get; set; }
@@ -18,16 +17,9 @@ namespace PenguinUpload.DataModels.Files
         [JsonProperty("hrSize")]
         public string HumanReadableSize { get; set; }
 
-        [JsonProperty("path")]
-        public string UserPath { get; set; }
-
-        [JsonIgnore]
-        public string OwnerUsername { get; set; }
-
         [JsonIgnore]
         public string Password { get; set; }
 
-        [BsonIgnore]
         [JsonProperty("locked")]
         public bool IsPasswordProtected => Password != null;
     }

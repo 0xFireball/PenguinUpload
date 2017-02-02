@@ -20,7 +20,7 @@ namespace PenguinUpload.Modules
                     pass = idParts[1];
                 }
                 var storedFilesManager = new StoredFilesManager();
-                var storedFile = await storedFilesManager.GetStoredFileByIdentifier(id);
+                var storedFile = await storedFilesManager.GetPublicStoredFileByIdentifier(id);
                 if (storedFile == null) return HttpStatusCode.NotFound;
                 if (storedFile.IsPasswordProtected)
                 {
@@ -43,7 +43,7 @@ namespace PenguinUpload.Modules
                     pass = idParts[1];
                 }
                 var storedFilesManager = new StoredFilesManager();
-                var storedFile = await storedFilesManager.GetStoredFileByIdentifier(id);
+                var storedFile = await storedFilesManager.GetPublicStoredFileByIdentifier(id);
                 if (storedFile == null) return HttpStatusCode.NotFound;
                 if (storedFile.IsPasswordProtected)
                 {
