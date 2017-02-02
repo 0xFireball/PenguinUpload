@@ -11,8 +11,8 @@
             return new PasswordCryptoConfiguration
             {
                 Iterations = 10000,
-                Length = Length,
-                SaltLength
+                Length = DefaultLength,
+                SaltLength = DefaultSaltLength
             };
         }
 
