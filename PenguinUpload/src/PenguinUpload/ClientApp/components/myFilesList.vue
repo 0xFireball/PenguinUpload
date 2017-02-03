@@ -252,7 +252,9 @@ Download link with password encoded:<br>
       dirUpLevel: function () {
         if (!this.atRootDir) {
           let segments = this.currentDir.split('/')
-          let newDirPath = segments.slice(0, segments.length - 2)
+          segments = segments.filter(Boolean)
+          segments.pop()
+          let newDirPath = '/' + segments.join('/')
           this.navigateToDir(newDirPath)
         }
       },
