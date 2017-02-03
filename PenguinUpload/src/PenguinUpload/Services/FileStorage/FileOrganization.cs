@@ -1,4 +1,5 @@
 ﻿using PenguinUpload.DataModels.Files;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace PenguinUpload.Services.FileStorage
     {
         private static string[] GetPathSegments(string path)
         {
-            return path.Split('/');
+            return path.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         private static string JoinPathSegments(string[] segments)
@@ -27,11 +28,14 @@ namespace PenguinUpload.Services.FileStorage
             {
                 var pathSegments = GetPathSegments(file.UserPath);
                 var targetPathSegmentCount = 0;
-                for (int segmentCount = 0;
-                    !dirStructure.SubDirectories.Any(x => x.Path == JoinPathSegments(pathSegments.Take(segmentCount).ToArray()));
-                    segmentCount++)
+                if (pathSegments.Length > 0)
                 {
-                    targetPathSegmentCount = segmentCount;
+                    for (int segmentCount = 0;
+                        !dirStructure.SubDirectories.Any(x => x.Path == JoinPathSegments(pathSegments.Take(segmentCount).ToArray()));
+                        segmentCount++)
+                    {
+                        targetPathSegmentCount = segmentCount;
+                    }
                 }
                 var parent = dirStructure;
                 for (int i = 0; i < targetPathSegmentCount; i++)

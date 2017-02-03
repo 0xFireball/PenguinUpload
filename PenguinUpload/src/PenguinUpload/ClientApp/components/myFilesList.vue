@@ -184,7 +184,7 @@ Download link with password encoded:<br>
       // load files from server
       let vm = this
       vm.authRequestParams.params.apikey = vm.$root.u.key
-      axios.get('/api/userfiles', vm.authRequestParams)
+      axios.get('/api/files', vm.authRequestParams)
         .then(function (response) {
           // merge file list
           for (let i = 0; i < response.data.length; i++) {
