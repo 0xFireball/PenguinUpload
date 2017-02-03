@@ -76,11 +76,6 @@
           err: '',
           e: true // enabled
         },
-        authRequestParams: {
-          params: {
-            apikey: ''
-          }
-        },
         uInfo: {
           quota: null,
           usage: null,
@@ -93,7 +88,7 @@
         let vm = this
         vm.$root.showConfirm('Are you sure you want a new API key? The old one will no longer work. You will then be logged out.', 'Confirm Action', function (r) {
           if (r) {
-            axios.patch('/api/newkey', {}, vm.authRequestParams)
+            axios.patch('/api/newkey', {}, vm.$root.getAuthRequestParams())
               .then((res) => {
                 // done
                 vm.$root.u.key = ''
@@ -107,7 +102,7 @@
         let vm = this
         vm.$root.showConfirm('Are you absolutely sure? All files that you have uploaded will be permanently removed. You will then be logged out.', 'Confirm Action', function (r) {
           if (r) {
-            axios.delete('/api/nuke/files', vm.authRequestParams)
+            axios.delete('/api/nuke/files', vm.$root.getAuthRequestParams())
               .then(function (res) {
                 // files have been nuked.
               })
@@ -122,7 +117,7 @@
         vm.$root.showConfirm('Are you absolutely sure? Your account and all files that you have uploaded will be permanently removed.', 'Confirm Action', function (r1) {
           if (r1) {
             if (window.confirm('Your account will be deleted. Are you certain you would like to proceed?')) {
-              axios.delete('/api/nuke/user', vm.authRequestParams)
+              axios.delete('/api/nuke/user', vm.$root.getAuthRequestParams())
                 .then(function (res) {
                   // account has been nuked.
                 })
@@ -179,9 +174,9 @@
     mounted: function () {
       // load files from server
       let vm = this
-      vm.authRequestParams.params.apikey = vm.$root.u.key
+      vm.$root.getAuthRequestParams().params.apikey = vm.$root.u.key
       // load user info
-      axios.get('/api/userinfo', vm.authRequestParams)
+      axios.get('/api/userinfo', vm.$root.getAuthRequestParams())
         .then(function (res) {
           // fetched data
           vm.uInfo = {

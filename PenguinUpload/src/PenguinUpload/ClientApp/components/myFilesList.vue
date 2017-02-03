@@ -63,12 +63,9 @@
   export default {
     data() {
       return {
+        dirStructure: {},
         files: [],
-        authRequestParams: {
-          params: {
-            apikey: ''
-          }
-        },
+        dirs: [],
         loadFinished: false
       }
     },
@@ -119,7 +116,7 @@ your link will need to enter the file password to view the file.
       showDownloadLinkWithPass: function (ix) {
         let vm = this
         let f = vm.files[ix]
-        axios.get('/api/getpass/' + f.fileId, vm.authRequestParams)
+        axios.get('/api/getpass/' + f.fileId, vm.$root.getAuthRequestParams())
           .then(function (res) {
             // password should be returned
             let dlPage = window.location.href.split("#")[0] + '#/d/' + f.fileId + '/' + window.btoa(res.data)
@@ -142,7 +139,7 @@ Download link with password encoded:<br>
         vm.$root.showPrompt('Enter password', 'Password', function (r) {
           if (r) {
             // send lock request
-            axios.patch('/api/lock/' + f.fileId + '!' + r, {}, vm.authRequestParams)
+            axios.patch('/api/lock/' + f.fileId + '!' + r, {}, vm.$root.getAuthRequestParams())
               .then(function (res) {
                 // update file list
                 f.locked = true
@@ -156,7 +153,7 @@ Download link with password encoded:<br>
         vm.$root.showConfirm('Are you sure you want to remove the password on this file?', 'Confirm Unlock', (r) => {
           if (r) {
             // send unlock request
-            axios.patch('/api/unlock/' + f.fileId, {}, vm.authRequestParams)
+            axios.patch('/api/unlock/' + f.fileId, {}, vm.$root.getAuthRequestParams())
               .then(function (res) {
                 // update file list
                 f.locked = false
@@ -171,7 +168,7 @@ Download link with password encoded:<br>
           (r) => {
             if (r) {
               // send delete request
-              axios.delete('/api/delete/' + f.fileId, vm.authRequestParams)
+              axios.delete('/api/delete/' + f.fileId, vm.$root.getAuthRequestParams())
                 .then(function (res) {
                   // update file list
                   vm.files.splice(ix, 1)
@@ -183,8 +180,8 @@ Download link with password encoded:<br>
     mounted: function () {
       // load files from server
       let vm = this
-      vm.authRequestParams.params.apikey = vm.$root.u.key
-      axios.get('/api/files', vm.authRequestParams)
+      vm.$root.getAuthRequestParams().params.apikey = vm.$root.u.key
+      axios.get('/api/files', vm.$root.getAuthRequestParams())
         .then(function (response) {
           // merge file list
           for (let i = 0; i < response.data.length; i++) {
