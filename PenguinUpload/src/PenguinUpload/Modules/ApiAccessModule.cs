@@ -40,12 +40,13 @@ namespace PenguinUpload.Modules
             });
 
             // Get list of files
-            Get("/userfiles", async _ =>
+            Get("/files", async _ =>
             {
                 var idUsername = Context.CurrentUser.Identity.Name;
                 var user = await userManager.FindUserByUsernameAsync(idUsername);
                 var storedFilesManager = new StoredFilesManager();
                 var userFiles = await storedFilesManager.GetStoredFilesByUser(user);
+                var directoryStructure = await FileOrganization.BuildStructure(userFiles);
                 return Response.AsJsonNet(userFiles);
             });
 
