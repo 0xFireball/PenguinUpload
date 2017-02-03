@@ -9,37 +9,11 @@
             "version": "1.1.0",
             "type": "platform"
         },
-        "Microsoft.AspNetCore.Diagnostics": "1.0.0",
-        "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",
-        "Microsoft.AspNetCore.Server.Kestrel": "1.0.1",
-        "Microsoft.Extensions.Logging.Console": "1.0.0",
-        "Microsoft.AspNetCore.AngularServices": "1.0.0-*",
-        "Microsoft.AspNetCore.Mvc": "1.0.1",
-        "Microsoft.AspNetCore.Razor.Tools": {
-            "version": "1.0.0-preview2-final",
-            "type": "build"
-        },
-        "Microsoft.AspNetCore.StaticFiles": "1.0.0",
-        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0",
-        "Microsoft.Extensions.Configuration.Json": "1.0.0",
-        "Microsoft.Extensions.Configuration.CommandLine": "1.0.0",
-        "Microsoft.Extensions.Logging": "1.0.0",
-        "Microsoft.Extensions.Logging.Debug": "1.0.0",
-        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
-        "Nancy.Authentication.Stateless": "2.0.0-clienteastwood",
-        "Microsoft.AspNetCore.Owin": "1.0.0",
-        "Newtonsoft.Json": "9.0.2-beta1",
         "LiteDB": "3.0.0",
       "System.Linq": "4.3.0",
-      "Nancy": "2.0.0-clinteastwood"
+      "Nancy": "2.0.0-clinteastwood",
+      "tools": {
     },
-
-    "tools": {
-        "Microsoft.AspNetCore.Razor.Tools": "1.0.0-preview2-final",
-        "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final",
-        "Microsoft.DotNet.Watcher.Tools": "1.0.0-preview2-final"
-    },
-
     "frameworks": {
         "netcoreapp1.1": {
             "imports": [
@@ -48,18 +22,15 @@
             ]
         }
     },
-
     "buildOptions": {
         "emitEntryPoint": true,
         "preserveCompilationContext": true
     },
-
     "runtimeOptions": {
         "configProperties": {
             "System.GC.Server": true
         }
     },
-
     "publishOptions": {
         "include": [
             "appsettings.json",
@@ -72,7 +43,6 @@
             "penguinupload.config.example.json"
         ]
     },
-
     "scripts": {
         "prepublish": [
             "npm install",
@@ -83,8 +53,23 @@
             "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%"
         ]
     },
-
-    "tooling": {
+      "tooling": {
         "defaultNamespace": "VueAndNfx"
-    }
+      },
+      "Microsoft.AspNetCore.Diagnostics": "1.1.0",
+      "Microsoft.AspNetCore.Mvc": "1.1.1",
+      "Microsoft.AspNetCore.Owin": "1.1.0",
+      "Microsoft.AspNetCore.Razor.Tools": "1.1.0-preview4-final",
+      "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
+      "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
+      "Microsoft.AspNetCore.StaticFiles": "1.1.0",
+      "Microsoft.Extensions.Configuration.CommandLine": "1.1.0",
+      "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
+      "Microsoft.Extensions.Configuration.Json": "1.1.0",
+      "Microsoft.Extensions.Logging": "1.1.0",
+      "Microsoft.Extensions.Logging.Console": "1.1.0",
+      "Microsoft.Extensions.Logging.Debug": "1.1.0",
+      "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
+      "Nancy.Authentication.Stateless": "2.0.0-clinteastwood",
+      "Newtonsoft.Json": "9.0.2-beta2"
 }
