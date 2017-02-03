@@ -35,7 +35,7 @@ namespace PenguinUpload.Services.FileStorage
                     Identifier = identifier,
                     FileSize = fileSize,
                     OwnerUsername = ownerName,
-                    UserPath = userPath
+                    ParentDirPath = userPath
                 };
                 using (var trans = db.BeginTrans())
                 {

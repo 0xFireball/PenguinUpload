@@ -19,8 +19,8 @@ namespace PenguinUpload.DataModels.Files
         [JsonProperty("size")]
         public long FileSize { get; set; }
 
-        [JsonProperty("path")]
-        public string UserPath { get; set; }
+        [JsonProperty("parent")]
+        public string ParentDirPath { get; set; }
 
         [JsonIgnore]
         public string OwnerUsername { get; set; }

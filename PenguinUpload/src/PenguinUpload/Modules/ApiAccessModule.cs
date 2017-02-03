@@ -47,7 +47,7 @@ namespace PenguinUpload.Modules
                 var storedFilesManager = new StoredFilesManager();
                 var userFiles = await storedFilesManager.GetStoredFilesByUser(user);
                 var directoryStructure = await FileOrganization.BuildStructure(userFiles);
-                return Response.AsJsonNet(userFiles);
+                return Response.AsJsonNet(directoryStructure);
             });
 
             // Upload a file

@@ -26,12 +26,13 @@ namespace PenguinUpload.Services.FileStorage
             };
             foreach (var file in files)
             {
-                var pathSegments = GetPathSegments(file.UserPath);
+                var pathSegments = GetPathSegments(file.ParentDirPath);
                 var targetPathSegmentCount = 0;
                 if (pathSegments.Length > 0)
                 {
-                    for (int segmentCount = 0;
-                        !dirStructure.SubDirectories.Any(x => x.Path == JoinPathSegments(pathSegments.Take(segmentCount).ToArray()));
+                    for (int segmentCount = 1;
+                        segmentCount <= pathSegments.Length
+                        && !dirStructure.SubDirectories.Any(x => x.Path == JoinPathSegments(pathSegments.Take(segmentCount).ToArray()));
                         segmentCount++)
                     {
                         targetPathSegmentCount = segmentCount;
@@ -44,9 +45,9 @@ namespace PenguinUpload.Services.FileStorage
                     var nextChild = new DirectoryStructure
                     {
                         Name = currentSegment,
-                        Path = parent.Path + currentSegment
+                        Path = parent.Path + currentSegment + "/"
                     };
-                    dirStructure.SubDirectories.Add(nextChild);
+                    parent.SubDirectories.Add(nextChild);
                     parent = nextChild;
                 }
                 parent.Files.Add(file);
