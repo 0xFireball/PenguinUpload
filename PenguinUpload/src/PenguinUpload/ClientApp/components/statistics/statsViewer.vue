@@ -26,7 +26,7 @@
   }
 
   export default {
-    data: function () {
+    data() {
       return {
         stats: {
           data: {},

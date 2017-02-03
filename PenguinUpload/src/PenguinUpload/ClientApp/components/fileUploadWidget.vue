@@ -79,7 +79,7 @@
   }
 
   export default {
-    data: function () {
+    data() {
       return {
         progressIndicators: [],
         /* schema:
@@ -177,7 +177,7 @@
             progress.value = Math.floor((e.loaded / e.total) * 100)
           }
         }
-        let form = new Formdata: function ()
+        let form = new FormData()
         form.append("apikey", vm.$root.u.key)
         form.append("dir", vm.uploadDestination)
         form.append("file", file)

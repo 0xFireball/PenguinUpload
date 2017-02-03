@@ -67,7 +67,7 @@
   }
 
   export default {
-    data: function () {
+    data() {
       return {
         updatePassword: {
           old: '',

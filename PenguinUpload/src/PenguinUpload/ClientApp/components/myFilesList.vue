@@ -92,7 +92,7 @@
     },
     computed: {
       noItems: function () {
-        return this.files.length === 0 && this.dirs.length === 0
+        return this.files.length == 0 && this.dirs.length == 0
       },
       atRootDir: function () {
         return this.currentDir === '/'
@@ -311,7 +311,7 @@
       '$route' (to, from) {
         // update current directory
         if (!this.dirStructure) {
-          this.fetchdata: function ()
+          this.fetchData()
         }
         this.currentDir = '/' + (to.params.dir || '')
         // this will update structure
@@ -319,7 +319,7 @@
       }
     },
     mounted: function () {
-      this.fetchdata: function ()
+      this.fetchData()
       document.onkeydown = this.handleGlobalKeypress
     }
   }

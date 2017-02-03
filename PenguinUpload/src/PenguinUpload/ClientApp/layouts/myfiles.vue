@@ -13,7 +13,7 @@
 
   export default {
     props: ['dir'],
-    data: function () {
+    data() {
       return {}
     },
     components: {
@@ -21,7 +21,7 @@
       myFilesList,
       devCredits
     },
-    beforeRouteEnter: function (to, from, next) {
+    beforeRouteEnter(to, from, next) {
       next(vm => {
         if (!vm.$root.loggedIn) {
           vm.$router.replace('/')

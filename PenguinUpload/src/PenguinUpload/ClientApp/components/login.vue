@@ -55,7 +55,7 @@
   }
   export default {
     name: 'login',
-    data: function () {
+    data() {
       return {
         login: {
           username: '',
