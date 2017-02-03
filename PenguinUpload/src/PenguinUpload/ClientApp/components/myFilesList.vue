@@ -18,6 +18,22 @@
               <md-list class="custom-list md-double-line">
                 <!--directories-->
                 <div v-if="!atRootDir">
+                  <md-list-item @click="dirUpLevel()">
+                    <md-icon class="md-primary">folder</md-icon>
+                    <div class="md-list-text-container">
+                      <span> .. </span>
+                      <span> Parent Folder </span>
+                    </div>
+                    <md-menu md-align-trigger>
+                      <md-button class="md-icon-button md-list-action" md-menu-trigger>
+                        <md-icon class="md-primary">more_horiz</md-icon>
+                      </md-button>
+                      <md-menu-content>
+                        <md-menu-item @click="dirUpLevel()">Open</md-menu-item>
+                      </md-menu-content>
+                    </md-menu>
+                    <md-divider class="md-inset"></md-divider>
+                  </md-list-item>
                 </div>
                 <md-list-item v-for="(dir, ix) in dirs" @click="openDir(ix)">
                   <md-icon class="md-primary">folder</md-icon>
@@ -207,7 +223,15 @@ Download link with password encoded:<br>
       },
       openDir: function (ix) {
         let newDirPath = this.dirs[ix].path
-        this.$router.push('/files' + newDirPath)
+        this.navigateToDir(newDirPath)
+      },
+      dirUpLevel: function () {
+        let segments = this.currentDir.split('/')
+        let newDirPath = segments.slice(0, segments.length - 2)
+        this.navigateToDir(newDirPath)
+      },
+      navigateToDir: function (path) {
+        this.$router.push('/files' + path)
       },
       updateFilesDirs: function () {
         // walk directory structure
