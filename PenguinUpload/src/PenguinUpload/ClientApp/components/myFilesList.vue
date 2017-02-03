@@ -57,6 +57,7 @@
                     </md-button>
                     <md-menu-content>
                       <md-menu-item @click="visitDownloadPage(ix)">Download Page</md-menu-item>
+                      <md-menu-item @click="renameFile(ix)">Rename</md-menu-item>
                       <md-menu-item @click="deleteFile(ix)">Delete</md-menu-item>
                     </md-menu-content>
                   </md-menu>
@@ -189,6 +190,21 @@ Download link with password encoded:<br>
               })
           }
         })
+      },
+      renameFile: function (ix) {
+        let vm = this
+        let f = vm.files[ix]
+        vm.$root.showPrompt('Enter new name', 'File name',
+          (r) => {
+            if (r) {
+              // send rename request
+              axios.patch('/api/rename/' + f.fileId + '/' + r, {}, vm.$root.getAuthRequestParams())
+                .then(function (res) {
+                  // update file list
+                  f.name = r
+                })
+            }
+          })
       },
       deleteFile: function (ix) {
         let vm = this

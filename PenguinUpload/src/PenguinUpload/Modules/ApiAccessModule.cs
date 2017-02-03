@@ -123,7 +123,7 @@ namespace PenguinUpload.Modules
                 return HttpStatusCode.OK;
             });
 
-            Patch("/rename/{id}", async args =>
+            Patch("/rename/{id}/{name}", async args =>
             {
                 var id = (string)args.id;
                 var newname = (string)args.name;
