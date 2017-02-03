@@ -34,6 +34,12 @@ const main = [
     component: MyFiles
   },
   {
+    path: '/files/:dir',
+    name: 'my files navigation',
+    component: MyFiles,
+    props: true
+  },
+  {
     path: '/p',
     name: 'profile',
     component: Profile

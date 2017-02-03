@@ -9,7 +9,10 @@
           <div class="uploaded-files-list">
             <div class="md-title">All My Files</div>
             <div v-if="loadFinished">
-              <div v-if="noFiles">
+              <div v-if="error">
+                <p>Error</p>
+              </div>
+              <div v-else-if="noItems">
                 <p>No Files</p>
               </div>
               <md-list class="custom-list md-double-line">
@@ -61,20 +64,20 @@
   }
 
   export default {
+    props: ['dir'],
     data() {
       return {
         dirStructure: {},
         files: [],
         dirs: [],
-        loadFinished: false
+        loadFinished: false,
+        error: false,
+        currentDir: this.dir
       }
     },
     computed: {
-      filesCount: function () {
-        return this.files.length
-      },
-      noFiles: function () {
-        return this.filesCount == 0
+      noItems: function () {
+        return this.files.length == 0 && this.dirs.length == 0
       }
     },
     methods: {
@@ -175,22 +178,42 @@ Download link with password encoded:<br>
                 })
             }
           })
+      },
+      updateFilesDirs: function () {
+        // walk directory structure
+        let segments = this.currentDir.split('/')
+        // clean up
+        segments = segments.filter(Boolean)
+        // find matching directory
+        let workingDirStructure = this.dirStructure
+        for (let i = 0; i < segments.length; i++) {
+          let currentSegment = segments[i]
+          console.log(currentSegment)
+          workingDirStructure = workingDirStructure.dirs.find(d => d.name == currentSegment)
+        }
+        // now update collections
+        this.files = workingDirStructure.files
+        this.dirs = workingDirStructure.dirs
       }
     },
     mounted: function () {
-      // load files from server
+      // load directory structure from server
       let vm = this
-      vm.$root.getAuthRequestParams().params.apikey = vm.$root.u.key
+      vm.currentDir = vm.currentDir || '/'
+      vm.$root.getAuthRequestParams()
       axios.get('/api/files', vm.$root.getAuthRequestParams())
         .then(function (response) {
           // merge file list
-          for (let i = 0; i < response.data.length; i++) {
-            vm.files.push(response.data[i])
-          }
+          console.log(response.data)
+          vm.dirStructure = response.data
+          vm.updateFilesDirs()
           vm.loadFinished = true
         })
         .catch(function (error) {
-          // console.log(error)
+          if (error) {
+            console.log(error)
+            vm.error = true
+          }
           vm.loadFinished = true
         })
     }
