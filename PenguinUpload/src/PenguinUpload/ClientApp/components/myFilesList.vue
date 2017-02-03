@@ -17,6 +17,8 @@
               </div>
               <md-list class="custom-list md-double-line">
                 <!--directories-->
+                <div v-if="!atRootDir">
+                </div>
                 <md-list-item v-for="(dir, ix) in dirs" @click="openDir(ix)">
                   <md-icon class="md-primary">folder</md-icon>
                   <div class="md-list-text-container">
@@ -96,6 +98,9 @@
     computed: {
       noItems: function () {
         return this.files.length == 0 && this.dirs.length == 0
+      },
+      atRootDir: function () {
+        return this.currentDir === '/'
       }
     },
     methods: {
@@ -201,7 +206,8 @@ Download link with password encoded:<br>
           })
       },
       openDir: function (ix) {
-        vm.$router.push('/files' + this.dirs[ix].path)
+        let newDirPath = this.dirs[ix].path
+        this.$router.push('/files' + newDirPath)
       },
       updateFilesDirs: function () {
         // walk directory structure
@@ -212,34 +218,51 @@ Download link with password encoded:<br>
         let workingDirStructure = this.dirStructure
         for (let i = 0; i < segments.length; i++) {
           let currentSegment = segments[i]
-          console.log(currentSegment)
-          workingDirStructure = workingDirStructure.dirs.find(d => d.name == currentSegment)
+          workingDirStructure = workingDirStructure.dirs.find(d => d.name === currentSegment)
+          if (!workingDirStructure) {
+            this.error = true
+            return
+          }
         }
         // now update collections
         this.files = workingDirStructure.files
         this.dirs = workingDirStructure.dirs
+      },
+      fetchData: function () {
+        // load directory structure from server
+        let vm = this
+        vm.currentDir = vm.currentDir || '/'
+        console.log(vm.dir)
+        vm.$root.getAuthRequestParams()
+        axios.get('/api/files', vm.$root.getAuthRequestParams())
+          .then(function (response) {
+            // merge file list
+            console.log(response.data)
+            vm.dirStructure = response.data
+            vm.updateFilesDirs()
+            vm.loadFinished = true
+          })
+          .catch(function (error) {
+            if (error) {
+              console.log(error)
+              vm.error = true
+            }
+            vm.loadFinished = true
+          })
+      }
+    },
+    watch: {
+      '$route' (to, from) {
+        // update current directory
+        if (!this.dirStructure) {
+          this.fetchData()
+        }
+        this.currentDir = '/' + (to.params.dir || '')
+        this.updateFilesDirs()
       }
     },
     mounted: function () {
-      // load directory structure from server
-      let vm = this
-      vm.currentDir = vm.currentDir || '/'
-      vm.$root.getAuthRequestParams()
-      axios.get('/api/files', vm.$root.getAuthRequestParams())
-        .then(function (response) {
-          // merge file list
-          console.log(response.data)
-          vm.dirStructure = response.data
-          vm.updateFilesDirs()
-          vm.loadFinished = true
-        })
-        .catch(function (error) {
-          if (error) {
-            console.log(error)
-            vm.error = true
-          }
-          vm.loadFinished = true
-        })
+      this.fetchData()
     }
   }
 </script>
