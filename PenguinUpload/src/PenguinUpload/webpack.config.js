@@ -19,8 +19,9 @@ var sharedConfig = {
     }
   },
   output: {
-    filename: '[name].js',
-    publicPath: '/dist/' // Webpack dev middleware, if enabled, handles requests for this URL prefix
+    path: path.join(__dirname, 'wwwroot', 'dist'),
+    publicPath: '/dist/', // for dev middleware
+    filename: '[name].js'
   },
   module: {
     loaders: [{
@@ -113,6 +114,7 @@ var serverBundleConfig = merge(sharedConfig, {
     libraryTarget: 'commonjs',
     path: path.join(__dirname, './ClientApp/dist')
   },
+  plugins: [],
   target: 'node',
   devtool: 'inline-source-map',
   externals: [nodeExternals({
