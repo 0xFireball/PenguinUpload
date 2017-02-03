@@ -111,6 +111,13 @@
             ++u
         } while (Math.abs(bytes) >= thresh && u < units.length - 1)
         return bytes.toFixed(2) + ' ' + units[u]
+      },
+      getAuthRequestParams: function () {
+        return {
+          params: {
+            apikey: this.u.key
+          }
+        }
       }
     },
     created: function () {

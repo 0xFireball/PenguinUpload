@@ -1,11 +1,12 @@
-﻿using LiteDB;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using PenguinUpload.DataModels.Auth;
+using PenguinUpload.Services.Authentication;
 using System;
+using System.Collections;
 
 namespace PenguinUpload.DataModels.Files
 {
-    public class StoredFile : DatabaseObject
+    public class PublicFile
     {
         [JsonProperty("fileId")]
         public string Identifier { get; set; }
@@ -19,17 +20,17 @@ namespace PenguinUpload.DataModels.Files
         [JsonProperty("size")]
         public long FileSize { get; set; }
 
-        [JsonProperty("parent")]
-        public string ParentDirPath { get; set; }
-
-        [JsonIgnore]
-        public string OwnerUsername { get; set; }
-
         [JsonIgnore]
         public ItemCrypto Crypto { get; set; }
 
-        [BsonIgnore]
         [JsonProperty("locked")]
         public bool IsPasswordProtected => Crypto != null;
+
+        public bool CheckPassword(string pass)
+        {
+            var cryptoHelper = new AuthCryptoHelper(Crypto.Conf);
+            var inputPass = cryptoHelper.CalculateUserPasswordHash(pass, Crypto.Salt);
+            return StructuralComparisons.StructuralEqualityComparer.Equals(inputPass, Crypto.Key);
+        }
     }
 }

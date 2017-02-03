@@ -84,18 +84,22 @@ namespace PenguinUpload.Services.Authentication
             {
                 // Calculate cryptographic info
                 var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
-                var pwSalt = AuthCryptoHelper.GetRandomSalt(AuthCryptoHelper.DefaultSaltLength);
+                var cryptoHelper = new AuthCryptoHelper(cryptoConf);
+                var pwSalt = cryptoHelper.GenerateSalt();
                 var encryptedPassword =
-                    AuthCryptoHelper.CalculateUserPasswordHash(regRequest.Password, pwSalt, cryptoConf);
+                    cryptoHelper.CalculateUserPasswordHash(regRequest.Password, pwSalt);
                 // Create user
                 newUserRecord = new RegisteredUser
                 {
                     Identifier = Guid.NewGuid().ToString(),
                     Username = regRequest.Username,
                     ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength),
-                    CryptoSalt = pwSalt,
-                    PasswordCryptoConf = cryptoConf,
-                    PasswordKey = encryptedPassword
+                    Crypto = new ItemCrypto
+                    {
+                        Salt = pwSalt,
+                        Conf = cryptoConf,
+                        Key = encryptedPassword
+                    }
                 };
                 // Add the user to the database
                 registeredUsers.Insert(newUserRecord);
@@ -117,10 +121,10 @@ namespace PenguinUpload.Services.Authentication
             await lockEntry.WithConcurrentRead(Task.Run(() =>
             {
                 //Calculate hash and compare
+                var cryptoHelper = new AuthCryptoHelper(user.Crypto.Conf);
                 var pwKey =
-                    AuthCryptoHelper.CalculateUserPasswordHash(password, user.CryptoSalt,
-                        user.PasswordCryptoConf);
-                ret = StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.PasswordKey);
+                    cryptoHelper.CalculateUserPasswordHash(password, user.Crypto.Salt);
+                ret = StructuralComparisons.StructuralEqualityComparer.Equals(pwKey, user.Crypto.Key);
             }));
             return ret;
         }
@@ -165,12 +169,16 @@ namespace PenguinUpload.Services.Authentication
             {
                 // Recompute password crypto
                 var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
-                var pwSalt = AuthCryptoHelper.GetRandomSalt(AuthCryptoHelper.DefaultSaltLength);
+                var cryptoHelper = new AuthCryptoHelper(cryptoConf);
+                var pwSalt = cryptoHelper.GenerateSalt();
                 var encryptedPassword =
-                    AuthCryptoHelper.CalculateUserPasswordHash(newPassword, pwSalt, cryptoConf);
-                user.CryptoSalt = pwSalt;
-                user.PasswordCryptoConf = cryptoConf;
-                user.PasswordKey = encryptedPassword;
+                    cryptoHelper.CalculateUserPasswordHash(newPassword, pwSalt);
+                user.Crypto = new ItemCrypto
+                {
+                    Salt = pwSalt,
+                    Conf = cryptoConf,
+                    Key = encryptedPassword
+                };
             }));
         }
 

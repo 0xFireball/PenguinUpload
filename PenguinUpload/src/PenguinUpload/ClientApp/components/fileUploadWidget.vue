@@ -9,6 +9,14 @@
           <div class="upload-here" @drop.stop.prevent="handleDragDropUpload" @dragenter.stop.prevent @dragleave.stop.prevent @dragover.stop.prevent>
             <!--<a class="target">Drag and drop or click to upload files</a>-->
             <div class="md-title">Upload Files</div>
+            <div class="row upload-settings-section">
+              <div class="six columns offset-by-three">
+                <md-input-container>
+                  <label>Upload Destination</label>
+                  <md-input v-model="uploadDestination"></md-input>
+                </md-input-container>
+              </div>
+            </div>
             <div class="md-subhead">Drag and drop or click</div>
             <div class="upload-area-padding" @click="browseForFiles">
             </div>
@@ -84,9 +92,10 @@
           message: string or null [an error message]
         }
         */
-        completedFiles: []
+        completedFiles: [],
         /* schema:
          */
+        uploadDestination: '/'
       }
     },
     computed: {
@@ -170,6 +179,7 @@
         }
         let form = new FormData()
         form.append("apikey", vm.$root.u.key)
+        form.append("dir", vm.uploadDestination)
         form.append("file", file)
         xhr.send(form)
       },
@@ -192,5 +202,9 @@
   
   .upload-progress-bar {
     padding: 5px;
+  }
+  
+  .upload-settings-section {
+    text-align: center;
   }
 </style>

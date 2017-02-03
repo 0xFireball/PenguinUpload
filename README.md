@@ -15,14 +15,19 @@ However, while `sr.ht` uses a Flask backend and static HTML as a frontend,
 PenguinUpload uses an ASP.NET Core + NancyFx backend and a Vue.js SPA with
 Vue Material as a frontend.
 
-## Features
+## Features/Details
 
 - Easy configuration (just a JSON file!)
   - Disable public registration
     - Require an invite code to create an account
   - Set physical location of files (use `/tmp` for ephemeral storage)
+- Simple directory structure and file metadata
+  - A simple directory structure to organize files is available (>= **0.8.x**)
+  - Directory structure is generated dynamically on query
+  - File metadata includes size and upload date
 - Password protection of files
   - Server enforced password protection
+  - Passwords are hashed and stored securely
 - Complete API with stateless authentication for accessing the entire application
   - All functionality is exposed through the API
   - In fact, the entire web application (a Vue.js SPA) works entirely

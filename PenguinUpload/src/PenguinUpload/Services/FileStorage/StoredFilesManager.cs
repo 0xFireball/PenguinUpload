@@ -1,7 +1,7 @@
 ﻿using PenguinUpload.DataModels.Auth;
 using PenguinUpload.DataModels.Files;
+using PenguinUpload.Services.Authentication;
 using PenguinUpload.Services.Database;
-using PenguinUpload.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,21 +10,31 @@ namespace PenguinUpload.Services.FileStorage
 {
     public class StoredFilesManager
     {
-        public async Task<StoredFile> RegisterStoredFileAsync(string ownerUsername, string name, string identifier,
-            double fileSize)
+        /// <summary>
+        /// Registers a stored file
+        /// </summary>
+        /// <param name="ownerName"></param>
+        /// <param name="fileName"></param>
+        /// <param name="path"></param>
+        /// <param name="identifier"></param>
+        /// <param name="fileSize"></param>
+        /// <returns></returns>
+        public async Task<StoredFile> RegisterStoredFileAsync(string ownerName, string fileName, string userPath, string identifier,
+            long fileSize)
         {
             return await Task.Run(() =>
             {
-                var userDatabaseLock = PenguinUploadRegistry.ServiceTable.GetOrCreate(ownerUsername).UserLock;
+                var userDatabaseLock = PenguinUploadRegistry.ServiceTable.GetOrCreate(ownerName).UserLock;
                 userDatabaseLock.ObtainExclusiveWrite();
                 var db = new DatabaseAccessService().OpenOrCreateDefault();
                 var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);
                 var result = new StoredFile
                 {
-                    Name = name,
+                    Name = fileName,
                     Identifier = identifier,
-                    HumanReadableSize = HumanReadableFileSize.FromLength(fileSize),
-                    OwnerUsername = ownerUsername
+                    FileSize = fileSize,
+                    OwnerUsername = ownerName,
+                    ParentDirPath = userPath
                 };
                 using (var trans = db.BeginTrans())
                 {
@@ -48,6 +58,24 @@ namespace PenguinUpload.Services.FileStorage
                 return storedFiles
                     .FindOne(x => x.Identifier == id);
             });
+        }
+
+        /// <summary>
+        /// Retrieves metadata for public access to a file
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<PublicFile> GetPublicStoredFileByIdentifier(string id)
+        {
+            var storedFile = await GetStoredFileByIdentifier(id);
+            return new PublicFile
+            {
+                Identifier = storedFile.Identifier,
+                Name = storedFile.Name,
+                UploadedDate = storedFile.UploadedDate,
+                FileSize = storedFile.FileSize,
+                Crypto = storedFile.Crypto,
+            };
         }
 
         public async Task<IEnumerable<StoredFile>> GetStoredFilesByUser(RegisteredUser user)
@@ -110,9 +138,27 @@ namespace PenguinUpload.Services.FileStorage
             });
         }
 
+        /// <summary>
+        /// Set the password on a file. This will overwrite an existing password.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="pass"></param>
+        /// <returns></returns>
         public async Task SetFilePassword(StoredFile file, string pass)
         {
-            file.Password = pass;
+            if (pass == null) // No password
+            {
+                file.Crypto = null;
+            }
+            var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
+            var cryptoHelper = new AuthCryptoHelper(cryptoConf);
+            var pwSalt = cryptoHelper.GenerateSalt();
+            file.Crypto = new ItemCrypto
+            {
+                Conf = cryptoConf,
+                Salt = pwSalt,
+                Key = cryptoHelper.CalculateUserPasswordHash(pass, pwSalt)
+            };
             await UpdateStoredFileInDatabase(file);
         }
     }

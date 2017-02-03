@@ -9,15 +9,38 @@
           <div class="uploaded-files-list">
             <div class="md-title">All My Files</div>
             <div v-if="loadFinished">
-              <div v-if="noFiles">
+              <div v-if="error">
+                <p>Error</p>
+              </div>
+              <div v-else-if="noItems">
                 <p>No Files</p>
               </div>
               <md-list class="custom-list md-double-line">
+                <!--directories-->
+                <div v-if="!atRootDir">
+                  <md-list-item @click="dirUpLevel()">
+                    <md-icon class="md-primary">folder</md-icon>
+                    <div class="md-list-text-container">
+                      <span> .. </span>
+                      <span> Parent Folder </span>
+                    </div>
+                    <md-divider class="md-inset"></md-divider>
+                  </md-list-item>
+                </div>
+                <md-list-item v-for="(dir, ix) in dirs" @click="openDir(ix)">
+                  <md-icon class="md-primary">folder</md-icon>
+                  <div class="md-list-text-container">
+                    <span> {{ dir.name }}</span>
+                    <span> Folder </span>
+                  </div>
+                  <md-divider class="md-inset"></md-divider>
+                </md-list-item>
+                <!--files-->
                 <md-list-item v-for="(file, ix) in files">
                   <md-icon class="md-primary">cloud_done</md-icon>
                   <div class="md-list-text-container">
                     <span> {{ file.name }}</span>
-                    <span> {{ file.hrSize }}</span>
+                    <span> {{ getHrSize(file.size) }}</span>
                   </div>
                   <md-button class="md-icon-button md-list-action" @click="lockFile(ix)" v-if="!file.locked">
                     <md-icon class="md-primary">lock_open</md-icon>
@@ -34,6 +57,7 @@
                     </md-button>
                     <md-menu-content>
                       <md-menu-item @click="visitDownloadPage(ix)">Download Page</md-menu-item>
+                      <md-menu-item @click="renameFile(ix)">Rename</md-menu-item>
                       <md-menu-item @click="deleteFile(ix)">Delete</md-menu-item>
                     </md-menu-content>
                   </md-menu>
@@ -61,26 +85,29 @@
   }
 
   export default {
+    props: ['dir'],
     data() {
       return {
+        dirStructure: {},
         files: [],
-        authRequestParams: {
-          params: {
-            apikey: ''
-          }
-        },
-        loadFinished: false
+        dirs: [],
+        loadFinished: false,
+        error: false,
+        currentDir: this.dir
       }
     },
     computed: {
-      filesCount: function () {
-        return this.files.length
+      noItems: function () {
+        return this.files.length == 0 && this.dirs.length == 0
       },
-      noFiles: function () {
-        return this.filesCount == 0
+      atRootDir: function () {
+        return this.currentDir === '/'
       }
     },
     methods: {
+      getHrSize: function (l) {
+        return this.$root.humanFileSize(l)
+      },
       uploadMoreFiles: function () {
         this.$router.push('/u')
       },
@@ -119,7 +146,7 @@ your link will need to enter the file password to view the file.
       showDownloadLinkWithPass: function (ix) {
         let vm = this
         let f = vm.files[ix]
-        axios.get('/api/getpass/' + f.fileId, vm.authRequestParams)
+        axios.get('/api/getpass/' + f.fileId, vm.$root.getAuthRequestParams())
           .then(function (res) {
             // password should be returned
             let dlPage = window.location.href.split("#")[0] + '#/d/' + f.fileId + '/' + window.btoa(res.data)
@@ -142,7 +169,7 @@ Download link with password encoded:<br>
         vm.$root.showPrompt('Enter password', 'Password', function (r) {
           if (r) {
             // send lock request
-            axios.patch('/api/lock/' + f.fileId + '!' + r, {}, vm.authRequestParams)
+            axios.patch('/api/lock/' + f.fileId + '!' + r, {}, vm.$root.getAuthRequestParams())
               .then(function (res) {
                 // update file list
                 f.locked = true
@@ -156,13 +183,28 @@ Download link with password encoded:<br>
         vm.$root.showConfirm('Are you sure you want to remove the password on this file?', 'Confirm Unlock', (r) => {
           if (r) {
             // send unlock request
-            axios.patch('/api/unlock/' + f.fileId, {}, vm.authRequestParams)
+            axios.patch('/api/unlock/' + f.fileId, {}, vm.$root.getAuthRequestParams())
               .then(function (res) {
                 // update file list
                 f.locked = false
               })
           }
         })
+      },
+      renameFile: function (ix) {
+        let vm = this
+        let f = vm.files[ix]
+        vm.$root.showPrompt('Enter new name', 'File name',
+          (r) => {
+            if (r) {
+              // send rename request
+              axios.patch('/api/rename/' + f.fileId + '/' + r, {}, vm.$root.getAuthRequestParams())
+                .then(function (res) {
+                  // update file list
+                  f.name = r
+                })
+            }
+          })
       },
       deleteFile: function (ix) {
         let vm = this
@@ -171,31 +213,105 @@ Download link with password encoded:<br>
           (r) => {
             if (r) {
               // send delete request
-              axios.delete('/api/delete/' + f.fileId, vm.authRequestParams)
+              axios.delete('/api/delete/' + f.fileId, vm.$root.getAuthRequestParams())
                 .then(function (res) {
                   // update file list
                   vm.files.splice(ix, 1)
                 })
             }
           })
+      },
+      openDir: function (ix) {
+        let newDirPath = this.dirs[ix].path
+        this.navigateToDir(newDirPath)
+      },
+      dirUpLevel: function () {
+        if (!this.atRootDir) {
+          let segments = this.currentDir.split('/')
+          let newDirPath = segments.slice(0, segments.length - 2)
+          this.navigateToDir(newDirPath)
+        }
+      },
+      navigateToDir: function (path) {
+        this.$router.push('/files' + path)
+      },
+      updateFilesDirs: function () {
+        // walk directory structure
+        let segments = this.currentDir.split('/')
+        // clean up
+        segments = segments.filter(Boolean)
+        // find matching directory
+        let workingDirStructure = this.dirStructure
+        for (let i = 0; i < segments.length; i++) {
+          let currentSegment = segments[i]
+          workingDirStructure = workingDirStructure.dirs.find(d => d.name === currentSegment)
+          if (!workingDirStructure) {
+            this.error = true
+            return
+          }
+        }
+        // now update collections
+        this.files = workingDirStructure.files
+        this.dirs = workingDirStructure.dirs
+      },
+      fetchData: function () {
+        // load directory structure from server
+        let vm = this
+        vm.currentDir = vm.currentDir || '/'
+        // console.log(vm.dir)
+        vm.$root.getAuthRequestParams()
+        axios.get('/api/files', vm.$root.getAuthRequestParams())
+          .then(function (response) {
+            // merge file list
+            // console.log(response.data)
+            vm.dirStructure = response.data
+            vm.updateFilesDirs()
+            vm.loadFinished = true
+          })
+          .catch(function (error) {
+            if (error) {
+              // console.log(error)
+              vm.error = true
+            }
+            vm.loadFinished = true
+          })
+      },
+      handleGlobalKeypress: function (e) {
+        e = e || window.event
+        if (e) {
+          switch (e.keyCode) {
+            case 37:
+              // left
+              this.$router.go(-1)
+              break;
+            case 38:
+              // up
+              this.dirUpLevel()
+              break;
+            case 39:
+              // right
+              this.$router.go(1)
+              break;
+            case 40:
+              // down
+              break;
+          }
+        }
+      }
+    },
+    watch: {
+      '$route' (to, from) {
+        // update current directory
+        if (!this.dirStructure) {
+          this.fetchData()
+        }
+        this.currentDir = '/' + (to.params.dir || '')
+        this.updateFilesDirs()
       }
     },
     mounted: function () {
-      // load files from server
-      let vm = this
-      vm.authRequestParams.params.apikey = vm.$root.u.key
-      axios.get('/api/userfiles', vm.authRequestParams)
-        .then(function (response) {
-          // merge file list
-          for (let i = 0; i < response.data.length; i++) {
-            vm.files.push(response.data[i])
-          }
-          vm.loadFinished = true
-        })
-        .catch(function (error) {
-          // console.log(error)
-          vm.loadFinished = true
-        })
+      this.fetchData()
+      document.onkeydown = this.handleGlobalKeypress
     }
   }
 </script>

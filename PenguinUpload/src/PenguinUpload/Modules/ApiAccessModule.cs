@@ -40,13 +40,14 @@ namespace PenguinUpload.Modules
             });
 
             // Get list of files
-            Get("/userfiles", async _ =>
+            Get("/files", async _ =>
             {
                 var idUsername = Context.CurrentUser.Identity.Name;
                 var user = await userManager.FindUserByUsernameAsync(idUsername);
                 var storedFilesManager = new StoredFilesManager();
                 var userFiles = await storedFilesManager.GetStoredFilesByUser(user);
-                return Response.AsJsonNet(userFiles);
+                var directoryStructure = await FileOrganization.BuildStructure(userFiles);
+                return Response.AsJsonNet(directoryStructure);
             });
 
             // Upload a file
@@ -70,7 +71,7 @@ namespace PenguinUpload.Modules
                 var storedFilesManager = new StoredFilesManager();
                 var storedFile =
                     await storedFilesManager.RegisterStoredFileAsync(idUsername,
-                        request.File.Name, uploadResult.FileId,
+                        request.File.Name, request.TargetDirectory, uploadResult.FileId,
                         uploadResult.Size);
 
                 return Response.AsJsonNet(storedFile);
@@ -110,15 +111,6 @@ namespace PenguinUpload.Modules
                 return HttpStatusCode.OK;
             });
 
-            // Get the password on a file
-            Get("/getpass/{id}", async args =>
-            {
-                var storedFilesManager = new StoredFilesManager();
-                var storedFile = await storedFilesManager.GetStoredFileByIdentifier((string)args.id);
-                if (storedFile == null || !storedFile.IsPasswordProtected) return HttpStatusCode.BadRequest;
-                return storedFile.Password;
-            });
-
             // Unset a password on a file
             Patch("/unlock/{id}", async args =>
             {
@@ -128,6 +120,19 @@ namespace PenguinUpload.Modules
                 var storedFile = await storedFilesManager.GetStoredFileByIdentifier(id);
                 if (storedFile == null) return HttpStatusCode.BadRequest;
                 await storedFilesManager.SetFilePassword(storedFile, null);
+                return HttpStatusCode.OK;
+            });
+
+            Patch("/rename/{id}/{name}", async args =>
+            {
+                var id = (string)args.id;
+                var newname = (string)args.name;
+                // Update file metadata
+                var storedFilesManager = new StoredFilesManager();
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifier(id);
+                if (storedFile == null) return HttpStatusCode.BadRequest;
+                storedFile.Name = newname;
+                await storedFilesManager.UpdateStoredFileInDatabase(storedFile);
                 return HttpStatusCode.OK;
             });
 

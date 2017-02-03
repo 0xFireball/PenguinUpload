@@ -5,9 +5,17 @@ namespace PenguinUpload.Services.Authentication
 {
     public class AuthCryptoHelper
     {
-        public static byte[] GetRandomSalt(int length)
+        public PasswordCryptoConfiguration Configuration { get; }
+
+        public AuthCryptoHelper(PasswordCryptoConfiguration conf)
         {
-            var bytes = new byte[length];
+            Configuration = conf;
+        }
+
+        public byte[] GenerateSalt()
+        {
+            var len = Configuration.SaltLength;
+            var bytes = new byte[len];
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(bytes);
@@ -15,21 +23,22 @@ namespace PenguinUpload.Services.Authentication
             return bytes;
         }
 
-        private static byte[] CalculatePasswordHash(byte[] password, byte[] salt, int iterations, int length)
+        private byte[] CalculatePasswordHash(byte[] password, byte[] salt)
         {
-            using (var deriveBytes = new Rfc2898DeriveBytes(password, salt, iterations))
+            var iter = Configuration.Iterations;
+            var len = Configuration.Length;
+            using (var deriveBytes = new Rfc2898DeriveBytes(password, salt, iter))
             {
-                return deriveBytes.GetBytes(length);
+                return deriveBytes.GetBytes(len);
             }
         }
 
-        public static byte[] CalculateUserPasswordHash(string password, byte[] salt, PasswordCryptoConfiguration cryptoConf)
+        public byte[] CalculateUserPasswordHash(string password, byte[] salt)
         {
             var passwordBytes = Encoding.UTF8.GetBytes(password);
-            return CalculatePasswordHash(passwordBytes, salt, cryptoConf.Iterations, cryptoConf.Length);
+            return CalculatePasswordHash(passwordBytes, salt);
         }
 
-        public const int DefaultSaltLength = 64;
         public const int DefaultApiKeyLength = 42;
     }
 }

@@ -2,20 +2,19 @@
   <div class="shrink-layout">
     <!--<img src="./assets/logo.png">-->
     <intro view-title="My Files"></intro>
-    <myFilesList></myFilesList>
+    <myFilesList :dir="dir"></myFilesList>
     <devCredits></devCredits>
   </div>
 </template>
-
 <script>
   import Intro from '../components/intro'
   import myFilesList from '../components/myFilesList'
   import devCredits from '../components/devCredits'
 
   export default {
+    props: ['dir'],
     data() {
-      return {
-      }
+      return {}
     },
     components: {
       Intro,
@@ -31,7 +30,6 @@
     }
   }
 </script>
-
 <style scoped>
   .shrink-layout {
     -webkit-font-smoothing: antialiased;

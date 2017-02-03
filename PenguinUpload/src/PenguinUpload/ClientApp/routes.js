@@ -1,4 +1,3 @@
-
 import NotFound from './layouts/notFound'
 import Landing from './layouts/landing'
 import About from './layouts/about'
@@ -29,6 +28,12 @@ const main = [
     component: Dashboard
   },
   {
+    path: '/files/:dir*',
+    name: 'my files navigation',
+    component: MyFiles,
+    props: true
+  },
+  {
     path: '/files',
     name: 'my files',
     component: MyFiles
@@ -50,12 +55,10 @@ const main = [
   }
 ]
 
-const error = [
-  {
-    path: '*',
-    name: 'error',
-    component: NotFound
-  }
-]
+const error = [{
+  path: '*',
+  name: 'error',
+  component: NotFound
+}]
 
 export default [].concat(main, error)

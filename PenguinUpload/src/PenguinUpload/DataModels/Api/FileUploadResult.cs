@@ -8,6 +8,6 @@ namespace PenguinUpload.DataModels.Api
         public string FileId { get; set; }
 
         [JsonProperty("size")]
-        public double Size { get; set; }
+        public long Size { get; set; }
     }
 }
