@@ -24,7 +24,7 @@
                       <span> .. </span>
                       <span> Parent Folder </span>
                     </div>
-                    <md-divider class="md-inset"></md-divider>
+                    <!--<md-divider class="md-inset"></md-divider>-->
                   </md-list-item>
                 </div>
                 <md-list-item v-for="(dir, ix) in dirs" @click="openDir(ix)">
@@ -33,7 +33,7 @@
                     <span> {{ dir.name }}</span>
                     <span> Folder </span>
                   </div>
-                  <md-divider class="md-inset"></md-divider>
+                  <!--<md-divider class="md-inset"></md-divider>-->
                 </md-list-item>
                 <!--files-->
                 <md-list-item v-for="(file, ix) in files">
@@ -61,7 +61,7 @@
                       <md-menu-item @click="deleteFile(ix)">Delete</md-menu-item>
                     </md-menu-content>
                   </md-menu>
-                  <md-divider class="md-inset"></md-divider>
+                  <!--<md-divider class="md-inset"></md-divider>-->
                 </md-list-item>
               </md-list>
             </div>
@@ -102,6 +102,23 @@
       },
       atRootDir: function () {
         return this.currentDir === '/'
+      },
+      currentDirStructure: function () {
+        // walk directory structure
+        let segments = this.currentDir.split('/')
+        // clean up
+        segments = segments.filter(Boolean)
+        // find matching directory
+        let workingDirStructure = this.dirStructure
+        for (let i = 0; i < segments.length; i++) {
+          let currentSegment = segments[i]
+          workingDirStructure = workingDirStructure.dirs.find(d => d.name === currentSegment)
+          if (!workingDirStructure) {
+            this.error = true
+            return null
+          }
+        }
+        return workingDirStructure
       }
     },
     methods: {
@@ -217,6 +234,13 @@ Download link with password encoded:<br>
                 .then(function (res) {
                   // update file list
                   vm.files.splice(ix, 1)
+                  vm.currentDirStructure.files.splice(ix, 1)
+                  // propagate to directories
+                  if (vm.noItems) { // if current dir is empty
+                    // remove current dir and switch to parent dir
+                    vm.dirStructure.dirs = vm.dirStructure.dirs.filter(d => d.name !== vm.currentDirStructure.name)
+                    vm.dirUpLevel()
+                  }
                 })
             }
           })
@@ -236,20 +260,8 @@ Download link with password encoded:<br>
         this.$router.push('/files' + path)
       },
       updateFilesDirs: function () {
-        // walk directory structure
-        let segments = this.currentDir.split('/')
-        // clean up
-        segments = segments.filter(Boolean)
-        // find matching directory
-        let workingDirStructure = this.dirStructure
-        for (let i = 0; i < segments.length; i++) {
-          let currentSegment = segments[i]
-          workingDirStructure = workingDirStructure.dirs.find(d => d.name === currentSegment)
-          if (!workingDirStructure) {
-            this.error = true
-            return
-          }
-        }
+        let workingDirStructure = this.currentDirStructure
+        if (!workingDirStructure) return
         // now update collections
         this.files = workingDirStructure.files
         this.dirs = workingDirStructure.dirs
@@ -306,6 +318,7 @@ Download link with password encoded:<br>
           this.fetchData()
         }
         this.currentDir = '/' + (to.params.dir || '')
+        // this will update structure
         this.updateFilesDirs()
       }
     },
