@@ -16,8 +16,8 @@ namespace PenguinUpload.DataModels.Files
         [JsonProperty("uploadDate")]
         public DateTime UploadedDate { get; set; } = DateTime.Now;
 
-        [JsonProperty("hrSize")]
-        public string HumanReadableSize { get; set; }
+        [JsonProperty("size")]
+        public long FileSize { get; set; }
 
         [JsonProperty("path")]
         public string UserPath { get; set; }

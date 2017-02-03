@@ -21,7 +21,7 @@ namespace PenguinUpload.Services.FileStorage
         /// <param name="fileSize"></param>
         /// <returns></returns>
         public async Task<StoredFile> RegisterStoredFileAsync(string ownerName, string fileName, string userPath, string identifier,
-            double fileSize)
+            long fileSize)
         {
             return await Task.Run(() =>
             {
@@ -33,7 +33,7 @@ namespace PenguinUpload.Services.FileStorage
                 {
                     Name = fileName,
                     Identifier = identifier,
-                    HumanReadableSize = HumanReadableFileSize.FromLength(fileSize),
+                    FileSize = fileSize,
                     OwnerUsername = ownerName,
                     UserPath = userPath
                 };
@@ -74,7 +74,7 @@ namespace PenguinUpload.Services.FileStorage
                 Identifier = storedFile.Identifier,
                 Name = storedFile.Name,
                 UploadedDate = storedFile.UploadedDate,
-                HumanReadableSize = storedFile.HumanReadableSize,
+                FileSize = storedFile.FileSize,
                 Crypto = storedFile.Crypto,
             };
         }
