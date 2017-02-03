@@ -21,7 +21,7 @@
 <script>
   import Toolbar from './components/toolbar'
   export default {
-    data() {
+    data: function () {
       return {
         u: {
           key: '',

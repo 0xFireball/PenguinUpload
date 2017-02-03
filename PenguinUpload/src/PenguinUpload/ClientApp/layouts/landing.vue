@@ -21,7 +21,7 @@
   import Login from '../components/login'
 
   export default {
-    data() {
+    data: function () {
       return {
       }
     },
@@ -30,7 +30,7 @@
       Login,
       devCredits
     },
-    beforeRouteEnter(to, from, next) {
+    beforeRouteEnter: function (to, from, next) {
       next(vm => {
         if (vm.$root.loggedIn) {
           vm.$router.replace('/u')

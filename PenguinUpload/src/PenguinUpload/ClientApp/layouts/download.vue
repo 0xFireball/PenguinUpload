@@ -21,7 +21,7 @@
   import downloadItem from '../components/downloadItem'
 
   export default {
-    data() {
+    data: function () {
       return {
       }
     },

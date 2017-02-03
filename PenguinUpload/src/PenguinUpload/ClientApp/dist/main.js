@@ -686,7 +686,7 @@
 	
 	
 	// module
-	exports.push([module.id, "\n.shrink-layout[data-v-bcce5e66] {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n  margin-top: 4%;\n}\n.intro-area[data-v-bcce5e66] {\n  margin-bottom: 2%;\n}\n", "", {"version":3,"sources":["/./ClientApp/layouts/landing.vue?b8970db0"],"names":[],"mappings":";AA2CA;EACA,oCAAA;EACA,mCAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;CACA;AAEA;EACA,kBAAA;CACA","file":"landing.vue","sourcesContent":["<template>\n  <div class=\"shrink-layout\">\n    <!--<img src=\"./assets/logo.png\">-->\n    <div class=\"row intro-area\">\n        <div class=\"twelve columns\">\n          <intro></intro>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"six columns offset-by-three\">\n          <login></login>\n        </div>\n      </div>\n    <devCredits></devCredits>\n  </div>\n</template>\n\n<script>\n  import Intro from '../components/intro'\n  import devCredits from '../components/devCredits'\n  import Login from '../components/login'\n\n  export default {\n    data() {\n      return {\n      }\n    },\n    components: {\n      Intro,\n      Login,\n      devCredits\n    },\n    beforeRouteEnter(to, from, next) {\n      next(vm => {\n        if (vm.$root.loggedIn) {\n          vm.$router.replace('/u')\n        }\n      })\n    }\n  }\n</script>\n\n<style scoped>\n  .shrink-layout {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    text-align: center;\n    color: #2c3e50;\n    margin-top: 4%;\n  }\n\n  .intro-area {\n    margin-bottom: 2%;\n  }\n</style>"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n.shrink-layout[data-v-bcce5e66] {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n  margin-top: 4%;\n}\n.intro-area[data-v-bcce5e66] {\n  margin-bottom: 2%;\n}\n", "", {"version":3,"sources":["/./ClientApp/layouts/landing.vue?b8970db0"],"names":[],"mappings":";AA2CA;EACA,oCAAA;EACA,mCAAA;EACA,mBAAA;EACA,eAAA;EACA,eAAA;CACA;AAEA;EACA,kBAAA;CACA","file":"landing.vue","sourcesContent":["<template>\n  <div class=\"shrink-layout\">\n    <!--<img src=\"./assets/logo.png\">-->\n    <div class=\"row intro-area\">\n        <div class=\"twelve columns\">\n          <intro></intro>\n        </div>\n      </div>\n      <div class=\"row\">\n        <div class=\"six columns offset-by-three\">\n          <login></login>\n        </div>\n      </div>\n    <devCredits></devCredits>\n  </div>\n</template>\n\n<script>\n  import Intro from '../components/intro'\n  import devCredits from '../components/devCredits'\n  import Login from '../components/login'\n\n  export default {\n    data() {\n      return {\n      }\n    },\n    components: {\n      Intro,\n      Login,\n      devCredits\n    },\n    beforeRouteEnter: function (to, from, next) {\n      next(vm => {\n        if (vm.$root.loggedIn) {\n          vm.$router.replace('/u')\n        }\n      })\n    }\n  }\n</script>\n\n<style scoped>\n  .shrink-layout {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    text-align: center;\n    color: #2c3e50;\n    margin-top: 4%;\n  }\n\n  .intro-area {\n    margin-bottom: 2%;\n  }\n</style>"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
@@ -725,7 +725,7 @@
 	    Login: _login2.default,
 	    devCredits: _devCredits2.default
 	  },
-	  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+	  beforeRouteEnter: function beforeRouteEnter: function (to, from, next) {
 	    next(function (vm) {
 	      if (vm.$root.loggedIn) {
 	        vm.$router.replace('/u');
@@ -1746,7 +1746,7 @@
 	
 	
 	// module
-	exports.push([module.id, "\n.shrink-layout[data-v-73b58b4a] {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n}\n", "", {"version":3,"sources":["/./ClientApp/layouts/dashboard.vue?7137d3d7"],"names":[],"mappings":";AAmCA;EACA,oCAAA;EACA,mCAAA;EACA,mBAAA;EACA,eAAA;CACA","file":"dashboard.vue","sourcesContent":["<template>\n  <div class=\"shrink-layout\">\n    <!--<img src=\"./assets/logo.png\">-->\n    <intro view-title=\"Dashboard\"></intro>\n    <fileUploadWidget></fileUploadWidget>\n    <devCredits></devCredits>\n  </div>\n</template>\n\n<script>\n  import Intro from '../components/intro'\n  import fileUploadWidget from '../components/fileUploadWidget'\n  import devCredits from '../components/devCredits'\n\n  export default {\n    data() {\n      return {\n      }\n    },\n    components: {\n      Intro,\n      fileUploadWidget,\n      devCredits\n    },\n    beforeRouteEnter(to, from, next) {\n      next(vm => {\n        if (!vm.$root.loggedIn) {\n          vm.$router.replace('/')\n        }\n      })\n    }\n  }\n</script>\n\n<style scoped>\n  .shrink-layout {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    text-align: center;\n    color: #2c3e50;\n  }\n</style>"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n.shrink-layout[data-v-73b58b4a] {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n}\n", "", {"version":3,"sources":["/./ClientApp/layouts/dashboard.vue?7137d3d7"],"names":[],"mappings":";AAmCA;EACA,oCAAA;EACA,mCAAA;EACA,mBAAA;EACA,eAAA;CACA","file":"dashboard.vue","sourcesContent":["<template>\n  <div class=\"shrink-layout\">\n    <!--<img src=\"./assets/logo.png\">-->\n    <intro view-title=\"Dashboard\"></intro>\n    <fileUploadWidget></fileUploadWidget>\n    <devCredits></devCredits>\n  </div>\n</template>\n\n<script>\n  import Intro from '../components/intro'\n  import fileUploadWidget from '../components/fileUploadWidget'\n  import devCredits from '../components/devCredits'\n\n  export default {\n    data() {\n      return {\n      }\n    },\n    components: {\n      Intro,\n      fileUploadWidget,\n      devCredits\n    },\n    beforeRouteEnter: function (to, from, next) {\n      next(vm => {\n        if (!vm.$root.loggedIn) {\n          vm.$router.replace('/')\n        }\n      })\n    }\n  }\n</script>\n\n<style scoped>\n  .shrink-layout {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    text-align: center;\n    color: #2c3e50;\n  }\n</style>"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
@@ -1785,7 +1785,7 @@
 	    fileUploadWidget: _fileUploadWidget2.default,
 	    devCredits: _devCredits2.default
 	  },
-	  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+	  beforeRouteEnter: function beforeRouteEnter: function (to, from, next) {
 	    next(function (vm) {
 	      if (!vm.$root.loggedIn) {
 	        vm.$router.replace('/');
@@ -2164,7 +2164,7 @@
 	
 	
 	// module
-	exports.push([module.id, "\n.shrink-layout[data-v-12a2b501] {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n}\n", "", {"version":3,"sources":["/./ClientApp/layouts/myfiles.vue?607d00a2"],"names":[],"mappings":";AAiCA;EACA,oCAAA;EACA,mCAAA;EACA,mBAAA;EACA,eAAA;CACA","file":"myfiles.vue","sourcesContent":["<template>\r\n  <div class=\"shrink-layout\">\r\n    <!--<img src=\"./assets/logo.png\">-->\r\n    <intro view-title=\"My Files\"></intro>\r\n    <myFilesList :dir=\"dir\"></myFilesList>\r\n    <devCredits></devCredits>\r\n  </div>\r\n</template>\r\n<script>\r\n  import Intro from '../components/intro'\r\n  import myFilesList from '../components/myFilesList'\r\n  import devCredits from '../components/devCredits'\r\n\r\n  export default {\r\n    props: ['dir'],\r\n    data() {\r\n      return {}\r\n    },\r\n    components: {\r\n      Intro,\r\n      myFilesList,\r\n      devCredits\r\n    },\r\n    beforeRouteEnter(to, from, next) {\r\n      next(vm => {\r\n        if (!vm.$root.loggedIn) {\r\n          vm.$router.replace('/')\r\n        }\r\n      })\r\n    }\r\n  }\r\n</script>\r\n<style scoped>\r\n  .shrink-layout {\r\n    -webkit-font-smoothing: antialiased;\r\n    -moz-osx-font-smoothing: grayscale;\r\n    text-align: center;\r\n    color: #2c3e50;\r\n  }\r\n</style>"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n.shrink-layout[data-v-12a2b501] {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n}\n", "", {"version":3,"sources":["/./ClientApp/layouts/myfiles.vue?607d00a2"],"names":[],"mappings":";AAiCA;EACA,oCAAA;EACA,mCAAA;EACA,mBAAA;EACA,eAAA;CACA","file":"myfiles.vue","sourcesContent":["<template>\r\n  <div class=\"shrink-layout\">\r\n    <!--<img src=\"./assets/logo.png\">-->\r\n    <intro view-title=\"My Files\"></intro>\r\n    <myFilesList :dir=\"dir\"></myFilesList>\r\n    <devCredits></devCredits>\r\n  </div>\r\n</template>\r\n<script>\r\n  import Intro from '../components/intro'\r\n  import myFilesList from '../components/myFilesList'\r\n  import devCredits from '../components/devCredits'\r\n\r\n  export default {\r\n    props: ['dir'],\r\n    data() {\r\n      return {}\r\n    },\r\n    components: {\r\n      Intro,\r\n      myFilesList,\r\n      devCredits\r\n    },\r\n    beforeRouteEnter: function (to, from, next) {\r\n      next(vm => {\r\n        if (!vm.$root.loggedIn) {\r\n          vm.$router.replace('/')\r\n        }\r\n      })\r\n    }\r\n  }\r\n</script>\r\n<style scoped>\r\n  .shrink-layout {\r\n    -webkit-font-smoothing: antialiased;\r\n    -moz-osx-font-smoothing: grayscale;\r\n    text-align: center;\r\n    color: #2c3e50;\r\n  }\r\n</style>"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
@@ -2204,7 +2204,7 @@
 	    myFilesList: _myFilesList2.default,
 	    devCredits: _devCredits2.default
 	  },
-	  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+	  beforeRouteEnter: function beforeRouteEnter: function (to, from, next) {
 	    next(function (vm) {
 	      if (!vm.$root.loggedIn) {
 	        vm.$router.replace('/');
@@ -2680,7 +2680,7 @@
 	
 	
 	// module
-	exports.push([module.id, "\n.shrink-layout[data-v-e2e5f142] {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n  margin-top: 60px;\n}\n", "", {"version":3,"sources":["/./ClientApp/layouts/profile.vue?6f6c5d82"],"names":[],"mappings":";AAyCA;EACA,oCAAA;EACA,mCAAA;EACA,mBAAA;EACA,eAAA;EACA,iBAAA;CACA","file":"profile.vue","sourcesContent":["<template>\n  <div class=\"shrink-layout\">\n    <!--<img src=\"./assets/logo.png\">-->\n    <div class=\"container\">\n      <intro view-title=\"User Profile\"></intro>\n      <div class=\"row\">\n        <div class=\"twelve columns\">\n          <myProfile></myProfile>\n        </div>\n      </div>\n      <devCredits></devCredits>\n    </div>\n  </div>\n</template>\n\n<script>\n  import Intro from '../components/intro'\n  import myProfile from '../components/myProfile'\n  import devCredits from '../components/devCredits'\n\n  export default {\n    data() {\n      return {\n      }\n    },\n    components: {\n      Intro,\n      myProfile,\n      devCredits\n    },\n    beforeRouteEnter(to, from, next) {\n      next(vm => {\n        if (!vm.$root.loggedIn) {\n          vm.$router.replace('/')\n        }\n      })\n    }\n  }\n</script>\n\n<style scoped>\n  .shrink-layout {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    text-align: center;\n    color: #2c3e50;\n    margin-top: 60px;\n  }\n</style>"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n.shrink-layout[data-v-e2e5f142] {\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  text-align: center;\n  color: #2c3e50;\n  margin-top: 60px;\n}\n", "", {"version":3,"sources":["/./ClientApp/layouts/profile.vue?6f6c5d82"],"names":[],"mappings":";AAyCA;EACA,oCAAA;EACA,mCAAA;EACA,mBAAA;EACA,eAAA;EACA,iBAAA;CACA","file":"profile.vue","sourcesContent":["<template>\n  <div class=\"shrink-layout\">\n    <!--<img src=\"./assets/logo.png\">-->\n    <div class=\"container\">\n      <intro view-title=\"User Profile\"></intro>\n      <div class=\"row\">\n        <div class=\"twelve columns\">\n          <myProfile></myProfile>\n        </div>\n      </div>\n      <devCredits></devCredits>\n    </div>\n  </div>\n</template>\n\n<script>\n  import Intro from '../components/intro'\n  import myProfile from '../components/myProfile'\n  import devCredits from '../components/devCredits'\n\n  export default {\n    data() {\n      return {\n      }\n    },\n    components: {\n      Intro,\n      myProfile,\n      devCredits\n    },\n    beforeRouteEnter: function (to, from, next) {\n      next(vm => {\n        if (!vm.$root.loggedIn) {\n          vm.$router.replace('/')\n        }\n      })\n    }\n  }\n</script>\n\n<style scoped>\n  .shrink-layout {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    text-align: center;\n    color: #2c3e50;\n    margin-top: 60px;\n  }\n</style>"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
@@ -2719,7 +2719,7 @@
 	    myProfile: _myProfile2.default,
 	    devCredits: _devCredits2.default
 	  },
-	  beforeRouteEnter: function beforeRouteEnter(to, from, next) {
+	  beforeRouteEnter: function beforeRouteEnter: function (to, from, next) {
 	    next(function (vm) {
 	      if (!vm.$root.loggedIn) {
 	        vm.$router.replace('/');

@@ -12,7 +12,7 @@
   import devCredits from '../components/devCredits'
 
   export default {
-    data() {
+    data: function () {
       return {
       }
     },

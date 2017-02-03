@@ -9,7 +9,7 @@
 <script>
   export default {
     props: ['viewTitle'],
-    data() {
+    data: function () {
       return {
         appTitle: 'PenguinUpload',
       }

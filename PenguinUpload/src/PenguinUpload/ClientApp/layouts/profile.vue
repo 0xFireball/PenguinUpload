@@ -19,7 +19,7 @@
   import devCredits from '../components/devCredits'
 
   export default {
-    data() {
+    data: function () {
       return {
       }
     },
@@ -28,7 +28,7 @@
       myProfile,
       devCredits
     },
-    beforeRouteEnter(to, from, next) {
+    beforeRouteEnter: function (to, from, next) {
       next(vm => {
         if (!vm.$root.loggedIn) {
           vm.$router.replace('/')
