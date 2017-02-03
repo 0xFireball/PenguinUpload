@@ -2,6 +2,7 @@
 using PenguinUpload.DataModels.Auth;
 using PenguinUpload.Services.Authentication;
 using System;
+using System.Collections;
 
 namespace PenguinUpload.DataModels.Files
 {
@@ -28,6 +29,8 @@ namespace PenguinUpload.DataModels.Files
         public bool CheckPassword(string pass)
         {
             var cryptoHelper = new AuthCryptoHelper(Crypto.Conf);
+            var inputPass = cryptoHelper.CalculateUserPasswordHash(pass, Crypto.Salt);
+            return StructuralComparisons.StructuralEqualityComparer.Equals(inputPass, Crypto.Key);
         }
     }
 }
