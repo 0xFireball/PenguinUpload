@@ -24,6 +24,7 @@ namespace PenguinUpload.Modules
                 if (storedFile == null) return HttpStatusCode.NotFound;
                 if (storedFile.IsPasswordProtected)
                 {
+                    if (pass == null) return HttpStatusCode.Unauthorized;
                     // Make sure password matches
                     if (!storedFile.CheckPassword(pass))
                     {
