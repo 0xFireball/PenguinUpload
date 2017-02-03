@@ -60,7 +60,7 @@
           .then(function (response) {
             if (response.status == 200) {
               vm.file.name = response.data.name
-              vm.file.sizeText = response.data.hrSize
+              vm.file.sizeText = vm.$root.humanFileSize(response.data.size)
               vm.loading = false
               if (suffix) {
                 vm.file.pass = key

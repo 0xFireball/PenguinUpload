@@ -16,7 +16,7 @@ namespace PenguinUpload.DataModels.Binding
             var form = context.Request.Form;
 
             fileUploadRequest.File = context.Request.Files.FirstOrDefault();
-            fileUploadRequest.TargetDirectory = (form["dir"] as string) ?? "/"; // Read path, or use default
+            fileUploadRequest.TargetDirectory = form.dir.HasValue ? form.dir : "/"; // Read path, or use default
 
             return fileUploadRequest;
         }

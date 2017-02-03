@@ -13,7 +13,7 @@
               <div class="six columns offset-by-three">
                 <md-input-container>
                   <label>Upload Destination</label>
-                  <md-input v-model="targetUploadPath"></md-input>
+                  <md-input v-model="uploadDestination"></md-input>
                 </md-input-container>
               </div>
             </div>
@@ -95,7 +95,7 @@
         completedFiles: [],
         /* schema:
          */
-        targetUploadPath: '/'
+        uploadDestination: '/'
       }
     },
     computed: {
@@ -179,6 +179,7 @@
         }
         let form = new FormData()
         form.append("apikey", vm.$root.u.key)
+        form.append("dir", vm.uploadDestination)
         form.append("file", file)
         xhr.send(form)
       },
@@ -202,7 +203,7 @@
   .upload-progress-bar {
     padding: 5px;
   }
-
+  
   .upload-settings-section {
     text-align: center;
   }
