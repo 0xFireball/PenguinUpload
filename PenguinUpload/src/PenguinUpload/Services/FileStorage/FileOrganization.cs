@@ -15,7 +15,7 @@ namespace PenguinUpload.Services.FileStorage
 
         private static string JoinPathSegments(string[] segments)
         {
-            return string.Join("/", segments);
+            return "/" + string.Join("/", segments) + "/";
         }
 
         public static async Task<DirectoryStructure> BuildStructure(IEnumerable<StoredFile> files)
@@ -27,27 +27,28 @@ namespace PenguinUpload.Services.FileStorage
             foreach (var file in files)
             {
                 var pathSegments = GetPathSegments(file.ParentDirPath);
-                var targetPathSegmentCount = 0;
-                if (pathSegments.Length > 0)
-                {
-                    for (int segmentCount = 1;
-                        segmentCount <= pathSegments.Length
-                        && !dirStructure.SubDirectories.Any(x => x.Path == JoinPathSegments(pathSegments.Take(segmentCount).ToArray()));
-                        segmentCount++)
-                    {
-                        targetPathSegmentCount = segmentCount;
-                    }
-                }
+                var targetPathSegmentCount = pathSegments.Length;
                 var parent = dirStructure;
                 for (int i = 0; i < targetPathSegmentCount; i++)
                 {
                     var currentSegment = pathSegments[i];
-                    var nextChild = new DirectoryStructure
+                    var currentFullPath = JoinPathSegments(pathSegments.Take(i + 1).ToArray());
+                    DirectoryStructure nextChild;
+                    var existingChild = parent.SubDirectories.Where(x => x.Path == currentFullPath).FirstOrDefault();
+                    if (existingChild != null)
                     {
-                        Name = currentSegment,
-                        Path = parent.Path + currentSegment + "/"
-                    };
-                    parent.SubDirectories.Add(nextChild);
+                        nextChild = existingChild;
+                    }
+                    else
+                    {
+                        // Create and add next directory
+                        nextChild = new DirectoryStructure
+                        {
+                            Name = currentSegment,
+                            Path = parent.Path + currentSegment + "/"
+                        };
+                        parent.SubDirectories.Add(nextChild);
+                    }
                     parent = nextChild;
                 }
                 parent.Files.Add(file);
