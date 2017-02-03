@@ -226,9 +226,11 @@ Download link with password encoded:<br>
         this.navigateToDir(newDirPath)
       },
       dirUpLevel: function () {
-        let segments = this.currentDir.split('/')
-        let newDirPath = segments.slice(0, segments.length - 2)
-        this.navigateToDir(newDirPath)
+        if (!this.atRootDir) {
+          let segments = this.currentDir.split('/')
+          let newDirPath = segments.slice(0, segments.length - 2)
+          this.navigateToDir(newDirPath)
+        }
       },
       navigateToDir: function (path) {
         this.$router.push('/files' + path)
@@ -256,23 +258,45 @@ Download link with password encoded:<br>
         // load directory structure from server
         let vm = this
         vm.currentDir = vm.currentDir || '/'
-        console.log(vm.dir)
+        // console.log(vm.dir)
         vm.$root.getAuthRequestParams()
         axios.get('/api/files', vm.$root.getAuthRequestParams())
           .then(function (response) {
             // merge file list
-            console.log(response.data)
+            // console.log(response.data)
             vm.dirStructure = response.data
             vm.updateFilesDirs()
             vm.loadFinished = true
           })
           .catch(function (error) {
             if (error) {
-              console.log(error)
+              // console.log(error)
               vm.error = true
             }
             vm.loadFinished = true
           })
+      },
+      handleGlobalKeypress: function (e) {
+        e = e || window.event
+        if (e) {
+          switch (e.keyCode) {
+            case 37:
+              // left
+              this.$router.go(-1)
+              break;
+            case 38:
+              // up
+              this.dirUpLevel()
+              break;
+            case 39:
+              // right
+              this.$router.go(1)
+              break;
+            case 40:
+              // down
+              break;
+          }
+        }
       }
     },
     watch: {
@@ -287,6 +311,7 @@ Download link with password encoded:<br>
     },
     mounted: function () {
       this.fetchData()
+      document.onkeydown = this.handleGlobalKeypress
     }
   }
 </script>
