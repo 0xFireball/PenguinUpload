@@ -16,11 +16,29 @@
                 <p>No Files</p>
               </div>
               <md-list class="custom-list md-double-line">
+                <!-- directories -- >
+                <md-list-item v-for="(dir, ix) in dirs" @click="openDir(ix)">
+                  <md-icon class="md-primary">folder</md-icon>
+                  <div class="md-list-text-container">
+                    <span> {{ dir.name }}</span>
+                    <span> Folder </span>
+                  </div>
+                  <md-menu md-align-trigger>
+                    <md-button class="md-icon-button md-list-action" md-menu-trigger>
+                      <md-icon class="md-primary">more_horiz</md-icon>
+                    </md-button>
+                    <md-menu-content>
+                      <md-menu-item @click="openDir(ix)">Open</md-menu-item>
+                    </md-menu-content>
+                  </md-menu>
+                  <md-divider class="md-inset"></md-divider>
+                </md-list-item>
+                <!-- files -- >
                 <md-list-item v-for="(file, ix) in files">
                   <md-icon class="md-primary">cloud_done</md-icon>
                   <div class="md-list-text-container">
                     <span> {{ file.name }}</span>
-                    <span> {{ file.hrSize }}</span>
+                    <span> {{ getHrSize(file.size) }}</span>
                   </div>
                   <md-button class="md-icon-button md-list-action" @click="lockFile(ix)" v-if="!file.locked">
                     <md-icon class="md-primary">lock_open</md-icon>
@@ -81,6 +99,9 @@
       }
     },
     methods: {
+      getHrSize: function(l) {
+        return this.$root.humanFileSize(l)
+      },
       uploadMoreFiles: function () {
         this.$router.push('/u')
       },
@@ -178,6 +199,9 @@ Download link with password encoded:<br>
                 })
             }
           })
+      },
+      openDir: function (ix) {
+        vm.$router.push('/files' + this.dirs[ix].path)
       },
       updateFilesDirs: function () {
         // walk directory structure
