@@ -123,6 +123,19 @@ namespace PenguinUpload.Modules
                 return HttpStatusCode.OK;
             });
 
+            Patch("/rename/{id}", async args =>
+            {
+                var id = (string)args.id;
+                var newname = (string)args.name;
+                // Update file metadata
+                var storedFilesManager = new StoredFilesManager();
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifier(id);
+                if (storedFile == null) return HttpStatusCode.BadRequest;
+                storedFile.Name = newname;
+                await storedFilesManager.UpdateStoredFileInDatabase(storedFile);
+                return HttpStatusCode.OK;
+            });
+
             // Delete a file
             Delete("/delete/{id}", async args =>
             {

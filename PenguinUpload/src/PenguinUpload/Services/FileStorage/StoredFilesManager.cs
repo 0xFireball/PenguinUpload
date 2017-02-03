@@ -2,7 +2,6 @@
 using PenguinUpload.DataModels.Files;
 using PenguinUpload.Services.Authentication;
 using PenguinUpload.Services.Database;
-using PenguinUpload.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -139,8 +138,18 @@ namespace PenguinUpload.Services.FileStorage
             });
         }
 
+        /// <summary>
+        /// Set the password on a file. This will overwrite an existing password.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="pass"></param>
+        /// <returns></returns>
         public async Task SetFilePassword(StoredFile file, string pass)
         {
+            if (pass == null) // No password
+            {
+                file.Crypto = null;
+            }
             var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
             var cryptoHelper = new AuthCryptoHelper(cryptoConf);
             var pwSalt = cryptoHelper.GenerateSalt();
