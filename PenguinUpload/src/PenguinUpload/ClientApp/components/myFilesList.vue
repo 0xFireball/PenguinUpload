@@ -24,14 +24,6 @@
                       <span> .. </span>
                       <span> Parent Folder </span>
                     </div>
-                    <md-menu md-align-trigger>
-                      <md-button class="md-icon-button md-list-action" md-menu-trigger>
-                        <md-icon class="md-primary">more_horiz</md-icon>
-                      </md-button>
-                      <md-menu-content>
-                        <md-menu-item @click="dirUpLevel()">Open</md-menu-item>
-                      </md-menu-content>
-                    </md-menu>
                     <md-divider class="md-inset"></md-divider>
                   </md-list-item>
                 </div>
@@ -41,14 +33,6 @@
                     <span> {{ dir.name }}</span>
                     <span> Folder </span>
                   </div>
-                  <md-menu md-align-trigger>
-                    <md-button class="md-icon-button md-list-action" md-menu-trigger>
-                      <md-icon class="md-primary">more_horiz</md-icon>
-                    </md-button>
-                    <md-menu-content>
-                      <md-menu-item @click="openDir(ix)">Open</md-menu-item>
-                    </md-menu-content>
-                  </md-menu>
                   <md-divider class="md-inset"></md-divider>
                 </md-list-item>
                 <!--files-->

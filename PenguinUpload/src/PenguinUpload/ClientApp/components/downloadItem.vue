@@ -90,6 +90,17 @@
             vm.loading = false
             vm.error = true
           })
+      },
+      handleGlobalKeypress: function (e) {
+        e = e || window.event
+        if (e) {
+          switch (e.keyCode) {
+            case 40:
+              // down
+              this.downloadFile()
+              break;
+          }
+        }
       }
     },
     mounted: function () {
@@ -101,6 +112,7 @@
         }
       }
       this.updateFileInfo(this.cItemPass)
+      document.onkeydown = this.handleGlobalKeypress
     }
   }
 </script>
