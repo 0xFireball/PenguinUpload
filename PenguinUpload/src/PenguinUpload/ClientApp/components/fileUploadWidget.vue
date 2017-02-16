@@ -4,7 +4,7 @@
       <div class="row">
         <div class="ten columns offset-by-one">
           <div class="left sep-b">
-            <md-button class="md-raised md-primary" @click="viewMyFiles">View my files</md-button>
+            <md-button class="md-raised md-primary" @click.native="viewMyFiles">View my files</md-button>
           </div>
           <div class="upload-here" @drop.stop.prevent="handleDragDropUpload" @dragenter.stop.prevent @dragleave.stop.prevent @dragover.stop.prevent>
             <!--<a class="target">Drag and drop or click to upload files</a>-->
@@ -18,7 +18,7 @@
               </div>
             </div>
             <div class="md-subhead">Drag and drop or click</div>
-            <div class="upload-area-padding" @click="browseForFiles">
+            <div class="upload-area-padding" @click.native="browseForFiles">
             </div>
             <div class="upload-progress-indicators">
               <!--<md-spinner md-size="60" :md-progress="progressIndicator.value" class="md-warn"></md-spinner>
@@ -38,7 +38,7 @@
                     </template>
                     <span v-else> {{ 'Upload error: ' + prInd.message }}</span>
                   </div>
-                  <md-button class="md-icon-button md-list-action" @click="cancelUpload(prInd)">
+                  <md-button class="md-icon-button md-list-action" @click.native="cancelUpload(prInd)">
                     <md-icon class="md-primary">cancel</md-icon>
                   </md-button>
                   <md-button class="md-icon-button md-list-action">
@@ -48,7 +48,7 @@
                 </md-list-item>
                 <!--Upload completed files-->
                 <md-subheader v-if="completedFiles.length > 0">Completed</md-subheader>
-                <md-list-item v-for="(cmplFile, ix) in completedFiles" @click="visitUrl(cmplFile.downloadPage)">
+                <md-list-item v-for="(cmplFile, ix) in completedFiles" @click.native="visitUrl(cmplFile.downloadPage)">
                   <md-icon class="md-primary">cloud_done</md-icon>
                   <div class="md-list-text-container">
                     <span> {{ cmplFile.name }}</span>
@@ -60,7 +60,7 @@
                   <md-divider class="md-inset"></md-divider>
                 </md-list-item>
               </md-list>
-              <md-button v-if="completedFiles.length > 0" @click="completedFiles = []">Clear All</md-button>
+              <md-button v-if="completedFiles.length > 0" @click.native="completedFiles = []">Clear All</md-button>
             </div>
             <input type="file" class="invisible" ref="browse" @change="onFilesUploaded" multiple />
           </div>

@@ -18,7 +18,7 @@
     <div class="p-section">
       <h5>API</h5>
       <h6>API Key: <code>{{ $root.u.key }}</code></h6>
-      <md-button class="md-primary md-raised" @click="generateNewApiKey">Generate New</md-button>
+      <md-button class="md-primary md-raised" @click.native="generateNewApiKey">Generate New</md-button>
     </div>
     <div class="p-section">
       <h5>Security</h5>
@@ -52,8 +52,8 @@
     </div>
     <div>
       <h5>Danger Zone</h5>
-      <md-button class="md-raised md-warn" @click="deleteAllFiles">Delete All Files</md-button>
-      <md-button class="md-raised md-warn" @click="deleteAccount">Delete Account</md-button>
+      <md-button class="md-raised md-warn" @click.native="deleteAllFiles">Delete All Files</md-button>
+      <md-button class="md-raised md-warn" @click.native="deleteAccount">Delete Account</md-button>
     </div>
   </div>
 </template>
