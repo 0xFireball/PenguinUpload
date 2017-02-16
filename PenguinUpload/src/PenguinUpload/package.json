@@ -7,10 +7,11 @@
     "jquery": "^3.1.1",
     "skeleton-css": "^2.0.4",
     "vue": "^2.1.0",
-    "vue-material": "^0.6.3",
+    "vue-material": "^0.7.1",
     "vue-router": "^2.2.0"
   },
   "devDependencies": {
+    "aspnet-webpack": "^1.0.25",
     "autoprefixer": "^6.4.0",
     "babel-core": "^6.0.0",
     "babel-eslint": "^7.0.0",
@@ -51,8 +52,7 @@
     "webpack": "^1.14.0",
     "webpack-dev-middleware": "^1.8.3",
     "webpack-hot-middleware": "^2.13.2",
-    "webpack-merge": "^0.14.1",
-    "aspnet-webpack": "^1.0.25"
+    "webpack-merge": "^0.14.1"
   },
   "engines": {
     "node": ">= 4.0.0",

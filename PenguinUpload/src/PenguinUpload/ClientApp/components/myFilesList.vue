@@ -297,18 +297,18 @@
             case 37:
               // left
               this.$router.go(-1)
-              break;
+              break
             case 38:
               // up
               this.dirUpLevel()
-              break;
+              break
             case 39:
               // right
               this.$router.go(1)
-              break;
+              break
             case 40:
               // down
-              break;
+              break
           }
         }
       }
