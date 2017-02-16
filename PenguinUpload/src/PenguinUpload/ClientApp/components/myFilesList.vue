@@ -4,7 +4,7 @@
       <div class="row">
         <div class="ten columns offset-by-one">
           <div class="left sep-b">
-            <md-button class="md-raised md-primary" @click="uploadMoreFiles">Upload Files</md-button>
+            <md-button class="md-raised md-primary" @click.native="uploadMoreFiles">Upload Files</md-button>
           </div>
           <div class="uploaded-files-list">
             <div class="md-title">All My Files</div>
@@ -18,7 +18,7 @@
               <md-list class="custom-list md-double-line">
                 <!--directories-->
                 <div v-if="!atRootDir">
-                  <md-list-item @click="dirUpLevel()">
+                  <md-list-item @click.native="dirUpLevel()">
                     <md-icon class="md-primary">folder</md-icon>
                     <div class="md-list-text-container">
                       <span> .. </span>
@@ -27,7 +27,7 @@
                     <!--<md-divider class="md-inset"></md-divider>-->
                   </md-list-item>
                 </div>
-                <md-list-item v-for="(dir, ix) in dirs" @click="openDir(ix)">
+                <md-list-item v-for="(dir, ix) in dirs" @click.native="openDir(ix)">
                   <md-icon class="md-primary">folder</md-icon>
                   <div class="md-list-text-container">
                     <span> {{ dir.name }}</span>
@@ -42,13 +42,13 @@
                     <span> {{ file.name }}</span>
                     <span> {{ getHrSize(file.size) }}</span>
                   </div>
-                  <md-button class="md-icon-button md-list-action" @click="lockFile(ix)" v-if="!file.locked">
+                  <md-button class="md-icon-button md-list-action" @click.native="lockFile(ix)" v-if="!file.locked">
                     <md-icon class="md-primary">lock_open</md-icon>
                   </md-button>
-                  <md-button class="md-icon-button md-list-action" @click="unlockFile(ix)" v-else>
+                  <md-button class="md-icon-button md-list-action" @click.native="unlockFile(ix)" v-else>
                     <md-icon class="md-primary">lock</md-icon>
                   </md-button>
-                  <md-button class="md-icon-button md-list-action" @click="downloadFile(ix)">
+                  <md-button class="md-icon-button md-list-action" @click.native="downloadFile(ix)">
                     <md-icon class="md-primary">file_download</md-icon>
                   </md-button>
                   <md-menu md-align-trigger>
@@ -56,9 +56,9 @@
                       <md-icon class="md-primary">more_horiz</md-icon>
                     </md-button>
                     <md-menu-content>
-                      <md-menu-item @click="visitDownloadPage(ix)">Download Page</md-menu-item>
-                      <md-menu-item @click="renameFile(ix)">Rename</md-menu-item>
-                      <md-menu-item @click="deleteFile(ix)">Delete</md-menu-item>
+                      <md-menu-item @click.native="visitDownloadPage(ix)">Download Page</md-menu-item>
+                      <md-menu-item @click.native="renameFile(ix)">Rename</md-menu-item>
+                      <md-menu-item @click.native="deleteFile(ix)">Delete</md-menu-item>
                     </md-menu-content>
                   </md-menu>
                   <!--<md-divider class="md-inset"></md-divider>-->

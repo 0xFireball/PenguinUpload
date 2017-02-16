@@ -13,7 +13,7 @@
           </md-input-container>
           <p class="error-message">{{ login.err }}</p>
           <input type="submit" class="invisible"></input>
-          <md-button class="md-raised md-primary" v-on:click="tryLogin" :disabled="!login.e">Log In</md-button>
+          <md-button class="md-raised md-primary" @click.native="tryLogin" :disabled="!login.e">Log In</md-button>
         </form>
       </md-tab>
 
@@ -38,7 +38,7 @@
           <md-checkbox v-model="register.iaccept">I accept the Terms and Conditions</md-checkbox>
           <p class="error-message">{{ register.err }}</p>
           <input type="submit" class="invisible"></input>
-          <md-button class="md-raised md-primary" v-on:click="tryRegister" :disabled="!register.e">Sign Up</md-button>
+          <md-button class="md-raised md-primary" @click.native="tryRegister" :disabled="!register.e">Sign Up</md-button>
         </form>
       </md-tab>
     </md-tabs>

@@ -11,7 +11,7 @@
             </md-input-container>
             <input type="submit" class="invisible"></input>
           </form>
-          <md-button class="space-v md-raised md-primary" :disabled="!shrinkEnabled" v-on:click="shrinkUrl">Shrink</md-button>
+          <md-button class="space-v md-raised md-primary" :disabled="!shrinkEnabled" @click.native="shrinkUrl">Shrink</md-button>
         </div>
       </div>
 

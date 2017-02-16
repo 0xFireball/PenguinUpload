@@ -1,7 +1,7 @@
 <template>
   <div class="toolbar">
     <md-toolbar>
-      <md-button class="md-icon-button" @click="toggleLeftSidenav">
+      <md-button class="md-icon-button" @click.native="toggleLeftSidenav">
         <md-icon>menu</md-icon>
       </md-button>
       <h2 class="md-title toolbar-title">{{ appName }}</h2>
@@ -14,24 +14,24 @@
             </span>
           </md-button>
           <md-menu-content>
-            <md-menu-item @click="routerGo('/p')">
+            <md-menu-item @click.native="routerGo('/p')">
               Account
             </md-menu-item>
-            <md-menu-item @click="routerGo('/u')">
+            <md-menu-item @click.native="routerGo('/u')">
               Dashboard
             </md-menu-item>
-            <md-menu-item @click="routerGo('/files')">
+            <md-menu-item @click.native="routerGo('/files')">
               My Files
             </md-menu-item>
             <md-divider></md-divider>
-            <md-menu-item @click="logout">
+            <md-menu-item @click.native="logout">
               Log Out
             </md-menu-item>
           </md-menu-content>
         </md-menu>
       </div>
       <div v-else>
-        <md-button class="md-icon-button" v-on:click="visitGitHub">
+        <md-button class="md-icon-button" @click.native="visitGitHub">
           <md-icon>favorite</md-icon>
         </md-button>
       </div>
@@ -46,20 +46,20 @@
         <div class="sidebar-links">
           <md-list class="md-dense">
             <template v-if="$root.loggedIn">
-              <md-list-item @click="closeSidenav">
+              <md-list-item @click.native="closeSidenav">
                 <router-link exact to="/p">Account</router-link>
               </md-list-item>
-              <md-list-item @click="closeSidenav">
+              <md-list-item @click.native="closeSidenav">
                 <router-link exact to="/u">Dashboard</router-link>
               </md-list-item>
-              <md-list-item @click="closeSidenav">
+              <md-list-item @click.native="closeSidenav">
                 <router-link exact to="/files">Files</router-link>
               </md-list-item>
             </template>
-            <md-list-item @click="closeSidenav" v-else>
+            <md-list-item @click.native="closeSidenav" v-else>
               <router-link exact to="/">Home</router-link>
             </md-list-item>
-            <md-list-item @click="closeSidenav">
+            <md-list-item @click.native="closeSidenav">
               <router-link exact to="/about">About</router-link>
             </md-list-item>
             <md-list-item>

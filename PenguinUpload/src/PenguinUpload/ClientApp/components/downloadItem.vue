@@ -12,7 +12,7 @@
         <p>{{ file.sizeText }}</p>
         <div v-if="!error">
           <div class="right">
-            <md-button @click="downloadFile">
+            <md-button @click.native="downloadFile">
               <md-icon v-if="file.pass.length > 0">lock</md-icon>
               <span>
               Download
