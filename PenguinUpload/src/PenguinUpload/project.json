@@ -1,23 +1,18 @@
-{
+﻿{
   "title": "PenguinUpload",
   "copyright": "Copyright (c) 2016 0xFireball. All Rights Reserved.",
   "description": "Easy file hosting/uploads",
   "language": "en",
   "version": "0.8.1.1-alpha3",
   "dependencies": {
-    "Microsoft.NETCore.App": {
-      "version": "1.1.0",
-      "type": "platform"
-    },
-    "LiteDB": "3.0.0",
-    "System.Linq": "4.3.0",
-    "Nancy": "2.0.0-clinteastwood",
+    "LiteDB": "3.0.1",
     "Microsoft.AspNetCore.Diagnostics": "1.1.0",
     "Microsoft.AspNetCore.Mvc": "1.1.1",
     "Microsoft.AspNetCore.Owin": "1.1.0",
     "Microsoft.AspNetCore.Razor.Tools": "1.1.0-preview4-final",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
     "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
+    "Microsoft.AspNetCore.SpaServices": "1.1.0",
     "Microsoft.AspNetCore.StaticFiles": "1.1.0",
     "Microsoft.Extensions.Configuration.CommandLine": "1.1.0",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
@@ -26,12 +21,16 @@
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
+    "Microsoft.NETCore.App": {
+      "version": "1.1.0",
+      "type": "platform"
+    },
+    "Nancy": "2.0.0-clinteastwood",
     "Nancy.Authentication.Stateless": "2.0.0-clinteastwood",
     "Newtonsoft.Json": "9.0.2-beta2",
-    "Microsoft.AspNetCore.SpaServices": "1.1.0"
+    "System.Linq": "4.3.0"
   },
-  "tools": {
-  },
+  "tools": {},
   "frameworks": {
     "netcoreapp1.1": {
       "imports": [
