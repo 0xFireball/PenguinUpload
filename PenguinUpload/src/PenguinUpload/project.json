@@ -3,7 +3,7 @@
   "copyright": "Copyright (c) 2016 0xFireball. All Rights Reserved.",
   "description": "Easy file hosting/uploads",
   "language": "en",
-  "version": "0.8.1.1-alpha3",
+  "version": "0.8.2-alpha4",
   "dependencies": {
     "LiteDB": "3.0.1",
     "Microsoft.AspNetCore.Diagnostics": "1.1.0",
