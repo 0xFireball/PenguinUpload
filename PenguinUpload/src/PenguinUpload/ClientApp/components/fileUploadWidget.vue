@@ -18,7 +18,7 @@
               </div>
             </div>
             <div class="md-subhead">Drag and drop or click</div>
-            <div class="upload-area-padding" @click.native="browseForFiles">
+            <div class="upload-area-padding" @click="browseForFiles">
             </div>
             <div class="upload-progress-indicators">
               <!--<md-spinner md-size="60" :md-progress="progressIndicator.value" class="md-warn"></md-spinner>
