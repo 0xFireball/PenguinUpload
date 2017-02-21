@@ -1,6 +1,7 @@
 
-# The annoying Webpack output file
-/src/PenguinUpload/wwwroot/dist/main.js
+# The annoying Webpack output files
+/PenguinUpload/src/PenguinUpload/wwwroot/dist/main.js
+/PenguinUpload/src/PenguinUpload/ClientApp/dist/main.js
 
 # Publish output path
 
@@ -397,8 +398,5 @@ __pycache__/
 
 # Cake - Uncomment if you are using it
 # tools/
-
-### VisualStudio Patch ###
-build/
 
 # End of https://www.gitignore.io/api/visualstudio,intellij+iml,node
