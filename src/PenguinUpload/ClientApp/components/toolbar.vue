@@ -14,13 +14,13 @@
             </span>
           </md-button>
           <md-menu-content>
-            <md-menu-item @click="routerGo('/p')">
+            <md-menu-item @click.native="routerGo('/p')">
               Account
             </md-menu-item>
-            <md-menu-item @click="routerGo('/u')">
+            <md-menu-item @click.native="routerGo('/u')">
               Dashboard
             </md-menu-item>
-            <md-menu-item @click="routerGo('/files')">
+            <md-menu-item @click.native="routerGo('/files')">
               My Files
             </md-menu-item>
             <md-divider></md-divider>
@@ -46,20 +46,20 @@
         <div class="sidebar-links">
           <md-list class="md-dense">
             <template v-if="$root.loggedIn">
-              <md-list-item @click.native="closeSidenav">
+              <md-list-item @click="closeSidenav">
                 <router-link exact to="/p">Account</router-link>
               </md-list-item>
-              <md-list-item @click.native="closeSidenav">
+              <md-list-item @click="closeSidenav">
                 <router-link exact to="/u">Dashboard</router-link>
               </md-list-item>
-              <md-list-item @click.native="closeSidenav">
+              <md-list-item @click="closeSidenav">
                 <router-link exact to="/files">Files</router-link>
               </md-list-item>
             </template>
-            <md-list-item @click.native="closeSidenav" v-else>
+            <md-list-item @click="closeSidenav" v-else>
               <router-link exact to="/">Home</router-link>
             </md-list-item>
-            <md-list-item @click.native="closeSidenav">
+            <md-list-item @click="closeSidenav">
               <router-link exact to="/about">About</router-link>
             </md-list-item>
             <md-list-item>
