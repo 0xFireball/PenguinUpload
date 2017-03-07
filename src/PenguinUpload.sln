@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26206.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E3C7012E-5AE4-456F-AD6E-EA0449410201}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{846C5230-1563-4470-AC51-4B2B343A53A0}"
+	ProjectSection(SolutionItems) = preProject
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PenguinUpload", "PenguinUpload\PenguinUpload.csproj", "{D10B6796-9113-4B07-863E-2F75C256B7FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D10B6796-9113-4B07-863E-2F75C256B7FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D10B6796-9113-4B07-863E-2F75C256B7FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D10B6796-9113-4B07-863E-2F75C256B7FB}.Debug|x64.ActiveCfg = Debug|x64
+		{D10B6796-9113-4B07-863E-2F75C256B7FB}.Debug|x64.Build.0 = Debug|x64
+		{D10B6796-9113-4B07-863E-2F75C256B7FB}.Debug|x86.ActiveCfg = Debug|x86
+		{D10B6796-9113-4B07-863E-2F75C256B7FB}.Debug|x86.Build.0 = Debug|x86
+		{D10B6796-9113-4B07-863E-2F75C256B7FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D10B6796-9113-4B07-863E-2F75C256B7FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D10B6796-9113-4B07-863E-2F75C256B7FB}.Release|x64.ActiveCfg = Release|x64
+		{D10B6796-9113-4B07-863E-2F75C256B7FB}.Release|x64.Build.0 = Release|x64
+		{D10B6796-9113-4B07-863E-2F75C256B7FB}.Release|x86.ActiveCfg = Release|x86
+		{D10B6796-9113-4B07-863E-2F75C256B7FB}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D10B6796-9113-4B07-863E-2F75C256B7FB} = {E3C7012E-5AE4-456F-AD6E-EA0449410201}
+	EndGlobalSection
+EndGlobal
