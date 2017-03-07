@@ -18,7 +18,7 @@ namespace PenguinUpload.Services.FileStorage
             return "/" + string.Join("/", segments) + "/";
         }
 
-        public static async Task<DirectoryStructure> BuildStructure(IEnumerable<StoredFile> files)
+        public static DirectoryStructure BuildStructure(IEnumerable<StoredFile> files)
         {
             var dirStructure = new DirectoryStructure
             {
