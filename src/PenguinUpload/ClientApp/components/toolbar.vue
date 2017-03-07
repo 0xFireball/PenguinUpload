@@ -14,13 +14,13 @@
             </span>
           </md-button>
           <md-menu-content>
-            <md-menu-item @click.native="routerGo('/p')">
+            <md-menu-item @click="routerGo('/p')">
               Account
             </md-menu-item>
-            <md-menu-item @click.native="routerGo('/u')">
+            <md-menu-item @click="routerGo('/u')">
               Dashboard
             </md-menu-item>
-            <md-menu-item @click.native="routerGo('/files')">
+            <md-menu-item @click="routerGo('/files')">
               My Files
             </md-menu-item>
             <md-divider></md-divider>
