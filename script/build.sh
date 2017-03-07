@@ -15,7 +15,7 @@ dotnet --version
 
 echo "Restoring packages..."
 # Restore packages
-dotnet restore
+dotnet restore src/PenguinUpload.sln
 
 echo "Building project..."
 
