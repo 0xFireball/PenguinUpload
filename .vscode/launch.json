@@ -6,9 +6,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}\\src\\PenguinUpload\\bin\\Debug\\netcoreapp1.1\\PenguinUpload.dll",
+            "program": "${workspaceRoot}/src/PenguinUpload/bin/Debug/netcoreapp1.1/PenguinUpload.dll",
             "args": [],
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}/src/PenguinUpload",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
