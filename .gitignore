@@ -1,7 +1,7 @@
 
 # The annoying Webpack output files
-/PenguinUpload/src/PenguinUpload/wwwroot/dist/main.js
-/PenguinUpload/src/PenguinUpload/ClientApp/dist/main.js
+/src/PenguinUpload/wwwroot/dist/main.js
+/src/PenguinUpload/ClientApp/dist/main.js
 
 # Publish output path
 

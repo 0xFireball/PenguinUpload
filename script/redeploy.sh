@@ -8,7 +8,7 @@ echo "Building project..."
 bash script/build.sh
 
 pushd .
-cd PenguinUpload/src/PenguinUpload/bin/Release/netcoreapp1.1/publish
+cd src/PenguinUpload/bin/Release/netcoreapp1.1/publish
 
 echo "Starting server with nohup"
 nohup dotnet PenguinUpload.dll &

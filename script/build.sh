@@ -20,11 +20,11 @@ dotnet restore
 echo "Building project..."
 
 # Build
-dotnet build -c Release PenguinUpload/src/PenguinUpload
+dotnet build -c Release src/PenguinUpload
 
 echo "Running tests..."
 
 echo "Publishing project..."
 
 # Publish
-dotnet publish -c Release PenguinUpload/src/PenguinUpload
+dotnet publish -c Release src/PenguinUpload
