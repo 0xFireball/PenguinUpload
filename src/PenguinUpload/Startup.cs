@@ -47,7 +47,6 @@ namespace PenguinUpload
 
             // Bind configuration
             PUConfiguration.Bind(puConfig);
-            
 
             if (env.IsDevelopment())
             {
@@ -64,10 +63,13 @@ namespace PenguinUpload
 
             app.UseStaticFiles();
 
-            app.UseOwin(x => x.UseNancy(options => options.PassThroughWhenStatusCodesAre(
-                HttpStatusCode.NotFound,
-                HttpStatusCode.InternalServerError
-            )));
+            app.UseOwin(x => x.UseNancy(options =>
+            {
+                options.PassThroughWhenStatusCodesAre(
+HttpStatusCode.NotFound,
+HttpStatusCode.InternalServerError
+); options.Bootstrapper = new PenguinUploadBootstrapper(new PenguinUploadContext(puConfig));
+            }));
 
             app.UseMvc(routes =>
             {

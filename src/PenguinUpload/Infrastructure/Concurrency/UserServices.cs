@@ -14,11 +14,11 @@
         /// </summary>
         public ResourceThrottle UploadThrottle { get; }
 
-        public UserServices(string username)
+        public UserServices(string username, int uploadThrottleLimit)
         {
             Username = username;
             UserLock = new UserLock();
-            UploadThrottle = new ResourceThrottle(8);
+            UploadThrottle = new ResourceThrottle(uploadThrottleLimit);
         }
     }
 }

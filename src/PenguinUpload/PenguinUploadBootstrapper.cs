@@ -8,6 +8,13 @@ namespace PenguinUpload
 {
     public class PenguinUploadBootstrapper : DefaultNancyBootstrapper
     {
+        public IPenguinUploadContext ServerContext { get; set; }
+
+        public PenguinUploadBootstrapper(IPenguinUploadContext serverContext)
+        {
+            ServerContext = serverContext;
+        }
+
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
             base.ApplicationStartup(container, pipelines);

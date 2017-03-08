@@ -4,6 +4,13 @@ namespace PenguinUpload.Infrastructure.Concurrency
 {
     public class UserServiceTable
     {
+        public IPenguinUploadContext ServerContext { get; set; }
+
+        public UserServiceTable(IPenguinUploadContext serverContext)
+        {
+            ServerContext = serverContext;
+        }
+
         private Dictionary<string, UserServices> ServiceTable = new Dictionary<string, UserServices>();
 
         public UserServices GetOrCreate(string username)
@@ -14,7 +21,7 @@ namespace PenguinUpload.Infrastructure.Concurrency
                 {
                     return ServiceTable[username];
                 }
-                var ret = new UserServices(username);
+                var ret = new UserServices(username, ServerContext.Configuration.UserMaxConcurrentUploads);
                 ServiceTable[username] = ret;
                 return ret;
             }

@@ -6,6 +6,12 @@ namespace PenguinUpload
 {
     public class PenguinUploadContext : IPenguinUploadContext
     {
+        public PenguinUploadContext(PenguinUploadConfiguration configuration)
+        {
+            Configuration = configuration;
+            ServiceTable = new UserServiceTable(this);
+        }
+
         public PenguinUploadConfiguration Configuration { get; set; } = new PenguinUploadConfiguration();
 
         public static string Version = Microsoft.Extensions.PlatformAbstractions
@@ -16,6 +22,6 @@ namespace PenguinUpload
             return Configuration.Admins.Contains(username);
         }
 
-        public UserServiceTable ServiceTable { get; } = new UserServiceTable();
+        public UserServiceTable ServiceTable { get; }
     }
 }
