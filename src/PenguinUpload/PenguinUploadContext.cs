@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using PenguinUpload.Configuration;
-using System.Linq;
+﻿using PenguinUpload.Configuration;
 using PenguinUpload.Infrastructure.Concurrency;
+using System.Linq;
 
 namespace PenguinUpload
 {
-    public static class PenguinUploadRegistry
+    public static class PenguinUploadContext
     {
         public const string ConfigFileName = "penguinupload.config.json";
         public static PenguinUploadConfiguration Configuration { get; set; } = new PenguinUploadConfiguration();

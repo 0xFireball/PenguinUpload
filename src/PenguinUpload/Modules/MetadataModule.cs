@@ -6,7 +6,7 @@ namespace PenguinUpload.Modules
     {
         public MetadataModule() : base("/meta")
         {
-            Get("/version", _ => PenguinUploadRegistry.Version);
+            Get("/version", _ => PenguinUploadContext.Version);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace PenguinUpload.Modules
 
                 try
                 {
-                    if (!PenguinUploadRegistry.Configuration.RegisterEnabled)
+                    if (!PenguinUploadContext.Configuration.RegisterEnabled)
                         return Response.AsText("Account registration has been disabled by the administrator.")
                             .WithStatusCode(HttpStatusCode.Unauthorized);
 
@@ -51,9 +51,9 @@ namespace PenguinUpload.Modules
                     }
 
                     // Check invite key if enabled
-                    if (PenguinUploadRegistry.Configuration.InviteKey != null)
+                    if (PenguinUploadContext.Configuration.InviteKey != null)
                     {
-                        if (req.InviteKey != PenguinUploadRegistry.Configuration.InviteKey)
+                        if (req.InviteKey != PenguinUploadContext.Configuration.InviteKey)
                         {
                             throw new SecurityException("The invite key is not recognized.");
                         }

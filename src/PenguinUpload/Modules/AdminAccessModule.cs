@@ -19,7 +19,7 @@ namespace PenguinUpload.Modules
             Before += (ctx) =>
             {
                 // Make sure user is an admin
-                if (!PenguinUploadRegistry.IsAdministrator(Context.CurrentUser.Identity.Name))
+                if (!PenguinUploadContext.IsAdministrator(Context.CurrentUser.Identity.Name))
                 {
                     return HttpStatusCode.Unauthorized;
                 }

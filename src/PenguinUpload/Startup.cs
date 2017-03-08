@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Nancy;
 using Nancy.Owin;
+using PenguinUpload.Configuration;
 
 namespace PenguinUpload
 {
@@ -13,15 +14,20 @@ namespace PenguinUpload
     {
         public Startup(IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
+            var appConfigBuilder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            ApplicationConfiguration = appConfigBuilder.Build();
+            var penguinUploadConfigBuilder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("penguinupload.config.json", optional: false, reloadOnChange: true);
+            PUConfiguration = penguinUploadConfigBuilder.Build();
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfigurationRoot ApplicationConfiguration { get; }
+        public IConfigurationRoot PUConfiguration { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -33,8 +39,15 @@ namespace PenguinUpload
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddConsole(ApplicationConfiguration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            // Create default configuration
+            var puConfig = new PenguinUploadConfiguration();
+
+            // Bind configuration
+            PUConfiguration.Bind(puConfig);
+            
 
             if (env.IsDevelopment())
             {

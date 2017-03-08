@@ -6,7 +6,7 @@ namespace PenguinUpload.Modules
     {
         public InfoModule()
         {
-            Get("/tos", _ => PenguinUploadRegistry.Configuration.TermsOfService);
+            Get("/tos", _ => PenguinUploadContext.Configuration.TermsOfService);
         }
     }
 }
