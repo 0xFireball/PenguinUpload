@@ -15,7 +15,6 @@ namespace PenguinUpload.Services.FileStorage
         /// </summary>
         /// <param name="ownerName"></param>
         /// <param name="fileName"></param>
-        /// <param name="path"></param>
         /// <param name="identifier"></param>
         /// <param name="fileSize"></param>
         /// <returns></returns>
@@ -49,7 +48,7 @@ namespace PenguinUpload.Services.FileStorage
             });
         }
 
-        public async Task<StoredFile> GetStoredFileByIdentifier(string id)
+        public async Task<StoredFile> GetStoredFileByIdentifierAsync(string id)
         {
             return await Task.Run(() =>
             {
@@ -65,9 +64,9 @@ namespace PenguinUpload.Services.FileStorage
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<PublicFile> GetPublicStoredFileByIdentifier(string id)
+        public async Task<PublicFile> GetPublicStoredFileByIdentifierAsync(string id)
         {
-            var storedFile = await GetStoredFileByIdentifier(id);
+            var storedFile = await GetStoredFileByIdentifierAsync(id);
             return new PublicFile
             {
                 Identifier = storedFile.Identifier,
@@ -78,7 +77,7 @@ namespace PenguinUpload.Services.FileStorage
             };
         }
 
-        public async Task<IEnumerable<StoredFile>> GetStoredFilesByUser(RegisteredUser user)
+        public async Task<IEnumerable<StoredFile>> GetStoredFilesByUserAsync(RegisteredUser user)
         {
             return await Task.Run(() =>
             {
@@ -105,7 +104,7 @@ namespace PenguinUpload.Services.FileStorage
             });
         }
 
-        public async Task NukeAllFiles(RegisteredUser user)
+        public async Task NukeAllFilesAsync(RegisteredUser user)
         {
             await Task.Run(() =>
             {
@@ -121,7 +120,7 @@ namespace PenguinUpload.Services.FileStorage
             });
         }
 
-        public async Task<bool> UpdateStoredFileInDatabase(StoredFile currentFile)
+        public async Task<bool> UpdateStoredFileInDatabaseAsync(StoredFile currentFile)
         {
             return await Task.Run(() =>
             {
@@ -144,7 +143,7 @@ namespace PenguinUpload.Services.FileStorage
         /// <param name="file"></param>
         /// <param name="pass"></param>
         /// <returns></returns>
-        public async Task SetFilePassword(StoredFile file, string pass)
+        public async Task SetFilePasswordAsync(StoredFile file, string pass)
         {
             if (pass == null) // No password
             {
@@ -159,7 +158,7 @@ namespace PenguinUpload.Services.FileStorage
                 Salt = pwSalt,
                 Key = cryptoHelper.CalculateUserPasswordHash(pass, pwSalt)
             };
-            await UpdateStoredFileInDatabase(file);
+            await UpdateStoredFileInDatabaseAsync(file);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace PenguinUpload.Infrastructure.Upload
             }
         }
 
-        public async Task<FileUploadResult> HandleUpload(string fileName, Stream stream)
+        public async Task<FileUploadResult> HandleUploadAsync(string fileName, Stream stream)
         {
             AssertIdentityProvided(); // Quota is affected
             var fileId = Guid.NewGuid().ToString();
@@ -43,7 +43,7 @@ namespace PenguinUpload.Infrastructure.Upload
             {
                 // Write file (Wait for upload throttle)
                 await PenguinUploadContext.ServiceTable[_owner]
-                    .UploadThrottle.WithResource(async () =>
+                    .UploadThrottle.WithResourceAsync(async () =>
                     {
                         using (var destinationStream = File.Create(targetFile))
                         {
@@ -67,7 +67,7 @@ namespace PenguinUpload.Infrastructure.Upload
                     }
                     // Increase user storage usage
                     ownerData.StorageUsage += uploadStreamFileSize;
-                    await userManager.UpdateUserInDatabase(ownerData);
+                    await userManager.UpdateUserInDatabaseAsync(ownerData);
                     lockEntry.ReleaseExclusiveWrite();
                 }
             }
@@ -111,7 +111,7 @@ namespace PenguinUpload.Infrastructure.Upload
             return File.OpenRead(filePath);
         }
 
-        public async Task DeleteFile(string fileId)
+        public async Task DeleteFileAsync(string fileId)
         {
             AssertIdentityProvided(); // Quota is affected
             var filePath = GetTargetFilePath(fileId);
@@ -127,16 +127,16 @@ namespace PenguinUpload.Infrastructure.Upload
                 var ownerData = await userManager.FindUserByUsernameAsync(_owner);
                 var prevStorageUsage = ownerData.StorageUsage;
                 ownerData.StorageUsage -= fileSize;
-                await userManager.UpdateUserInDatabase(ownerData);
+                await userManager.UpdateUserInDatabaseAsync(ownerData);
                 lockEntry.ReleaseExclusiveWrite();
             }
         }
 
-        public async Task NukeAllFiles(IEnumerable<string> identifiers)
+        public async Task NukeAllFilesAsync(IEnumerable<string> identifiers)
         {
             foreach (var id in identifiers)
             {
-                await DeleteFile(id);
+                await DeleteFileAsync(id);
             }
         }
     }

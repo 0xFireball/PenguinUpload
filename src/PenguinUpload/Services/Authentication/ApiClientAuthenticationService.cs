@@ -12,7 +12,7 @@ namespace PenguinUpload.Services.Authentication
         {
             // Check user records in database
             var webUserManager = new WebUserManager();
-            var u = webUserManager.FindUserByApiKeyAsync(apiKey);
+            var u = webUserManager.FindUserByApiKey(apiKey);
             if (u == null || !u.Enabled) return null;
             // Give client identity
             var id = new ClaimsPrincipal(new ClaimsIdentity(new GenericIdentity(u.Username, "stateless"),

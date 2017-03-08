@@ -29,7 +29,7 @@ namespace PenguinUpload.Services.Authentication
             });
         }
 
-        public RegisteredUser FindUserByApiKeyAsync(string apiKey)
+        public RegisteredUser FindUserByApiKey(string apiKey)
         {
             RegisteredUser storedUserRecord = null;
             var db = new DatabaseAccessService().OpenOrCreateDefault();
@@ -45,7 +45,7 @@ namespace PenguinUpload.Services.Authentication
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<bool> UpdateUserInDatabase(RegisteredUser user)
+        public async Task<bool> UpdateUserInDatabaseAsync(RegisteredUser user)
         {
             var result = false;
             await Task.Run(() =>
@@ -118,7 +118,7 @@ namespace PenguinUpload.Services.Authentication
         {
             var ret = false;
             var lockEntry = PenguinUploadContext.ServiceTable.GetOrCreate(user.Username).UserLock;
-            await lockEntry.WithConcurrentRead(Task.Run(() =>
+            await lockEntry.WithConcurrentReadAsync(Task.Run(() =>
             {
                 //Calculate hash and compare
                 var cryptoHelper = new AuthCryptoHelper(user.Crypto.Conf);
@@ -129,7 +129,7 @@ namespace PenguinUpload.Services.Authentication
             return ret;
         }
 
-        public async Task RemoveUser(string username)
+        public async Task RemoveUserAsync(string username)
         {
             await Task.Run(() =>
             {
@@ -144,28 +144,28 @@ namespace PenguinUpload.Services.Authentication
             });
         }
 
-        public async Task SetQuota(RegisteredUser user, long quota)
+        public async Task SetQuotaAsync(RegisteredUser user, long quota)
         {
             var lockEntry = PenguinUploadContext.ServiceTable.GetOrCreate(user.Username).UserLock;
             await lockEntry.ObtainExclusiveWriteAsync();
             user.StorageQuota = quota;
-            await UpdateUserInDatabase(user);
+            await UpdateUserInDatabaseAsync(user);
             lockEntry.ReleaseExclusiveWrite();
         }
 
-        public async Task SetEnabled(RegisteredUser user, bool status)
+        public async Task SetEnabledAsync(RegisteredUser user, bool status)
         {
             var lockEntry = PenguinUploadContext.ServiceTable.GetOrCreate(user.Username).UserLock;
             await lockEntry.ObtainExclusiveWriteAsync();
             user.Enabled = status;
-            await UpdateUserInDatabase(user);
+            await UpdateUserInDatabaseAsync(user);
             lockEntry.ReleaseExclusiveWrite();
         }
 
         public async Task ChangeUserPasswordAsync(RegisteredUser user, string newPassword)
         {
             var lockEntry = PenguinUploadContext.ServiceTable.GetOrCreate(user.Username).UserLock;
-            await lockEntry.WithExclusiveWrite(Task.Run(() =>
+            await lockEntry.WithExclusiveWriteAsync(Task.Run(() =>
             {
                 // Recompute password crypto
                 var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
@@ -185,7 +185,7 @@ namespace PenguinUpload.Services.Authentication
         public async Task GenerateNewApiKeyAsync(RegisteredUser user)
         {
             var lockEntry = PenguinUploadContext.ServiceTable.GetOrCreate(user.Username).UserLock;
-            await lockEntry.WithExclusiveWrite(Task.Run(() =>
+            await lockEntry.WithExclusiveWriteAsync(Task.Run(() =>
             {
                 // Recompute key
                 user.ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength);

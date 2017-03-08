@@ -45,7 +45,7 @@ namespace PenguinUpload.Modules
                 var idUsername = Context.CurrentUser.Identity.Name;
                 var user = await userManager.FindUserByUsernameAsync(idUsername);
                 var storedFilesManager = new StoredFilesManager();
-                var userFiles = await storedFilesManager.GetStoredFilesByUser(user);
+                var userFiles = await storedFilesManager.GetStoredFilesByUserAsync(user);
                 var directoryStructure = FileOrganization.BuildStructure(userFiles);
                 return Response.AsJsonNet(directoryStructure);
             });
@@ -60,7 +60,7 @@ namespace PenguinUpload.Modules
                 try
                 {
                     uploadResult =
-                        await fileUploadHandler.HandleUpload(request.File.Name, request.File.Value);
+                        await fileUploadHandler.HandleUploadAsync(request.File.Name, request.File.Value);
                 }
                 catch (QuotaExceededException qEx)
                 {
@@ -82,7 +82,7 @@ namespace PenguinUpload.Modules
             {
                 var idUsername = Context.CurrentUser.Identity.Name;
                 var storedFilesManager = new StoredFilesManager();
-                var storedFile = await storedFilesManager.GetStoredFileByIdentifier((string)args.id);
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifierAsync((string)args.id);
                 if (storedFile == null) return HttpStatusCode.NotFound;
 
                 var fileUploadHandler = new LocalStorageHandler(idUsername);
@@ -105,9 +105,9 @@ namespace PenguinUpload.Modules
                 }
                 // Update file metadata
                 var storedFilesManager = new StoredFilesManager();
-                var storedFile = await storedFilesManager.GetStoredFileByIdentifier(id);
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifierAsync(id);
                 if (storedFile == null) return HttpStatusCode.BadRequest;
-                await storedFilesManager.SetFilePassword(storedFile, pass);
+                await storedFilesManager.SetFilePasswordAsync(storedFile, pass);
                 return HttpStatusCode.OK;
             });
 
@@ -117,9 +117,9 @@ namespace PenguinUpload.Modules
                 var id = (string)args.id;
                 // Update file metadata
                 var storedFilesManager = new StoredFilesManager();
-                var storedFile = await storedFilesManager.GetStoredFileByIdentifier(id);
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifierAsync(id);
                 if (storedFile == null) return HttpStatusCode.BadRequest;
-                await storedFilesManager.SetFilePassword(storedFile, null);
+                await storedFilesManager.SetFilePasswordAsync(storedFile, null);
                 return HttpStatusCode.OK;
             });
 
@@ -129,10 +129,10 @@ namespace PenguinUpload.Modules
                 var newname = (string)args.name;
                 // Update file metadata
                 var storedFilesManager = new StoredFilesManager();
-                var storedFile = await storedFilesManager.GetStoredFileByIdentifier(id);
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifierAsync(id);
                 if (storedFile == null) return HttpStatusCode.BadRequest;
                 storedFile.Name = newname;
-                await storedFilesManager.UpdateStoredFileInDatabase(storedFile);
+                await storedFilesManager.UpdateStoredFileInDatabaseAsync(storedFile);
                 return HttpStatusCode.OK;
             });
 
@@ -143,7 +143,7 @@ namespace PenguinUpload.Modules
                 var fileId = (string)args.id;
                 // Remove physical file
                 var fileUploadHandler = new LocalStorageHandler(idUsername);
-                await fileUploadHandler.DeleteFile(fileId);
+                await fileUploadHandler.DeleteFileAsync(fileId);
                 // Unregister file
                 var storedFilesManager = new StoredFilesManager();
                 await storedFilesManager.UnregisterStoredFileAsync(fileId);
@@ -160,9 +160,9 @@ namespace PenguinUpload.Modules
                 var storedFilesManager = new StoredFilesManager();
                 var fileUploadHandler = new LocalStorageHandler(idUsername);
                 // Start tasks to nuke user's files
-                var userFiles = await storedFilesManager.GetStoredFilesByUser(user);
-                var nukePhysicalFilesTask = fileUploadHandler.NukeAllFiles(userFiles.Select(x => x.Identifier));
-                var nukeFilesTask = storedFilesManager.NukeAllFiles(user);
+                var userFiles = await storedFilesManager.GetStoredFilesByUserAsync(user);
+                var nukePhysicalFilesTask = fileUploadHandler.NukeAllFilesAsync(userFiles.Select(x => x.Identifier));
+                var nukeFilesTask = storedFilesManager.NukeAllFilesAsync(user);
                 return HttpStatusCode.OK;
             });
 
@@ -172,17 +172,17 @@ namespace PenguinUpload.Modules
                 var idUsername = Context.CurrentUser.Identity.Name;
                 var user = await userManager.FindUserByUsernameAsync(idUsername);
                 // Disable user
-                await userManager.SetEnabled(user, false);
+                await userManager.SetEnabledAsync(user, false);
                 var storedFilesManager = new StoredFilesManager();
                 var fileUploadHandler = new LocalStorageHandler(idUsername);
                 // Start tasks to nuke user's files
-                var userFiles = await storedFilesManager.GetStoredFilesByUser(user);
-                var nukePhysicalFilesTask = fileUploadHandler.NukeAllFiles(userFiles.Select(x => x.Identifier));
-                var nukeFilesTask = storedFilesManager.NukeAllFiles(user);
+                var userFiles = await storedFilesManager.GetStoredFilesByUserAsync(user);
+                var nukePhysicalFilesTask = fileUploadHandler.NukeAllFilesAsync(userFiles.Select(x => x.Identifier));
+                var nukeFilesTask = storedFilesManager.NukeAllFilesAsync(user);
                 await nukeFilesTask;
                 await nukePhysicalFilesTask;
                 // Now nuke the user
-                await userManager.RemoveUser(user.Username);
+                await userManager.RemoveUserAsync(user.Username);
                 return HttpStatusCode.OK;
             });
         }

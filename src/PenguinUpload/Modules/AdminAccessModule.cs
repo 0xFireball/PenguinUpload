@@ -49,7 +49,7 @@ namespace PenguinUpload.Modules
                 var user = await userManager.FindUserByUsernameAsync((string)args.name);
                 if (user == null) return HttpStatusCode.BadRequest;
                 // Disable user
-                await userManager.SetEnabled(user, false);
+                await userManager.SetEnabledAsync(user, false);
                 return HttpStatusCode.OK;
             });
 
@@ -60,7 +60,7 @@ namespace PenguinUpload.Modules
                 var user = await userManager.FindUserByUsernameAsync((string)args.name);
                 if (user == null) return HttpStatusCode.BadRequest;
                 // Disable user
-                await userManager.SetEnabled(user, true);
+                await userManager.SetEnabledAsync(user, true);
                 return HttpStatusCode.OK;
             });
 
@@ -70,7 +70,7 @@ namespace PenguinUpload.Modules
                 var fileId = (string)args.id;
                 // Get metadata
                 var storedFilesManager = new StoredFilesManager();
-                var storedFile = await storedFilesManager.GetStoredFileByIdentifier(fileId);
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifierAsync(fileId);
                 return Response.AsJsonNet(storedFile);
             });
 
@@ -80,7 +80,7 @@ namespace PenguinUpload.Modules
                 var fileId = (string)args.id;
                 // Get metadata
                 var storedFilesManager = new StoredFilesManager();
-                var storedFile = await storedFilesManager.GetStoredFileByIdentifier(fileId);
+                var storedFile = await storedFilesManager.GetStoredFileByIdentifierAsync(fileId);
                 if (storedFile == null) return HttpStatusCode.NotFound;
                 var fileUploadHandler = new LocalStorageHandler(null, true);
                 var fileStream = fileUploadHandler.RetrieveFileStream(storedFile.Identifier);
@@ -94,7 +94,7 @@ namespace PenguinUpload.Modules
                 var fileId = (string)args.id;
                 // Remove physical file
                 var fileUploadHandler = new LocalStorageHandler(null, true);
-                await fileUploadHandler.DeleteFile(fileId);
+                await fileUploadHandler.DeleteFileAsync(fileId);
                 // Unregister file
                 var storedFilesManager = new StoredFilesManager();
                 await storedFilesManager.UnregisterStoredFileAsync(fileId);
@@ -108,7 +108,7 @@ namespace PenguinUpload.Modules
                 var user = await userManager.FindUserByUsernameAsync((string)args.name);
                 if (user == null) return HttpStatusCode.BadRequest;
                 // Disable user
-                await userManager.SetQuota(user, (int)args.quota);
+                await userManager.SetQuotaAsync(user, (int)args.quota);
                 return HttpStatusCode.OK;
             });
         }

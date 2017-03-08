@@ -28,7 +28,7 @@ namespace PenguinUpload.Infrastructure.Concurrency
             _throttle.Release();
         }
 
-        public async Task WithResource(Func<Task> action)
+        public async Task WithResourceAsync(Func<Task> action)
         {
             await AcquireAsync();
             await action();

@@ -66,42 +66,42 @@ namespace PenguinUpload.Infrastructure.Concurrency
 
         #region Nicer API
 
-        public async Task WithExclusiveWrite(Task action)
+        public async Task WithExclusiveWriteAsync(Task action)
         {
             await ObtainExclusiveWriteAsync();
             await action;
             ReleaseExclusiveWrite();
         }
 
-        public async Task WithExclusiveWrite(Func<Task> action)
+        public async Task WithExclusiveWriteAsync(Func<Task> action)
         {
             await ObtainExclusiveWriteAsync();
             await action();
             ReleaseExclusiveWrite();
         }
 
-        public async Task WithExclusiveRead(Task action)
+        public async Task WithExclusiveReadAsync(Task action)
         {
             await ObtainExclusiveReadAsync();
             await action;
             ReleaseExclusiveRead();
         }
 
-        public async Task WithExclusiveRead(Func<Task> action)
+        public async Task WithExclusiveReadAsync(Func<Task> action)
         {
             await ObtainExclusiveReadAsync();
             await action();
             ReleaseExclusiveRead();
         }
 
-        public async Task WithConcurrentRead(Task action)
+        public async Task WithConcurrentReadAsync(Task action)
         {
             await ObtainConcurrentReadAsync();
             await action;
             ReleaseConcurrentRead();
         }
 
-        public async Task WithConcurrentRead(Func<Task> action)
+        public async Task WithConcurrentReadAsync(Func<Task> action)
         {
             await ObtainConcurrentReadAsync();
             await action();
