@@ -15,7 +15,7 @@ namespace PenguinUpload
 
         public static bool IsAdministrator(string username)
         {
-            return Configuration.Administrators.Contains(username);
+            return Configuration.Admins.Contains(username);
         }
 
         public static UserServiceTable ServiceTable { get; } = new UserServiceTable();

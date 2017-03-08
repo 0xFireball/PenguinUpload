@@ -92,7 +92,7 @@ namespace PenguinUpload.Infrastructure.Upload
 
         private string GetUploadDirectory()
         {
-            var uploadDirectory = Path.Combine(PenguinUploadRegistry.Configuration.FileUploadDirectory);
+            var uploadDirectory = Path.Combine(PenguinUploadRegistry.Configuration.UploadDirectory);
 
             Directory.CreateDirectory(uploadDirectory);
 

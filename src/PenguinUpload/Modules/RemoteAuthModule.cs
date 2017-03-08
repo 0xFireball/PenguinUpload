@@ -21,7 +21,7 @@ namespace PenguinUpload.Modules
 
                 try
                 {
-                    if (!PenguinUploadRegistry.Configuration.RegistrationEnabled)
+                    if (!PenguinUploadRegistry.Configuration.RegisterEnabled)
                         return Response.AsText("Account registration has been disabled by the administrator.")
                             .WithStatusCode(HttpStatusCode.Unauthorized);
 
