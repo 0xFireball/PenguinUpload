@@ -26,7 +26,8 @@ namespace PenguinUpload
                 }
 
                 // Authenticate the request
-                return accessToken == null ? null : ApiClientAuthenticationService.ResolveClientIdentity(accessToken);
+                var authService = new ApiClientAuthenticationService(ServerContext);
+                return accessToken == null ? null : authService.ResolveClientIdentity(accessToken);
             }));
         }
     }

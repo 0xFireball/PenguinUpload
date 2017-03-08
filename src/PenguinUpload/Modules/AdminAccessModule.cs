@@ -10,8 +10,12 @@ namespace PenguinUpload.Modules
 {
     public class AdminAccessModule : NancyModule
     {
-        public AdminAccessModule() : base("/api/admin")
+        public IPenguinUploadContext ServerContext;
+
+        public AdminAccessModule(IPenguinUploadContext serverContext) : base("/api/admin")
         {
+            ServerContext = serverContext;
+
             this.RequiresAuthentication();
             // Requires API key access
             this.RequiresClaims(x => x.Value == ApiClientAuthenticationService.StatelessAuthClaim.Value);
@@ -19,7 +23,7 @@ namespace PenguinUpload.Modules
             Before += (ctx) =>
             {
                 // Make sure user is an admin
-                if (!PenguinUploadContext.IsAdministrator(Context.CurrentUser.Identity.Name))
+                if (!ServerContext.IsAdministrator(Context.CurrentUser.Identity.Name))
                 {
                     return HttpStatusCode.Unauthorized;
                 }
@@ -29,7 +33,7 @@ namespace PenguinUpload.Modules
             // List all users
             Get("/enumerateusers", async _ =>
             {
-                var webUserManager = new WebUserManager();
+                var webUserManager = new WebUserManager(ServerContext);
                 var allUsers = await webUserManager.GetAllUsersAsync();
                 return Response.AsJsonNet(allUsers);
             });
@@ -37,7 +41,7 @@ namespace PenguinUpload.Modules
             // Get user account info
             Get("/accountinfo/{name}", async args =>
             {
-                var userManager = new WebUserManager();
+                var userManager = new WebUserManager(ServerContext);
                 var user = await userManager.FindUserByUsernameAsync((string)args.name);
                 return user == null ? HttpStatusCode.NotFound : Response.AsJsonNet(user);
             });
@@ -45,7 +49,7 @@ namespace PenguinUpload.Modules
             // Disable a user's account
             Patch("/disableuser/{name}", async args =>
             {
-                var userManager = new WebUserManager();
+                var userManager = new WebUserManager(ServerContext);
                 var user = await userManager.FindUserByUsernameAsync((string)args.name);
                 if (user == null) return HttpStatusCode.BadRequest;
                 // Disable user
@@ -56,7 +60,7 @@ namespace PenguinUpload.Modules
             // Enable a user's account
             Patch("/enableuser/{name}", async args =>
             {
-                var userManager = new WebUserManager();
+                var userManager = new WebUserManager(ServerContext);
                 var user = await userManager.FindUserByUsernameAsync((string)args.name);
                 if (user == null) return HttpStatusCode.BadRequest;
                 // Disable user
@@ -69,7 +73,7 @@ namespace PenguinUpload.Modules
             {
                 var fileId = (string)args.id;
                 // Get metadata
-                var storedFilesManager = new StoredFilesManager();
+                var storedFilesManager = new StoredFilesManager(ServerContext);
                 var storedFile = await storedFilesManager.GetStoredFileByIdentifierAsync(fileId);
                 return Response.AsJsonNet(storedFile);
             });
@@ -79,10 +83,10 @@ namespace PenguinUpload.Modules
             {
                 var fileId = (string)args.id;
                 // Get metadata
-                var storedFilesManager = new StoredFilesManager();
+                var storedFilesManager = new StoredFilesManager(ServerContext);
                 var storedFile = await storedFilesManager.GetStoredFileByIdentifierAsync(fileId);
                 if (storedFile == null) return HttpStatusCode.NotFound;
-                var fileUploadHandler = new LocalStorageHandler(null, true);
+                var fileUploadHandler = new LocalStorageHandler(ServerContext, null, true);
                 var fileStream = fileUploadHandler.RetrieveFileStream(storedFile.Identifier);
                 var response = new StreamResponse(() => fileStream, MimeTypes.GetMimeType(storedFile.Name));
                 return response.AsAttachment(storedFile.Name);
@@ -93,10 +97,10 @@ namespace PenguinUpload.Modules
             {
                 var fileId = (string)args.id;
                 // Remove physical file
-                var fileUploadHandler = new LocalStorageHandler(null, true);
+                var fileUploadHandler = new LocalStorageHandler(ServerContext, null, true);
                 await fileUploadHandler.DeleteFileAsync(fileId);
                 // Unregister file
-                var storedFilesManager = new StoredFilesManager();
+                var storedFilesManager = new StoredFilesManager(ServerContext);
                 await storedFilesManager.UnregisterStoredFileAsync(fileId);
                 return HttpStatusCode.OK;
             });
@@ -104,7 +108,7 @@ namespace PenguinUpload.Modules
             // Quota management
             Patch("/updatequota/{name}/{quota}", async args =>
             {
-                var userManager = new WebUserManager();
+                var userManager = new WebUserManager(ServerContext);
                 var user = await userManager.FindUserByUsernameAsync((string)args.name);
                 if (user == null) return HttpStatusCode.BadRequest;
                 // Disable user

@@ -8,10 +8,17 @@ namespace PenguinUpload.Services.Authentication
         public static Claim StatelessAuthClaim { get; } = new Claim("authType", "stateless");
         public static string UidKey => "uid";
 
-        public static ClaimsPrincipal ResolveClientIdentity(string apiKey)
+        public IPenguinUploadContext ServerContext { get; set; }
+
+        public ApiClientAuthenticationService(IPenguinUploadContext serverContext)
+        {
+            ServerContext = serverContext;
+        }
+
+        public ClaimsPrincipal ResolveClientIdentity(string apiKey)
         {
             // Check user records in database
-            var webUserManager = new WebUserManager();
+            var webUserManager = new WebUserManager(ServerContext);
             var u = webUserManager.FindUserByApiKey(apiKey);
             if (u == null || !u.Enabled) return null;
             // Give client identity

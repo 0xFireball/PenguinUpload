@@ -18,7 +18,7 @@
         {
             Username = username;
             UserLock = new UserLock();
-            UploadThrottle = new ResourceThrottle(PenguinUploadContext.Configuration.UserMaxConcurrentUploads);
+            UploadThrottle = new ResourceThrottle(8);
         }
     }
 }

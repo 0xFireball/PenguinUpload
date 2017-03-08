@@ -16,9 +16,6 @@ namespace PenguinUpload.Configuration
         [JsonProperty("admins")]
         public string[] Admins { get; set; } = new string[0];
 
-        [JsonProperty("userMaxConcurrentUploads")]
-        public int UserMaxConcurrentUploads { get; set; } = 4;
-
         /// <summary>
         /// Max file storage quota (in bytes)
         /// </summary>

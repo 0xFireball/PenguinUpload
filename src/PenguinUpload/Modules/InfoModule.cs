@@ -2,11 +2,14 @@
 
 namespace PenguinUpload.Modules
 {
-    public class InfoModule :  NancyModule
+    public class InfoModule : NancyModule
     {
-        public InfoModule()
+        public IPenguinUploadContext ServerContext { get; set; }
+
+        public InfoModule(IPenguinUploadContext serverContext)
         {
-            Get("/tos", _ => PenguinUploadContext.Configuration.TermsOfService);
+            ServerContext = serverContext;
+            Get("/tos", _ => ServerContext.Configuration.TermsOfService);
         }
     }
 }

@@ -14,6 +14,12 @@ namespace PenguinUpload.Services.Authentication
     /// </summary>
     public class WebUserManager
     {
+        public IPenguinUploadContext ServerContext { get; private set; }
+
+        public WebUserManager(IPenguinUploadContext serverContext)
+        {
+            ServerContext = serverContext;
+        }
         public async Task<RegisteredUser> FindUserByUsernameAsync(string username)
         {
             return await Task.Run(() =>
@@ -99,7 +105,8 @@ namespace PenguinUpload.Services.Authentication
                         Salt = pwSalt,
                         Conf = cryptoConf,
                         Key = encryptedPassword
-                    }
+                    },
+                    StorageQuota = ServerContext.Configuration.DefaultQuota
                 };
                 // Add the user to the database
                 registeredUsers.Insert(newUserRecord);
@@ -117,7 +124,7 @@ namespace PenguinUpload.Services.Authentication
         public async Task<bool> CheckPasswordAsync(string password, RegisteredUser user)
         {
             var ret = false;
-            var lockEntry = PenguinUploadContext.ServiceTable.GetOrCreate(user.Username).UserLock;
+            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
             await lockEntry.WithConcurrentReadAsync(Task.Run(() =>
             {
                 //Calculate hash and compare
@@ -146,7 +153,7 @@ namespace PenguinUpload.Services.Authentication
 
         public async Task SetQuotaAsync(RegisteredUser user, long quota)
         {
-            var lockEntry = PenguinUploadContext.ServiceTable.GetOrCreate(user.Username).UserLock;
+            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
             await lockEntry.ObtainExclusiveWriteAsync();
             user.StorageQuota = quota;
             await UpdateUserInDatabaseAsync(user);
@@ -155,7 +162,7 @@ namespace PenguinUpload.Services.Authentication
 
         public async Task SetEnabledAsync(RegisteredUser user, bool status)
         {
-            var lockEntry = PenguinUploadContext.ServiceTable.GetOrCreate(user.Username).UserLock;
+            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
             await lockEntry.ObtainExclusiveWriteAsync();
             user.Enabled = status;
             await UpdateUserInDatabaseAsync(user);
@@ -164,7 +171,7 @@ namespace PenguinUpload.Services.Authentication
 
         public async Task ChangeUserPasswordAsync(RegisteredUser user, string newPassword)
         {
-            var lockEntry = PenguinUploadContext.ServiceTable.GetOrCreate(user.Username).UserLock;
+            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
             await lockEntry.WithExclusiveWriteAsync(Task.Run(() =>
             {
                 // Recompute password crypto
@@ -184,7 +191,7 @@ namespace PenguinUpload.Services.Authentication
 
         public async Task GenerateNewApiKeyAsync(RegisteredUser user)
         {
-            var lockEntry = PenguinUploadContext.ServiceTable.GetOrCreate(user.Username).UserLock;
+            var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
             await lockEntry.WithExclusiveWriteAsync(Task.Run(() =>
             {
                 // Recompute key

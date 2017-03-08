@@ -8,8 +8,11 @@ namespace PenguinUpload.Modules
 {
     public class AdHocApiAccessModule : NancyModule
     {
-        public AdHocApiAccessModule() : base("/api")
+        public IPenguinUploadContext ServerContext { get; set; }
+
+        public AdHocApiAccessModule(IPenguinUploadContext serverContext) : base("/api")
         {
+            ServerContext = serverContext;
             Get("/fileinfo/{idPass}", async args =>
             {
                 var idParts = ((string)args.idPass).Split('!');
@@ -19,7 +22,7 @@ namespace PenguinUpload.Modules
                 {
                     pass = idParts[1];
                 }
-                var storedFilesManager = new StoredFilesManager();
+                var storedFilesManager = new StoredFilesManager(ServerContext);
                 var storedFile = await storedFilesManager.GetPublicStoredFileByIdentifierAsync(id);
                 if (storedFile == null) return HttpStatusCode.NotFound;
                 if (storedFile.IsPasswordProtected)
@@ -43,7 +46,7 @@ namespace PenguinUpload.Modules
                 {
                     pass = idParts[1];
                 }
-                var storedFilesManager = new StoredFilesManager();
+                var storedFilesManager = new StoredFilesManager(ServerContext);
                 var storedFile = await storedFilesManager.GetPublicStoredFileByIdentifierAsync(id);
                 if (storedFile == null) return HttpStatusCode.NotFound;
                 if (storedFile.IsPasswordProtected)
@@ -57,7 +60,7 @@ namespace PenguinUpload.Modules
 
                 // Create unauthenticated storage handler without admin permissions
                 // This is OK because download operatiotn does not affect quota.
-                var fileUploadHandler = new LocalStorageHandler(null, false);
+                var fileUploadHandler = new LocalStorageHandler(ServerContext, null, false);
                 var fileStream = fileUploadHandler.RetrieveFileStream(storedFile.Identifier);
                 var response = new StreamResponse(() => fileStream, MimeTypes.GetMimeType(storedFile.Name));
                 return response.AsAttachment(storedFile.Name);

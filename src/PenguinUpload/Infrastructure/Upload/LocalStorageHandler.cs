@@ -11,9 +11,11 @@ namespace PenguinUpload.Infrastructure.Upload
     {
         private readonly string _owner;
         private readonly bool _adminOverride;
+        public IPenguinUploadContext ServerContext;
 
-        public LocalStorageHandler(string owner, bool adminOverride = false)
+        public LocalStorageHandler(IPenguinUploadContext serverContext, string owner, bool adminOverride = false)
         {
+            ServerContext = serverContext;
             _owner = owner;
             _adminOverride = adminOverride;
         }
@@ -42,7 +44,7 @@ namespace PenguinUpload.Infrastructure.Upload
             try
             {
                 // Write file (Wait for upload throttle)
-                await PenguinUploadContext.ServiceTable[_owner]
+                await ServerContext.ServiceTable[_owner]
                     .UploadThrottle.WithResourceAsync(async () =>
                     {
                         using (var destinationStream = File.Create(targetFile))
@@ -54,9 +56,9 @@ namespace PenguinUpload.Infrastructure.Upload
                 // Make sure user has enough space remaining
                 if (_owner != null)
                 {
-                    var lockEntry = PenguinUploadContext.ServiceTable[_owner].UserLock;
+                    var lockEntry = ServerContext.ServiceTable[_owner].UserLock;
                     await lockEntry.ObtainExclusiveWriteAsync();
-                    var userManager = new WebUserManager();
+                    var userManager = new WebUserManager(ServerContext);
                     var ownerData = await userManager.FindUserByUsernameAsync(_owner);
                     var afterUploadSpace = ownerData.StorageUsage + uploadStreamFileSize;
                     if (afterUploadSpace > ownerData.StorageQuota)
@@ -92,7 +94,7 @@ namespace PenguinUpload.Infrastructure.Upload
 
         private string GetUploadDirectory()
         {
-            var uploadDirectory = Path.Combine(PenguinUploadContext.Configuration.UploadDirectory);
+            var uploadDirectory = Path.Combine(ServerContext.Configuration.UploadDirectory);
 
             Directory.CreateDirectory(uploadDirectory);
 
@@ -120,10 +122,10 @@ namespace PenguinUpload.Infrastructure.Upload
             await Task.Run(() => File.Delete(filePath));
             if (_owner != null)
             {
-                var lockEntry = PenguinUploadContext.ServiceTable[_owner].UserLock;
+                var lockEntry = ServerContext.ServiceTable[_owner].UserLock;
                 // Decrease user storage usage
                 await lockEntry.ObtainExclusiveWriteAsync();
-                var userManager = new WebUserManager();
+                var userManager = new WebUserManager(ServerContext);
                 var ownerData = await userManager.FindUserByUsernameAsync(_owner);
                 var prevStorageUsage = ownerData.StorageUsage;
                 ownerData.StorageUsage -= fileSize;

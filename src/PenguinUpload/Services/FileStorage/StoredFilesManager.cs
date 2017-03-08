@@ -10,6 +10,13 @@ namespace PenguinUpload.Services.FileStorage
 {
     public class StoredFilesManager
     {
+        public IPenguinUploadContext ServerContext { get; set; }
+
+        public StoredFilesManager(IPenguinUploadContext serverContext)
+        {
+            ServerContext = serverContext;
+        }
+
         /// <summary>
         /// Registers a stored file
         /// </summary>
@@ -23,7 +30,7 @@ namespace PenguinUpload.Services.FileStorage
         {
             return await Task.Run(() =>
             {
-                var userDatabaseLock = PenguinUploadContext.ServiceTable.GetOrCreate(ownerName).UserLock;
+                var userDatabaseLock = ServerContext.ServiceTable.GetOrCreate(ownerName).UserLock;
                 userDatabaseLock.ObtainExclusiveWrite();
                 var db = new DatabaseAccessService().OpenOrCreateDefault();
                 var storedFiles = db.GetCollection<StoredFile>(DatabaseAccessService.StoredFilesCollectionDatabaseKey);

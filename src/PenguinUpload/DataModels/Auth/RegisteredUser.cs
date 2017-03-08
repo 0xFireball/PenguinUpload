@@ -14,7 +14,7 @@ namespace PenguinUpload.DataModels.Auth
         /// Storage quota in bytes
         /// </summary>
         [JsonProperty("quota")]
-        public long? StorageQuota { get; set; } = PenguinUploadContext.Configuration.DefaultQuota;
+        public long? StorageQuota { get; set; }
 
         /// <summary>
         ///  Storage usage in bytes

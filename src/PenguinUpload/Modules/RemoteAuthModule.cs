@@ -13,15 +13,18 @@ namespace PenguinUpload.Modules
     /// </summary>
     public class RemoteAuthModule : NancyModule
     {
-        public RemoteAuthModule()
+        public IPenguinUploadContext ServerContext { get; set; }
+
+        public RemoteAuthModule(IPenguinUploadContext serverContext)
         {
+            ServerContext = serverContext;
             Post("/register", async args =>
             {
                 var req = this.Bind<RegistrationRequest>();
 
                 try
                 {
-                    if (!PenguinUploadContext.Configuration.RegisterEnabled)
+                    if (!ServerContext.Configuration.RegisterEnabled)
                         return Response.AsText("Account registration has been disabled by the administrator.")
                             .WithStatusCode(HttpStatusCode.Unauthorized);
 
@@ -51,16 +54,16 @@ namespace PenguinUpload.Modules
                     }
 
                     // Check invite key if enabled
-                    if (PenguinUploadContext.Configuration.InviteKey != null)
+                    if (ServerContext.Configuration.InviteKey != null)
                     {
-                        if (req.InviteKey != PenguinUploadContext.Configuration.InviteKey)
+                        if (req.InviteKey != ServerContext.Configuration.InviteKey)
                         {
                             throw new SecurityException("The invite key is not recognized.");
                         }
                     }
 
                     // Validate registration
-                    var webUserManager = new WebUserManager();
+                    var webUserManager = new WebUserManager(ServerContext);
                     var newUser = await webUserManager.RegisterUserAsync(req);
 
                     // Return user details
@@ -86,7 +89,7 @@ namespace PenguinUpload.Modules
             Post("/login", async args =>
             {
                 var req = this.Bind<LoginRequest>();
-                var webUserManager = new WebUserManager();
+                var webUserManager = new WebUserManager(ServerContext);
                 var selectedUser = await webUserManager.FindUserByUsernameAsync(req.Username);
 
                 if (selectedUser == null) return HttpStatusCode.Unauthorized;
@@ -121,7 +124,7 @@ namespace PenguinUpload.Modules
             Patch("/changepassword", async args =>
             {
                 var req = this.Bind<ChangePasswordRequest>();
-                var webUserManager = new WebUserManager();
+                var webUserManager = new WebUserManager(ServerContext);
                 var selectedUser = await webUserManager.FindUserByUsernameAsync(req.Username);
 
                 try
