@@ -41,6 +41,7 @@ namespace PenguinUpload.Modules
             {
                 var idParts = ((string)args.idPass).Split('!');
                 var id = idParts[0];
+                var serveEmbed = ((string)Request.Query.embed) == "1";
                 string pass = null;
                 if (idParts.Length > 1)
                 {
@@ -59,11 +60,19 @@ namespace PenguinUpload.Modules
                 }
 
                 // Create unauthenticated storage handler without admin permissions
-                // This is OK because download operatiotn does not affect quota.
+                // This is OK because download operation does not affect quota.
                 var fileUploadHandler = new LocalStorageHandler(ServerContext, null, false);
                 var fileStream = fileUploadHandler.RetrieveFileStream(storedFile.Identifier);
                 var response = new StreamResponse(() => fileStream, MimeTypes.GetMimeType(storedFile.Name));
-                return response.AsAttachment(storedFile.Name);
+                // serve dependding on embed option
+                if (serveEmbed)
+                {
+                    return response;
+                }
+                else
+                {
+                    return response.AsAttachment(storedFile.Name);
+                }
             });
         }
     }
