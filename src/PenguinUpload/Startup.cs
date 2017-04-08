@@ -63,12 +63,14 @@ namespace PenguinUpload
 
             app.UseStaticFiles();
 
+            var context = new PenguinUploadContext(puConfig);
+
             app.UseOwin(x => x.UseNancy(options =>
             {
                 options.PassThroughWhenStatusCodesAre(
 HttpStatusCode.NotFound,
 HttpStatusCode.InternalServerError
-); options.Bootstrapper = new PenguinUploadBootstrapper(new PenguinUploadContext(puConfig));
+); options.Bootstrapper = new PenguinUploadBootstrapper(context);
             }));
 
             app.UseMvc(routes =>

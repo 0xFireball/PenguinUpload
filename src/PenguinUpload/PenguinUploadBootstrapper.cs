@@ -37,5 +37,12 @@ namespace PenguinUpload
                 return accessToken == null ? null : authService.ResolveClientIdentity(accessToken);
             }));
         }
+
+        protected override void ConfigureApplicationContainer(TinyIoCContainer container)
+        {
+            base.ConfigureApplicationContainer(container);
+
+            container.Register<IPenguinUploadContext>(ServerContext);
+        }
     }
 }
