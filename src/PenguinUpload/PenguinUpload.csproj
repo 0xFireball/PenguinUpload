@@ -4,7 +4,7 @@
     <Description>Easy file hosting/uploads</Description>
     <Copyright>Copyright (c) 2016 0xFireball. All Rights Reserved.</Copyright>
     <AssemblyTitle>PenguinUpload</AssemblyTitle>
-    <VersionPrefix>0.8.2-alpha4</VersionPrefix>
+    <VersionPrefix>0.8.3-alpha4</VersionPrefix>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>PenguinUpload</AssemblyName>
