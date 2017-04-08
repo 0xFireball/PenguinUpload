@@ -54,7 +54,7 @@ namespace PenguinUpload.Modules
                     }
 
                     // Check invite key if enabled
-                    if (ServerContext.Configuration.InviteKey != null)
+                    if (!string.IsNullOrWhiteSpace(ServerContext.Configuration.InviteKey))
                     {
                         if (req.InviteKey != ServerContext.Configuration.InviteKey)
                         {
