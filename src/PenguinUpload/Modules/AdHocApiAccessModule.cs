@@ -15,7 +15,7 @@ namespace PenguinUpload.Modules
             ServerContext = serverContext;
             Get("/fileinfo/{idPass}", async args =>
             {
-                var idParts = ((string)args.idPass).Split('!');
+                var idParts = ((string) args.idPass).Split('!');
                 var id = idParts[0];
                 string pass = null;
                 if (idParts.Length > 1)
@@ -39,9 +39,9 @@ namespace PenguinUpload.Modules
 
             Get("/download/{idPass}", async args =>
             {
-                var idParts = ((string)args.idPass).Split('!');
+                var idParts = ((string) args.idPass).Split('!');
                 var id = idParts[0];
-                var serveEmbed = ((string)Request.Query.embed) == "1";
+                var serveEmbed = ((string) Request.Query.embed) == "1";
                 string pass = null;
                 if (idParts.Length > 1)
                 {
@@ -63,14 +63,16 @@ namespace PenguinUpload.Modules
                 // This is OK because download operation does not affect quota.
                 var fileUploadHandler = new LocalStorageHandler(ServerContext, null, false);
                 var fileStream = fileUploadHandler.RetrieveFileStream(storedFile.Identifier);
-                var response = new StreamResponse(() => fileStream, MimeTypes.GetMimeType(storedFile.Name));
-                // serve dependding on embed option
+                var contentType = MimeTypes.GetMimeType(storedFile.Name);
+                // serve depending on embed option
                 if (serveEmbed)
                 {
-                    return response;
+                    // allow streamable download
+                    return Response.FromPartialStream(Request, fileStream, contentType);
                 }
                 else
                 {
+                    var response = new StreamResponse(() => fileStream, contentType);
                     return response.AsAttachment(storedFile.Name);
                 }
             });
