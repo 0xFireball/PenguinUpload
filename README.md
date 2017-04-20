@@ -43,6 +43,9 @@ Vue Material as a frontend.
   - Share download links, even to password protected files, which will
     prompt for the password. Links can also be generated containing encoded
     passwords.
+- Rich download/embed support
+  - Stream raw files with a simple API call
+  - Supports partial download, allowing for streaming of content directly from cloud storage
 - Advanced user management
   - User privileges, advanced admin API
   - File storage quotas and enforcement
