@@ -89,9 +89,8 @@
           })
           .catch(function (error) {
             console.log(error)
-            // file not found
-            vm.file.name = 'File Not Found'
-            vm.file.sizeText = 'Error'
+            vm.file.name = 'Error locating file'
+            vm.file.sizeText = 'Could not retrieve information'
             vm.loading = false
             vm.error = true
           })
@@ -103,7 +102,7 @@
             case 40:
               // down
               this.downloadFile()
-              break;
+              break
           }
         }
       }
