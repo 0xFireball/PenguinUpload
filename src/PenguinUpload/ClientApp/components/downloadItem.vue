@@ -58,17 +58,17 @@
         vm.file.id = vm.itemId
         axios.get('/api/fileinfo/' + vm.file.id + suffix, axiosRequestConfig)
           .then(function (response) {
-            if (response.status == 200) {
+            if (response.status === 200) {
               vm.file.name = response.data.name
               vm.file.sizeText = vm.$root.humanFileSize(response.data.size)
               vm.loading = false
               if (suffix) {
                 vm.file.pass = key
               }
-            } else if (response.status == 401) {
+            } else if (response.status === 401) {
               // file is password protected
               vm.$root.showPrompt('Enter password', 'File password', function (r) {
-                let responded = true
+                // let responded = true
                 if (r) {
                   setTimeout(() => {
                     vm.updateFileInfo(r)
@@ -80,6 +80,11 @@
                   vm.error = true
                 }
               })
+            } else if (response.status === 404) {
+              vm.file.name = 'File not Found'
+              vm.file.sizeText = 'Not found'
+              vm.loading = false
+              vm.error = true
             }
           })
           .catch(function (error) {
