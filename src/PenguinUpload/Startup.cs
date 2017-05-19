@@ -7,11 +7,14 @@ using Microsoft.Extensions.Logging;
 using Nancy;
 using Nancy.Owin;
 using PenguinUpload.Configuration;
+using System.IO;
 
 namespace PenguinUpload
 {
     public class Startup
     {
+        private string ClientAppPath = "ClientApp/";
+
         public Startup(IHostingEnvironment env)
         {
             var appConfigBuilder = new ConfigurationBuilder()
@@ -40,7 +43,7 @@ namespace PenguinUpload
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(ApplicationConfiguration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            // loggerFactory.AddDebug();
 
             // Create default configuration
             var puConfig = new PenguinUploadConfiguration();
@@ -48,12 +51,18 @@ namespace PenguinUpload
             // Bind configuration
             PUConfiguration.Bind(puConfig);
 
+            var context = new PenguinUploadContext(puConfig);
+
+            ClientAppPath = Path.Combine(Directory.GetCurrentDirectory(), ClientAppPath);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
-                    HotModuleReplacement = true
+                    HotModuleReplacement = true,
+                    ProjectPath = ClientAppPath,
+                    ConfigFile = $"{ClientAppPath}webpack.config.js"
                 });
             }
             else
@@ -61,23 +70,29 @@ namespace PenguinUpload
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            // add wwwroot/
             app.UseStaticFiles();
 
-            var context = new PenguinUploadContext(puConfig);
-
+            // set up Nancy OWIN hosting
             app.UseOwin(x => x.UseNancy(options =>
             {
                 options.PassThroughWhenStatusCodesAre(
-HttpStatusCode.NotFound,
-HttpStatusCode.InternalServerError
-); options.Bootstrapper = new PenguinUploadBootstrapper(context);
+                    HttpStatusCode.NotFound,
+                    HttpStatusCode.InternalServerError
+                );
+                options.Bootstrapper = new PenguinUploadBootstrapper(context);
             }));
 
+            // set up MVC fallback
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
             });
         }
     }
