@@ -9,10 +9,8 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "aspnet-webpack": "^1.0.29",
     "vue": "^2.2.1",
-    "vuetify": "^0.12.0",
-    "webpack-hot-middleware": "^2.18.0"
+    "vuetify": "^0.12.0"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
@@ -28,6 +26,8 @@
     "vue-loader": "^11.1.4",
     "vue-template-compiler": "^2.2.1",
     "webpack": "^2.2.0",
-    "webpack-dev-server": "^2.2.0"
+    "webpack-dev-server": "^2.2.0",
+    "webpack-hot-middleware": "^2.18.0",
+    "aspnet-webpack": "^1.0.29"
   }
 }
