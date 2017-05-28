@@ -8,12 +8,16 @@ using Nancy;
 using Nancy.Owin;
 using PenguinUpload.Configuration;
 using System.IO;
+using System;
+using Newtonsoft.Json;
 
 namespace PenguinUpload
 {
     public class Startup
     {
-        private string ClientAppPath = "ClientApp/";
+        private static string ClientAppPath = "ClientApp/";
+
+        private static string ConfigurationFile = "penguinupload.config.json";
 
         public Startup(IHostingEnvironment env)
         {
@@ -23,9 +27,25 @@ namespace PenguinUpload
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             ApplicationConfiguration = appConfigBuilder.Build();
+
+            ConfigurationFile = Path.Combine(Directory.GetCurrentDirectory(), ConfigurationFile);
+            // Generate the config file if it doesn't exist
+            if (!File.Exists(ConfigurationFile))
+            {
+                try
+                {
+                    File.WriteAllText(ConfigurationFile, 
+                        JsonConvert.SerializeObject(new PenguinUploadConfiguration()));
+                }
+                catch
+                {
+                    Console.WriteLine($"Failed to create default configuration in {ConfigurationFile}");
+                }
+            }
+
             var penguinUploadConfigBuilder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("penguinupload.config.json", optional: false, reloadOnChange: true);
+                .AddJsonFile(ConfigurationFile, optional: false, reloadOnChange: true);
             PUConfiguration = penguinUploadConfigBuilder.Build();
         }
 
