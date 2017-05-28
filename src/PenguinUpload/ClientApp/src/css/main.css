@@ -1,0 +1,43 @@
+.content-container {
+  margin: 2rem;
+}
+
+.center {
+  text-align: center;
+}
+
+
+/*.content {
+  background: #303030
+}*/
+
+.intro {
+  margin-bottom: 5%;
+}
+
+.fill {
+  height: 100%;
+}
+
+.slide-enter-active,
+.slide-enter {
+  transition: all .3s ease;
+}
+
+.slide-enter,
+.slide-leave-to {
+  opacity: 0;
+}
+
+.slide-enter {
+  transform: translateX(-3rem);
+}
+
+.slide-leave,
+.slide-leave-active {
+  transition: all .4s ease;
+}
+
+.slide-leave-to {
+  transform: translateX(3rem);
+}

@@ -1,92 +1,45 @@
 <template>
-  <v-app>
+  <v-app :dark="dark_theme">
     <v-navigation-drawer
       persistent
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      v-model="drawer"
+      :clipped="true"
+      v-model="sidebar_v"
     >
       <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-        >
-          <v-list-tile value="true">
-            <v-list-tile-action>
-              <v-icon light v-html="item.icon"></v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title v-text="item.title"></v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list-item>
+        <template v-for="(item, i) in sidebar">
+          <v-subheader v-if="item.header" v-text="item.header" />
+          <v-divider v-else-if="item.divider" light />
+          <v-list-item v-else>
+            <template v-if="!item.autoHide || (item.unauthRequired && !loggedIn) || (item.authRequired && loggedIn)">
+              <v-list-tile :router="item.router != null" :href="item.router || item.link" ripple>
+                <v-list-tile-avatar>
+                  <v-icon>{{ item.avatar }}</v-icon>
+                </v-list-tile-avatar>
+                <v-list-tile-title v-text="item.title" />    
+              </v-list-tile>
+            </template>
+          </v-list-item>
+        </template>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar>
-      <v-toolbar-side-icon @click.native.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-btn 
-        icon
-        @click.native.stop="miniVariant = !miniVariant"
-      >
-        <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.native.stop="clipped = !clipped"
-      >
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.native.stop="fixed = !fixed"
-      >
-        <v-icon>remove</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <v-toolbar-side-icon @click.native.stop="sidebar_v = !sidebar_v"></v-toolbar-side-icon>
+      <v-toolbar-title v-text="appName"></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        icon
-        @click.native.stop="rightDrawer = !rightDrawer"
-      >
         <v-icon>menu</v-icon>
       </v-btn>
     </v-toolbar>
     <main>
       <v-container fluid>
         <v-slide-y-transition mode="out-in">
-          <v-layout column align-center>
-            <img src="/public/v.png" alt="Vuetify.js" class="mb-5" />
-            <blockquote>
-              &#8220;First, solve the problem. Then, write the code.&#8221;
-              <footer>
-                <small>
-                  <em>&mdash;John Johnson</em>
-                </small>
-              </footer>
-            </blockquote>
-          </v-layout>
+          <div class="content-container">
+            <transition name="slide" mode="out-in">
+              <router-view></router-view>
+            </transition>
+          </div>
         </v-slide-y-transition>
       </v-container>
     </main>
-    <v-navigation-drawer
-      temporary
-      :right="right"
-      v-model="rightDrawer"
-    >
-      <v-list>
-        <v-list-item>
-          <v-list-tile @click.native="right = !right">
-            <v-list-tile-action>
-              <v-icon light>compare_arrows</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-          </v-list-tile>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer :fixed="fixed">
-      <span>&copy; 2017</span>
-    </v-footer>
   </v-app>
 </template>
 
@@ -94,21 +47,97 @@
   export default {
     data () {
       return {
-        clipped: false,
-        drawer: true,
-        fixed: false,
-        items: [
-          { icon: 'bubble_chart', title: 'Inspire' }
-        ],
-        miniVariant: false,
-        right: true,
-        rightDrawer: false,
-        title: 'Vuetify.js'
+        sidebar_v: true,
+        dark_theme: false,
+        sidebar: [
+          { header: 'Quick Links' },
+          // {
+          //   title: 'Parent',
+          //   items: [
+          //     { title: 'Child' },
+          //     { title: 'Child' },
+          //     { title: 'Child' }
+          //   ]
+          // },
+          { 
+            title: 'Home',
+            avatar: 'home',
+            router: '/'
+          },
+          { 
+            title: 'Dashboard',
+            avatar: 'dashboard',
+            router: '/dashboard',
+            authRequired: true,
+            autoHide: true
+          },
+          { 
+            title: 'World Map',
+            avatar: 'map',
+            router: '/g/map',
+            authRequired: true,
+            autoHide: true
+          },
+          { 
+            title: 'Code Editor',
+            avatar: 'code',
+            router: '/g/editor',
+            authRequired: true,
+            autoHide: true
+          },
+          {
+            title: 'Account',
+            avatar: 'person',
+            router: '/u',
+            authRequired: true,
+            autoHide: true
+          },
+          {
+            title: 'Login',
+            avatar: 'person',
+            router: '/login',
+            unauthRequired: true,
+            autoHide: true
+          },
+          {
+            title: 'Register',
+            avatar: 'create',
+            router: '/register',
+            unauthRequired: true,
+            autoHide: true
+          },
+          {
+            title: 'Logout',
+            avatar: 'exit_to_app',
+            router: '/logout',
+            authRequired: true,
+            autoHide: true
+          },
+          { divider: true },
+          { header: 'Support' },
+          { 
+            title: 'Report Bugs',
+            avatar: 'error',
+            link: 'https://github.com/0xFireball/PenguinUpload/issues'
+          }
+        ]
       }
-    }
+    },
+    computed: {
+      appName: function() {
+        return this.$store.state.data.appName
+      },
+      loggedIn: function() {
+        return this.$store.state.auth.loggedIn
+      }
+    },
+    methods: {}
   }
 </script>
 
 <style lang="stylus">
-  @import './stylus/main'
+  @import '../node_modules/vuetify/src/stylus/main'
+  @import './css/main.css'
+
+  // $material-theme := $material-dark
 </style>
