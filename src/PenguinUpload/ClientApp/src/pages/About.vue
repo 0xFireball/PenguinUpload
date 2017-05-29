@@ -1,18 +1,14 @@
 <template>
   <div>
-    <div class="center">
-      <img src="public/icon.png" />
-      <h2>{{ appName }}</h2>
-    </div>
-    <div>
-      <p>
-        {{ appName }} is a game. Welcome to about.
-      </p>
-    </div>
+    <intro></intro>
+    <about></about>
   </div>
 </template>
 
 <script>
+import intro from '../components/intro.vue'
+import about from '../components/about.vue'
+
 export default {
   data () {
     return {
@@ -22,6 +18,10 @@ export default {
     appName: function () {
       return this.$store.state.data.appName
     }
+  },
+  components: {
+    about,
+    intro
   }
 }
 </script>

@@ -103,6 +103,11 @@
             authRequired: true,
             autoHide: true
           },
+          { 
+            title: 'About',
+            avatar: 'info',
+            router: 'about'
+          },
           { divider: true },
           { header: 'Support' },
           { 

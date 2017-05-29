@@ -15,7 +15,7 @@ const main = [
     component: Landing
   },
   {
-    path: '/',
+    path: '/about',
     name: 'about',
     component: About
   },
