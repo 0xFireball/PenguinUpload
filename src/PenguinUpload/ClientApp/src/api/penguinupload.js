@@ -78,7 +78,7 @@ export class PenguinUploadApi {
 
   deleteAccount() {
     this.ax()
-    return axios.delete('/api/nuke/user')
+    return this.axios.delete('/api/nuke/user')
   }
 
   getUserInfo() {

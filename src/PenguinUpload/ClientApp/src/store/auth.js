@@ -66,7 +66,7 @@ const actions = {
       })
     })
   },
-  delete_acount({commit, state}, auth) {
+  delete_account ({commit, state}, auth) {
     return new Promise((resolve, reject) => {
       state.api.deleteAccount()
         .then((r) => {
