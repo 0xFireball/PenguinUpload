@@ -41,3 +41,21 @@
 .slide-leave-to {
   transform: translateX(3rem);
 }
+
+/*
+Tools
+*/
+
+.mg-top {
+  margin-top: 2%;
+}
+
+/*
+App Title
+*/
+
+.app-title {
+  font-size: 3.4rem;
+  letter-spacing: .02rem;
+  font-weight: 300;
+}
