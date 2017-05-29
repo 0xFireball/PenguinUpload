@@ -78,7 +78,23 @@ export class PenguinUploadApi {
 
   regenApiKey () {
     this.ax()
-    return this.axios.patch('/api/newkey' {})
+    return this.axios.patch('/api/newkey')
+  }
+
+  changePassword (old, newp) {
+    return new Promise((resolve, reject) => {
+      this.ax()
+      this.axios.patch('/changepassword', {
+        username: this.username,
+        oldPassword: old,
+        newPassword: newp
+      })
+        .then((res) => {
+          console.log('password changed successfully')
+          resolve(res)
+        })
+        .catch((e) => reject(e))
+    })
   }
 
   deleteAllFiles () {

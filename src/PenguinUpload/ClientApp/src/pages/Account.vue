@@ -96,7 +96,37 @@ export default {
   },
   methods: {
     tryUpdatePassword () {
-
+      let vm = this
+      if (!vm.updatePassword.e) return
+      // make sure confirmation is correct
+      if (vm.updatePassword.password.length < 8) {
+        vm.updatePassword.err = 'password must be at least 8 characters. this is also validated on the server'
+        return
+      }
+      if (vm.updatePassword.password !== vm.updatePassword.confirm) {
+        vm.updatePassword.err = 'password confirmation does not match'
+        return
+      }
+      vm.updatePassword.e = false
+      // reset error message
+      vm.updatePassword.err = ''
+      // update password
+      vm.$store.dispatch('change_password', {
+        o: vm.updatePassword.old,
+        n: vm.updatePassword.password
+      })
+        .then((response) => {
+          // proceed
+          vm.$router.replace('/')
+          vm.updatePassword.e = true
+        })
+        .catch(function (error) {
+          if (error) {
+            console.log(error)
+          }
+          vm.updatePassword.err = 'password change failed. is the old password correct?'
+          vm.updatePassword.e = true
+        })
     },
 
     generateNewApiKey () {

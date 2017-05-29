@@ -66,7 +66,17 @@ const actions = {
       })
     })
   },
-  regenerate_api_key ({commit, state}, auth) {
+  change_password ({commit, state}, pw) {
+    return new Promise((resolve, reject) => {
+      state.api.changePassword(pw.o, pw.n)
+        .then((r) => {
+          commit('login_result', { success: false })
+          resolve()
+        })
+        .catch((e) => reject(e))
+    })
+  },
+  regenerate_api_key ({commit, state}) {
     return new Promise((resolve, reject) => {
       state.api.regenApiKey()
         .then((r) => {
@@ -76,7 +86,7 @@ const actions = {
         .catch((e) => reject(e))
     })
   },
-  delete_all_files ({commit, state}, auth) {
+  delete_all_files ({commit, state}) {
     return new Promise((resolve, reject) => {
       state.api.deleteAllFiles()
         .then((r) => {
@@ -86,7 +96,7 @@ const actions = {
         .catch((e) => reject(e))
     })
   },
-  delete_account ({commit, state}, auth) {
+  delete_account ({commit, state}) {
     return new Promise((resolve, reject) => {
       state.api.deleteAccount()
         .then((r) => {
