@@ -5,14 +5,14 @@
 
     <div class="p-section">
       <h5>Resource Usage</h5>
-      <div v-if="loaded">
+      <div v-if="ready">
         <p>
           Using
           <b>{{ userInfo.usage }}</b> of <b>{{ userInfo.quota }}</b>
         </p>
       </div>
       <div v-else>
-        <md-spinner :md-stroke="1.5" md-indeterminate></md-spinner>
+        <v-progress-circular indeterminate class="primary--text"></v-progress-circular>
         <p>Retrieving Data</p>
       </div>
       <p></p>
@@ -20,42 +20,44 @@
     <div class="p-section">
       <h5>API</h5>
       <h6>API Key: <code>{{ user_api_key }}</code></h6>
-      <md-button class="md-primary md-raised" @click.native="generateNewApiKey">Generate New</md-button>
+      <v-btn primary @click.native="generateNewApiKey">Generate New</v-btn>
     </div>
     <div class="p-section">
       <h5>Security</h5>
       <form v-on:submit.prevent="tryUpdatePassword">
-        <div class="row">
-          <div class="eight columns">
-            <md-input-container>
-              <label>Current password</label>
-              <md-input type="password" v-model="updatePassword.old"></md-input>
-            </md-input-container>
-          </div>
-        </div>
-        <div class="row">
-          <div class="six columns">
-            <md-input-container md-has-password>
-              <label>New Password</label>
-              <md-input type="password" v-model="updatePassword.password"></md-input>
-            </md-input-container>
-          </div>
-          <div class="six columns">
-            <md-input-container>
-              <label>Confirm New Password</label>
-              <md-input type="password" v-model="updatePassword.confirm"></md-input>
-            </md-input-container>
-          </div>
-        </div>
+        <v-layout row>
+          <v-flex xs6>
+            <v-text-field
+              label="Current password"
+              v-model="updatePassword.old"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout row>
+          <v-flex xs6>
+            <v-text-field
+              label="New password"
+              v-model="updatePassword.password"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout row>
+          <v-flex xs6>
+            <v-text-field
+              label="Confirm new password"
+              v-model="updatePassword.confirm"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
         <p class="error-message">{{ updatePassword.err }}</p>
         <input type="submit" class="invisible"></input>
-        <md-button class="md-raised md-primary" @click.native="tryUpdatePassword" :disabled="!updatePassword.e">Change Password</md-button>
+        <v-btn primary @click.native="tryUpdatePassword" :disabled="!updatePassword.e">Change Password</v-btn>
       </form>
     </div>
     <div>
       <h5>Danger Zone</h5>
-      <md-button class="md-raised md-warn" @click.native="deleteAllFiles">Delete All Files</md-button>
-      <md-button class="md-raised md-warn" @click.native="deleteAccount">Delete Account</md-button>
+      <v-btn class="md-raised md-warn" @click.native="deleteAllFiles">Delete All Files</v-btn>
+      <v-btn class="md-raised md-warn" @click.native="deleteAccount">Delete Account</v-btn>
     </div>
   </div>
 </template>
@@ -67,6 +69,13 @@ export default {
       userInfo: {
         quota: null,
         usage: null,
+      },
+      updatePassword: {
+        old: '',
+        password: '',
+        confirm: '',
+        err: '',
+        e: true // enabled
       },
       ready: false
     }
@@ -82,10 +91,22 @@ export default {
       return this.$store.getters.auth_data.key;
     }
   },
+  methods: {
+    tryUpdatePassword () {
+
+    },
+
+    generateNewApiKey () {
+
+    }
+  },
   mounted () {
     this.$store.dispatch('get_user_info', this.$store.getters.api)
       .then((ud) => {
-        this.userInfo = ud
+        this.userInfo = {
+          quota: this.$store.dispatch('human_filesize', ud.quota),
+          usage: this.$store.dispatch('human_filesize', ud.usage)
+        }
         this.ready = true
       })
   }

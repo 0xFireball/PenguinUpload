@@ -2,7 +2,7 @@
   <v-app :dark="dark_theme">
     <v-navigation-drawer
       persistent
-      :clipped="true"
+      :clipped="false"
       v-model="sidebar_v"
     >
       <v-list>
