@@ -114,8 +114,10 @@ export default {
           if (window.confirm('Your account will be deleted. Are you certain you would like to proceed?')) {
             // request account nuke; this will log out
             vm.$store.dispatch('delete_account')
-            // proceed
-            vm.$router.replace('/')
+              .then(() => {
+                // proceed
+                vm.$router.replace('/')
+              })
           }
         }
       })
