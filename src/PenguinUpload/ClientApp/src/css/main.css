@@ -60,6 +60,10 @@ Tools
   margin-bottom: 3%;
 }
 
+.invisible {
+  display: none;
+}
+
 /*
 App Title
 */

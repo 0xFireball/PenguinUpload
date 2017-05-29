@@ -16,7 +16,8 @@
                 type="password"
                 v-model="pw"
               ></v-text-field>
-              <v-subheader v-if="err !== null">{{ err }}</v-subheader>
+              <v-subheader class="error--text" v-if="err !== null">{{ err }}</v-subheader>
+              <input type="submit" class="invisible"></input>
               <div class="center">
                 <v-btn @click.native="proceed_login" :disabled="!canProceed" primary raised ripple>Login</v-btn>
               </div>
@@ -39,7 +40,8 @@
                 type="password"
                 v-model="ikey"
               ></v-text-field>
-              <v-subheader v-if="err !== null">{{ err }}</v-subheader>
+              <v-subheader class="error--text" v-if="err !== null">{{ err }}</v-subheader>
+              <input type="submit" class="invisible"></input>
               <div class="center">
                 <v-btn @click.native="proceed_register" :disabled="!canProceed" primary raised ripple>Register</v-btn>
               </div>

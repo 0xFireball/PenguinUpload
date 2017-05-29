@@ -49,7 +49,7 @@
             ></v-text-field>
           </v-flex>
         </v-layout>
-        <p class="error-message">{{ updatePassword.err }}</p>
+        <p class="error--text">{{ updatePassword.err }}</p>
         <input type="submit" class="invisible"></input>
         <v-btn primary @click.native="tryUpdatePassword" :disabled="!updatePassword.e">Change Password</v-btn>
       </form>
