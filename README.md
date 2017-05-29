@@ -52,6 +52,10 @@ Vuetify as a frontend.
 - Optional resource usage control
   - Limit concurrent uploads per user
 
+## Build
+
+[![Build Status](https://travis-ci.org/0xFireball/PenguinUpload.svg?branch=master)](https://travis-ci.org/0xFireball/PenguinUpload)
+
 ## Install
 
 PenguinUpload uses an embedded NoSQL database ([LiteDB](https://github.com/mbdavid/LiteDB))
