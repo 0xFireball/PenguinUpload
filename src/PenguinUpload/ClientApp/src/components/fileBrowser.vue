@@ -49,38 +49,54 @@
                 <v-list-tile-sub-title>{{ humanFileSize(file.size) }}</v-list-tile-sub-title>
               </v-list-tile-content>
               <v-list-tile-action v-if="!file.locked">
-                <v-btn icon ripple>
-                  <v-icon  @click.native="lockFile(ix)">lock_open</v-icon>
+                <v-btn icon ripple @click.native="lockFile(ix)">
+                  <v-icon>lock_open</v-icon>
                 </v-btn>
               </v-list-tile-action>
               <v-list-tile-action v-else>
-                <v-btn icon ripple>
-                  <v-icon  @click.native="unlockFile(ix)">lock</v-icon>
+                <v-btn icon ripple @click.native="unlockFile(ix)">
+                  <v-icon>lock</v-icon>
                 </v-btn>
               </v-list-tile-action>
               <v-list-tile-action>
-                <v-btn icon ripple>
-                  <v-icon  @click.native="downloadFile(ix)">file_download</v-icon>
+                <v-btn icon ripple @click.native="downloadFile(ix)">
+                  <v-icon>file_download</v-icon>
                 </v-btn>
               </v-list-tile-action>
-              <!--
-              <md-menu md-align-trigger>
-                <v-btn class="md-icon-button md-list-action" md-menu-trigger>
-                  <md-icon class="md-primary">more_horiz</md-icon>
-                </v-btn>
-                <md-menu-content>
-                  <md-menu-item @click.native="visitDownloadPage(ix)">Download Page</md-menu-item>
-                  <md-menu-item @click.native="renameFile(ix)">Rename</md-menu-item>
-                  <md-menu-item @click.native="deleteFile(ix)">Delete</md-menu-item>
-                </md-menu-content>
-              </md-menu>
-              -->
+              <v-list-tile-action>
+                <v-menu
+                  origin="center center"
+                  transition="v-scale-transition"
+                  bottom
+                >
+                  <v-btn icon ripple slot="activator">
+                    <v-icon>more_horiz</v-icon>
+                  </v-btn>
+                  <v-list>
+                    <v-list-item>
+                      <v-list-tile @click.native="visitDownloadPage(ix)">
+                        <v-list-tile-title>Download Page</v-list-tile-title>
+                      </v-list-tile>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-tile @click.native="renameFile(ix)">
+                        <v-list-tile-title>Rename</v-list-tile-title>
+                      </v-list-tile>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-tile @click.native="deleteFile(ix)">
+                        <v-list-tile-title>Delete</v-list-tile-title>
+                      </v-list-tile>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-list-tile-action>
             </v-list-tile>
             <v-divider inset></v-divider>
           </v-list-item>
         </v-list>
       </div>
-      <div v-else>
+      <div class="center" v-else>
         <v-progress-circular indeterminate v-bind:size="60" class="primary--text"></v-progress-circular>
         <h5>Retrieving Data</h5>
       </div>
