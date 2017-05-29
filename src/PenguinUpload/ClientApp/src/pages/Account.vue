@@ -101,6 +101,26 @@ export default {
 
     generateNewApiKey () {
 
+    },
+
+    deleteAllFiles() {
+
+    },
+
+    deleteAccount() {
+      let vm = this
+      vm.$root.showConfirm('Are you absolutely sure? Your account and all files that you have uploaded will be permanently removed.', 'Confirm Action', function (r1) {
+        if (r1) {
+          if (window.confirm('Your account will be deleted. Are you certain you would like to proceed?')) {
+            // request account nuke
+            
+            // now log out
+            this.$store.dispatch('logout')
+            // proceed
+            vm.$router.replace('/')
+          }
+        }
+      })
     }
   },
   mounted: function () {

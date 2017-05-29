@@ -37,7 +37,25 @@
         </v-slide-y-transition>
       </v-container>
     </main>
+
+    <v-layout row justify-center>
+      <v-dialog persistent v-model="dialogOpen" ref="dialog">
+        <v-card>
+          <v-card-row>
+            <v-card-title>{{ confirmDialog.title }}</v-card-title>
+          </v-card-row>
+          <v-card-row>
+            <v-card-text>{{ confirmDialog.content }} </v-card-text>
+          </v-card-row>
+          <v-card-row actions>
+            <v-btn class="blue--text darken-1" flat @click.native="onDialogResult(false)">{{ confirmDialog.cancel }}</v-btn>
+            <v-btn class="blue--text darken-1" flat @click.native="onDialogResult(true)">{{ confirmDialog.ok }}</v-btn>
+          </v-card-row>
+        </v-card>
+      </v-dialog>
+    </v-layout>
   </v-app>
+
 </template>
 
 <script>
@@ -115,7 +133,15 @@
             avatar: 'error',
             link: 'https://github.com/0xFireball/PenguinUpload/issues'
           }
-        ]
+        ],
+        confirmDialog: {
+          title: '',
+          content: '',
+          ok: 'OK',
+          cancel: 'Cancel',
+          callback: null
+        },
+        dialogOpen: false
       }
     },
     computed: {
@@ -126,7 +152,23 @@
         return this.$store.state.auth.loggedIn
       }
     },
-    methods: {}
+    methods: {
+      showConfirm (tx, ti, cb, y, n) {
+        y = y || 'OK'
+        n = n || 'Cancel'
+        this.confirmDialog.ok = y
+        this.confirmDialog.cancel = n
+        this.confirmDialog.content = tx
+        this.confirmDialog.title = ti
+        this.confirmDialog.callback = cb
+        this.dialogOpen = true
+      },
+      onDialogResult (r) {
+        this.dialogOpen = false
+        this.confirmDialog.callback(r)
+        this.confirmDialog.callback = null
+      }
+    }
   }
 </script>
 

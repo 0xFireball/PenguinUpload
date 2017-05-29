@@ -37,6 +37,7 @@ export class PenguinUploadApi {
   /* actions */
   login (un, pw) {
     return new Promise((resolve, reject) => {
+      this.ax()
       this.axios.post('/login', {
         username: un,
         password: pw
@@ -44,7 +45,6 @@ export class PenguinUploadApi {
         if (res.status !== 200) return reject(PenguinUploadErrors.CredentialError())
         this.key = res.data.apikey
         this.username = res.data.user.username
-        this.ax()
         resolve()
       }).catch((err) => {
         reject(err)
@@ -54,13 +54,13 @@ export class PenguinUploadApi {
 
   register (un, pw, i = null) {
     return new Promise((resolve, reject) => {
+      this.ax()
       this.axios.post('/register', {
         username: un,
         password: pw,
         invitekey: i
       }).then((res) => {
         if (res.status !== 200) return reject(SpeercsErrors.CredentialError())
-        this.ax()
         this.login(un, pw)
           .then(() => {
             resolve()
@@ -76,8 +76,14 @@ export class PenguinUploadApi {
     this.init()
   }
 
+  deleteAccount() {
+    this.ax()
+    return axios.delete('/api/nuke/user')
+  }
+
   getUserInfo() {
     return new Promise((resolve, reject) => {
+      this.ax()
       this.axios.get('/api/userinfo')
         .then((res) => {
           resolve({

@@ -41,9 +41,10 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-const app = new Vue({
+let PenguinUploadApp = Vue.component('app', App)
+
+const app = new PenguinUploadApp({
   el: '#app',
-  render: h => h(App),
   router,
   store
 })
