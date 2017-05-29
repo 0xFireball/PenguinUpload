@@ -67,6 +67,14 @@ export default {
     }
   },
   methods: {
+    attempt_relogin () {
+      this.$store.dispatch('ensure_api', `${window.location.origin}/`)
+        .then(() => {
+          this.$store.dispatch('attempt_reauthenticate')
+          // proceed
+          this.onProceed()
+        }
+    },
     proceed_login () {
       this.canProceed = false
       let b = {
@@ -79,11 +87,7 @@ export default {
             .then(() => {
               console.log('login successful')
               // proceed
-              if (this.$route.query.r) {
-                this.$router.push(this.$route.query.r)
-              } else {
-                this.$router.push('/d')
-              }
+              this.onProceed()
             })
             .catch((e) => {
               this.canProceed = true
@@ -105,7 +109,7 @@ export default {
             .then(() => {
               console.log('registration successful')
               // proceed
-              this.$router.push('/d')
+              this.onProceed()
             })
             .catch((e) => {
               this.canProceed = true
@@ -116,6 +120,13 @@ export default {
               console.log('registration failure', e)
             })
         })
+    },
+    onProceed () {
+      if (this.$route.query.r) {
+        this.$router.push(this.$route.query.r)
+      } else {
+        this.$router.push('/d')
+      }
     }
   }
 }

@@ -115,7 +115,42 @@ namespace PenguinUpload.Modules
                 }
                 catch (SecurityException secEx)
                 {
-                    // Registration blocked for security reasons
+                    // Blocked for security reasons
+                    return Response.AsText(secEx.Message)
+                        .WithStatusCode(HttpStatusCode.Unauthorized);
+                }
+            });
+
+            Post("/reauth", async args =>
+            {
+                var req = this.Bind<ReauthRequest>();
+                var webUserManager = new WebUserManager(ServerContext);
+                var selectedUser = await webUserManager.FindUserByUsernameAsync(req.Username);
+
+                if (selectedUser == null) return HttpStatusCode.Unauthorized;
+
+                try
+                {
+                    // Validate key
+                    if (selectedUser.Enabled && selectedUser.ApiKey == req.ApiKey)
+                    {
+                        // Return user details
+                        return Response.AsJsonNet(new RemoteAuthResponse
+                        {
+                            User = selectedUser,
+                            ApiKey = selectedUser.ApiKey
+                        });
+                    }
+                    return HttpStatusCode.Unauthorized;
+                }
+                catch (NullReferenceException)
+                {
+                    // A parameter was not provided
+                    return HttpStatusCode.BadRequest;
+                }
+                catch (SecurityException secEx)
+                {
+                    // Blocked for security reasons
                     return Response.AsText(secEx.Message)
                         .WithStatusCode(HttpStatusCode.Unauthorized);
                 }
