@@ -112,10 +112,8 @@ export default {
       vm.$root.showConfirm('Are you absolutely sure? Your account and all files that you have uploaded will be permanently removed.', 'Confirm Action', function (r1) {
         if (r1) {
           if (window.confirm('Your account will be deleted. Are you certain you would like to proceed?')) {
-            // request account nuke
-            
-            // now log out
-            this.$store.dispatch('logout')
+            // request account nuke; this will log out
+            vm.$store.dispatch('delete_account')
             // proceed
             vm.$router.replace('/')
           }

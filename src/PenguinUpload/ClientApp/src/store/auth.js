@@ -69,13 +69,19 @@ const actions = {
   delete_acount({commit, state}, auth) {
     return new Promise((resolve, reject) => {
       state.api.deleteAccount()
-      commit('login_result', {success: false})
+        .then((r) => {
+          commit('login_result', { success: false })
+          resolve()
+        })
     })
   },
   logout ({commit, state}) {
     return new Promise((resolve, reject) => {
       state.api.logout()
-      commit('login_result', { success: false })
+        .then((r) => {
+          commit('login_result', { success: false })
+          resolve()
+        })
     })
   }
 }
