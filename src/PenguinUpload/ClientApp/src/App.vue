@@ -38,22 +38,37 @@
       </v-container>
     </main>
 
-    <v-layout row justify-center>
-      <v-dialog persistent v-model="dialogOpen" ref="dialog">
-        <v-card>
-          <v-card-row>
-            <v-card-title>{{ confirmDialog.title }}</v-card-title>
-          </v-card-row>
-          <v-card-row>
-            <v-card-text>{{ confirmDialog.content }} </v-card-text>
-          </v-card-row>
-          <v-card-row actions>
-            <v-btn class="blue--text darken-1" flat @click.native="onDialogResult(false)">{{ confirmDialog.cancel }}</v-btn>
-            <v-btn class="blue--text darken-1" flat @click.native="onDialogResult(true)">{{ confirmDialog.ok }}</v-btn>
-          </v-card-row>
-        </v-card>
-      </v-dialog>
-    </v-layout>
+    <v-dialog persistent v-model="confirmDialogOpen" ref="confirmDialog">
+      <v-card>
+        <v-card-row>
+          <v-card-title>{{ confirmDialog.title }}</v-card-title>
+        </v-card-row>
+        <v-card-row>
+          <v-card-text>{{ confirmDialog.content }}</v-card-text>
+        </v-card-row>
+        <v-card-row actions>
+          <v-btn class="blue--text darken-1" flat @click.native="onConfirmResult(false)">{{ confirmDialog.cancel }}</v-btn>
+          <v-btn class="blue--text darken-1" flat @click.native="onConfirmResult(true)">{{ confirmDialog.ok }}</v-btn>
+        </v-card-row>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog persistent v-model="confirmDialogOpen" ref="promptDialog">
+      <v-card>
+        <v-card-row>
+          <v-card-title>{{ promptDialog.title }}</v-card-title>
+        </v-card-row>
+        <v-card-row>
+          <v-card-text>
+            <v-text-field :label="promptDialog.hint"  v-model="promptDialog.resp" required></v-text-field>
+          </v-card-text>
+        </v-card-row>
+        <v-card-row actions>
+          <v-btn class="blue--text darken-1" flat @click.native="onPromptResult(false)">{{ promptDialog.cancel }}</v-btn>
+          <v-btn class="blue--text darken-1" flat @click.native="onPromptResult(true)">{{ promptDialog.ok }}</v-btn>
+        </v-card-row>
+      </v-card>
+    </v-dialog>
   </v-app>
 
 </template>
@@ -141,7 +156,16 @@
           cancel: 'Cancel',
           callback: null
         },
-        dialogOpen: false
+        promptDialog: {
+          title: '',
+          ok: 'OK',
+          cancel: 'Cancel',
+          hint: '',
+          resp: '',
+          callback: null
+        },
+        confirmDialogOpen: false,
+        promptDialogOpen: false
       }
     },
     computed: {
@@ -161,12 +185,30 @@
         this.confirmDialog.content = tx
         this.confirmDialog.title = ti
         this.confirmDialog.callback = cb
-        this.dialogOpen = true
+        this.confirmDialogOpen = true
       },
-      onDialogResult (r) {
-        this.dialogOpen = false
+      showPrompt: function (ti, h, cb, y, n) {
+        y = y || 'OK'
+        n = n || 'Cancel'
+        this.promptDialog.ok = y
+        this.promptDialog.cancel = n
+        this.promptDialog.hint = h
+        this.promptDialog.title = ti
+        this.promptDialog.callback = cb
+        this.promptDialogOpen = true
+      },
+      onConfirmResult (r) {
+        this.confirmDialogOpen = false
         this.confirmDialog.callback(r)
         this.confirmDialog.callback = null
+      },
+      onPromptResult (r) {
+        this.confirmDialogOpen = false
+        if (r) {
+          this.promptDialog.callback(r)
+        }
+        this.promptDialog.resp = ''
+        this.promptDialog.callback = null
       }
     }
   }
