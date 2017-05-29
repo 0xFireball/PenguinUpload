@@ -81,9 +81,11 @@ export default {
       let vm = this
       let suffix = key ? '!' + key : ''
       vm.file.id = vm.itemId
-      axios.get('/api/fileinfo/' + vm.file.id + suffix, axiosRequestConfig)
+      let infoQuery = '/api/fileinfo/' + vm.file.id + suffix
+      axios.get(infoQuery, axiosRequestConfig)
         .then(function (response) {
           if (response.status === 200) {
+            // console.log('got file info', response.data, infoQuery)
             vm.file.name = response.data.name
             vm.file.sizeText = vm.humanFileSize(response.data.size)
             vm.loading = false

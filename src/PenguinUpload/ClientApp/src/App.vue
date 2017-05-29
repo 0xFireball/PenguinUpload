@@ -204,8 +204,10 @@
       },
       onPromptResult (r) {
         this.promptDialogOpen = false
-        if (r) {
-          this.promptDialog.callback(r)
+        if (r && this.promptDialog.resp) {
+          this.promptDialog.callback(this.promptDialog.resp)
+        } else {
+          this.promptDialog.callback(false)
         }
         this.promptDialog.resp = ''
         this.promptDialog.callback = null

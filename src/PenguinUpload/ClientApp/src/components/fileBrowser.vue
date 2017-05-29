@@ -69,7 +69,6 @@
                   transition="v-scale-transition"
                   bottom
                 >
-                  <!-- -->
                   <v-btn icon ripple slot="activator">
                     <v-icon>more_horiz</v-icon>
                   </v-btn>
