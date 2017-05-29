@@ -203,7 +203,7 @@
         this.confirmDialog.callback = null
       },
       onPromptResult (r) {
-        this.confirmDialogOpen = false
+        this.promptDialogOpen = false
         if (r) {
           this.promptDialog.callback(r)
         }
