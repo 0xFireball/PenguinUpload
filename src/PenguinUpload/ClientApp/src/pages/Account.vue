@@ -19,14 +19,14 @@
     </div>
     <div class="p-section">
       <h5>API</h5>
-      <h6>API Key: <code>{{ user_api_key }}</code></h6>
+      <p>API Key: <code>{{ user_api_key }}</code></p>
       <v-btn primary @click.native="generateNewApiKey">Generate New</v-btn>
     </div>
     <div class="p-section">
       <h5>Security</h5>
       <form v-on:submit.prevent="tryUpdatePassword">
         <v-layout row>
-          <v-flex xs6>
+          <v-flex xs12 lg6>
             <v-text-field
               label="Current password"
               v-model="updatePassword.old"
@@ -34,7 +34,7 @@
           </v-flex>
         </v-layout>
         <v-layout row>
-          <v-flex xs6>
+          <v-flex xs12 lg6>
             <v-text-field
               label="New password"
               v-model="updatePassword.password"
@@ -42,7 +42,7 @@
           </v-flex>
         </v-layout>
         <v-layout row>
-          <v-flex xs6>
+          <v-flex xs12 lg6>
             <v-text-field
               label="Confirm new password"
               v-model="updatePassword.confirm"
@@ -63,7 +63,10 @@
 </template>
 
 <script>
+import HumanFilesizeMixin from '../util/filesize.js'
+
 export default {
+  mixins: [HumanFilesizeMixin],
   data () {
     return {
       userInfo: {
@@ -100,12 +103,12 @@ export default {
 
     }
   },
-  mounted () {
+  mounted: function () {
     this.$store.dispatch('get_user_info', this.$store.getters.api)
       .then((ud) => {
         this.userInfo = {
-          quota: this.$store.dispatch('human_filesize', ud.quota),
-          usage: this.$store.dispatch('human_filesize', ud.usage)
+          quota: this.humanFileSize(ud.quota),
+          usage: this.humanFileSize(ud.usage)
         }
         this.ready = true
       })

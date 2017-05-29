@@ -5,7 +5,6 @@ import Vuex from 'vuex'
 import auth from './auth'
 import files from './files'
 import data from './data'
-import util from './util'
 
 Vue.use(Vuex)
 
@@ -13,7 +12,6 @@ export default new Vuex.Store({
   modules: {
     auth,
     files,
-    data,
-    util
+    data
   }
 })
