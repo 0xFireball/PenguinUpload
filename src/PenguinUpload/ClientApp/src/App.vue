@@ -25,9 +25,6 @@
     <v-toolbar>
       <v-toolbar-side-icon @click.native.stop="sidebar_v = !sidebar_v"></v-toolbar-side-icon>
       <v-toolbar-title v-text="appName"></v-toolbar-title>
-      <v-spacer></v-spacer>
-        <v-icon>menu</v-icon>
-      </v-btn>
     </v-toolbar>
     <main>
       <v-container fluid>
