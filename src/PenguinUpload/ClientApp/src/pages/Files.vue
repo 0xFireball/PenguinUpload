@@ -6,7 +6,7 @@
     </div>
     <div>
       <p>
-        {{ appName }} is a game. Welcome to about.
+        welcome to the file browser
       </p>
     </div>
   </div>
