@@ -33,7 +33,7 @@
               <v-list two-line subheader>
                 <!--Uploading file-->
                 <v-subheader v-if="progressIndicators.length > 0">Uploading</v-subheader>
-                <v-list-item v-for="(item, ix) in progressIndicators">
+                <v-list-item :key="ix" v-for="(item, ix) in progressIndicators">
                   <v-list-tile avatar>
                     <v-list-tile-avatar>
                       <v-icon>cloud_queue</v-icon>
@@ -57,7 +57,7 @@
                 </v-list-item>
                 <!--Upload completed files-->
                 <v-subheader v-if="completedFiles.length > 0">Completed</v-subheader>
-                <v-list-item v-for="(item, ix) in completedFiles" @click="visitUrl(item.downloadPage)">
+                <v-list-item :key="ix" v-for="(item, ix) in completedFiles" @click="visitUrl(item.downloadPage)">
                   <v-list-tile avatar>
                     <v-list-tile-avatar>
                       <v-icon>cloud_done</v-icon>

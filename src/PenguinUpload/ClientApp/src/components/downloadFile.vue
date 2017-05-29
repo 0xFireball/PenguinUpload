@@ -12,14 +12,13 @@
           <h5>{{ file.name }}</h5>
           <p>{{ file.sizeText }}</p>
           <div v-if="!error">
-            <div class="right">
-                <md-button @click.native="downloadFile">
-                <md-icon v-if="file.pass.length > 0">lock</md-icon>
-                <span>
-                Download
-                </span>
-                </md-button>
-                <!--<md-button>Copy Link</md-button>-->
+            <div class="t-right">
+                <v-btn @click.native="downloadFile">
+                  <md-icon v-if="file.pass.length > 0">lock</md-icon>
+                  <span>
+                  Download
+                  </span>
+                </v-btn>
             </div>
           </div>
         </div>
@@ -67,7 +66,7 @@ export default {
         .then(function (response) {
           if (response.status === 200) {
             vm.file.name = response.data.name
-            vm.file.sizeText = this.humanFileSize(response.data.size)
+            vm.file.sizeText = vm.humanFileSize(response.data.size)
             vm.loading = false
             if (suffix) {
               vm.file.pass = key
