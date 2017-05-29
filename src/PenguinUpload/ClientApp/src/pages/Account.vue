@@ -12,7 +12,7 @@
         </p>
       </div>
       <div v-else>
-        <v-progress-circular indeterminate class="primary--text"></v-progress-circular>
+        <v-progress-circular indeterminate v-bind:size="60" class="primary--text"></v-progress-circular>
         <p>Retrieving Data</p>
       </div>
       <p></p>
@@ -63,10 +63,10 @@
 </template>
 
 <script>
-import HumanFilesizeMixin from '../util/filesize.js'
+import HumanFilesizeMixin from '../mixins/util/filesize.js'
 
 export default {
-  mixins: [HumanFilesizeMixin],
+  mixins: [ HumanFilesizeMixin ],
   data () {
     return {
       userInfo: {

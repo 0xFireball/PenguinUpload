@@ -7,6 +7,7 @@ import Logout from './pages/Logout.vue'
 import Account from './pages/Account.vue'
 import Dashboard from './pages/Dashboard.vue'
 import Files from './pages/Files.vue'
+import Download from './pages/Download.vue'
 
 const main = [
   {
@@ -51,6 +52,16 @@ const main = [
     name: 'files',
     component: Files,
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/d/:id/:pass',
+    name: 'download (with pass)',
+    component: Download
+  },
+  {
+    path: '/d/:id',
+    name: 'download',
+    component: Download
   }
 ]
 

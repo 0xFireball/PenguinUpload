@@ -33,22 +33,22 @@
               <v-list two-line subheader>
                 <!--Uploading file-->
                 <v-subheader v-if="progressIndicators.length > 0">Uploading</v-subheader>
-                <v-list-item v-for="(prInd, ix) in progressIndicators">
+                <v-list-item v-for="(item, ix) in progressIndicators">
                   <v-list-tile avatar>
                     <v-list-tile-avatar>
                       <v-icon>cloud_queue</v-icon>
                     </v-list-tile-avatar>
                     <v-list-tile-content>
-                      <v-list-tile-title>{{ prInd.name }}</v-list-tile-title>
-                      <template v-if="!prInd.error">
-                        <v-list-tile-sub-title>{{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Uploaded, Processing...' }}</v-list-tile-sub-title>
+                      <v-list-tile-title>{{ item.name }}</v-list-tile-title>
+                      <template v-if="!item.error">
+                        <v-list-tile-sub-title>{{ (item.value < 100) ? `Uploading... (${item.value}%)` : 'Uploaded, Processing...' }}</v-list-tile-sub-title>
                       </template>
                       <template v-else>
-                        <v-list-tile-sub-title>{{ 'Upload error: ' + prInd.message }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title>{{ 'Upload error: ' + item.message }}</v-list-tile-sub-title>
                       </template>
                     </v-list-tile-content>
                     <v-list-tile-action>
-                      <v-btn icon ripple @click.native="cancelUpload(prInd)">
+                      <v-btn icon ripple @click.native="cancelUpload(item)">
                         <v-icon class="grey--text text--lighten-1">cancel</v-icon>
                       </v-btn>
                     </v-list-tile-action>
@@ -57,13 +57,13 @@
                 </v-list-item>
                 <!--Upload completed files-->
                 <v-subheader v-if="completedFiles.length > 0">Completed</v-subheader>
-                <v-list-item v-for="(cmplFile, ix) in completedFiles" @click="visitUrl(cmplFile.downloadPage)">
+                <v-list-item v-for="(item, ix) in completedFiles" @click="visitUrl(item.downloadPage)">
                   <v-list-tile avatar>
                     <v-list-tile-avatar>
                       <v-icon>cloud_done</v-icon>
                     </v-list-tile-avatar>
                     <v-list-tile-content>
-                      <v-list-tile-title>{{ cmplFile.name }}</v-list-tile-title>
+                      <v-list-tile-title>{{ item.name }}</v-list-tile-title>
                       <v-list-tile-sub-title>Upload Complete!</v-list-tile-sub-title>
                     </v-list-tile-content>
                     <v-list-tile-action>
