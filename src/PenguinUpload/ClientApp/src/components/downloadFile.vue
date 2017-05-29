@@ -14,11 +14,27 @@
           <div v-if="!error">
             <div class="t-right">
                 <v-btn @click.native="downloadFile">
-                  <md-icon v-if="file.pass.length > 0">lock</md-icon>
-                  <span>
                   Download
-                  </span>
+                  <v-icon right v-if="file.pass.length > 0">lock</v-icon>
+                  <v-icon right v-else>file_download</v-icon>
                 </v-btn>
+                <v-menu
+                  origin="center center"
+                  transition="v-scale-transition"
+                  bottom
+                >
+                  <v-btn slot="activator">
+                  Tools
+                    <v-icon right>build</v-icon>
+                  </v-btn>
+                  <v-list>
+                    <v-list-item @click="embedFile">
+                      <v-list-tile>
+                        <v-list-tile-title>Embed</v-list-tile-title>
+                      </v-list-tile>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
             </div>
           </div>
         </div>
@@ -32,7 +48,7 @@ import axios from 'axios'
 import HumanFilesizeMixin from '../mixins/util/filesize.js'
 
 let axiosRequestConfig = {
-  validateStatus: function (status) {
+  validateStatus (status) {
     return status >= 200 && status < 500
   }
 }
@@ -41,7 +57,7 @@ export default {
   name: 'downloadFile',
   props: ['itemId', 'itemPass'],
   mixins: [ HumanFilesizeMixin ],
-  data: function () {
+  data () {
     return {
       loading: true,
       file: {
@@ -55,10 +71,13 @@ export default {
     }
   },
   methods: {
-    downloadFile: function () {
+    downloadFile () {
       window.location.href = '/api/download/' + this.file.id + (this.file.pass ? '!' + this.file.pass : '')
     },
-    updateFileInfo: function (key) {
+    embedFile () {
+      window.open('/api/download/' + this.file.id + (this.file.pass ? '!' + this.file.pass : '') + '?embed=1')
+    },
+    updateFileInfo (key) {
       let vm = this
       let suffix = key ? '!' + key : ''
       vm.file.id = vm.itemId
@@ -101,7 +120,7 @@ export default {
           vm.error = true
         })
     },
-    handleGlobalKeypress: function (e) {
+    handleGlobalKeypress (e) {
       e = e || window.event
       if (e) {
         switch (e.keyCode) {
@@ -113,7 +132,7 @@ export default {
       }
     }
   },
-  mounted: function () {
+  mounted () {
     if (this.itemPass) {
       try {
         this.cItemPass = window.atob(this.itemPass)
