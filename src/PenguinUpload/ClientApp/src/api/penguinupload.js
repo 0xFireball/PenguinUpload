@@ -74,6 +74,11 @@ export class PenguinUploadApi {
     })
   }
 
+  logout () {
+    this.key = null
+    this.init()
+  }
+
   /* getters */
   getKey() { return this.key }
 

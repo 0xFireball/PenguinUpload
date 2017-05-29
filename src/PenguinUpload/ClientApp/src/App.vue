@@ -64,21 +64,14 @@
           { 
             title: 'Dashboard',
             avatar: 'dashboard',
-            router: '/dashboard',
+            router: '/d',
             authRequired: true,
             autoHide: true
           },
           { 
-            title: 'World Map',
-            avatar: 'map',
-            router: '/g/map',
-            authRequired: true,
-            autoHide: true
-          },
-          { 
-            title: 'Code Editor',
-            avatar: 'code',
-            router: '/g/editor',
+            title: 'Files',
+            avatar: 'cloud',
+            router: '/f',
             authRequired: true,
             autoHide: true
           },
