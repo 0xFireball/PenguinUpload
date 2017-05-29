@@ -31,6 +31,14 @@ namespace PenguinUpload
                 {
                     accessToken = ctx.Request.Form["apikey"];
                 }
+                else
+                {
+                    var authHeader = ctx.Request.Headers.Authorization;
+                    if (!string.IsNullOrWhiteSpace(authHeader))
+                    {
+                        accessToken = authHeader;
+                    }
+                }
 
                 // Authenticate the request
                 var authService = new ApiClientAuthenticationService(ServerContext);

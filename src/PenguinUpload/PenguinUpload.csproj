@@ -4,7 +4,7 @@
     <Description>Easy file hosting/uploads</Description>
     <Copyright>Copyright (c) 2016 0xFireball. All Rights Reserved.</Copyright>
     <AssemblyTitle>PenguinUpload</AssemblyTitle>
-    <VersionPrefix>0.8.4-alpha5</VersionPrefix>
+    <VersionPrefix>0.9.0-alpha</VersionPrefix>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>PenguinUpload</AssemblyName>
@@ -21,21 +21,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="LiteDB" Version="3.0.1" />
+    <Compile Remove="ClientApp\**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiteDB" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.1" />
     <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.Authentication.Stateless" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.1-beta1" />
@@ -43,9 +41,9 @@
   </ItemGroup>
 
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
-    <Exec Command="npm install" />
-    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.js --env.prod" />
-    <Exec Command="node node_modules/webpack/bin/webpack.js --env.prod" />
+    <Exec WorkingDirectory="./ClientApp/" Command="npm install" />
+    <Exec WorkingDirectory="./ClientApp/" Command="node node_modules/webpack/bin/webpack.js --config webpack.config.js --env.prod" />
+    <Exec WorkingDirectory="./ClientApp/" Command="node node_modules/webpack/bin/webpack.js --env.prod" />
   </Target>
 
 </Project>
