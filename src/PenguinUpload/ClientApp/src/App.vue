@@ -53,7 +53,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog persistent v-model="confirmDialogOpen" ref="promptDialog">
+    <v-dialog persistent v-model="promptDialogOpen" ref="promptDialog">
       <v-card>
         <v-card-row>
           <v-card-title>{{ promptDialog.title }}</v-card-title>

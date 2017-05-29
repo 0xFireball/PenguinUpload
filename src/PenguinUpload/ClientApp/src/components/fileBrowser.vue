@@ -63,6 +63,7 @@
                   <v-icon>file_download</v-icon>
                 </v-btn>
               </v-list-tile-action>
+              <!--
               <v-list-tile-action>
                 <v-menu
                   origin="center center"
@@ -91,6 +92,7 @@
                   </v-list>
                 </v-menu>
               </v-list-tile-action>
+              -->
             </v-list-tile>
             <v-divider inset></v-divider>
           </v-list-item>
@@ -199,7 +201,7 @@ export default {
     //       showDownloadLinkWithPass (ix) {
     //         let vm = this
     //         let f = vm.files[ix]
-    //         axios.get('/api/getpass/' + f.fileId, this.getAuthRequestParams())
+    //         axios.get('/api/getpass/' + f.fileId, vm.getAuthRequestParams())
     //           .then(function (res) {
     //             // password should be returned
     //             let dlPage = window.location.href.split("#")[0] + '#/d/' + f.fileId + '/' + window.btoa(res.data)
@@ -214,7 +216,7 @@ export default {
     downloadFile (ix) {
       let f = this.files[ix]
       // use force download to bypass password
-      window.location.href = '/api/fdownload/' + f.fileId + '?apikey=' + this.$root.u.key
+      window.location.href = '/api/fdownload/' + f.fileId + '?apikey=' + this.$store.getters.auth_data.key
     },
     lockFile (ix) {
       let vm = this
@@ -222,7 +224,7 @@ export default {
       vm.$root.showPrompt('Enter password', 'Password', function (r) {
         if (r) {
           // send lock request
-          axios.patch('/api/lock/' + f.fileId + '!' + r, {}, this.getAuthRequestParams())
+          axios.patch('/api/lock/' + f.fileId + '!' + r, {}, vm.getAuthRequestParams())
             .then(function (res) {
               // update file list
               f.locked = true
@@ -236,7 +238,7 @@ export default {
       vm.$root.showConfirm('Are you sure you want to remove the password on this file?', 'Confirm Unlock', (r) => {
         if (r) {
           // send unlock request
-          axios.patch('/api/unlock/' + f.fileId, {}, this.getAuthRequestParams())
+          axios.patch('/api/unlock/' + f.fileId, {}, vm.getAuthRequestParams())
             .then(function (res) {
               // update file list
               f.locked = false
@@ -251,7 +253,7 @@ export default {
         (r) => {
           if (r) {
             // send rename request
-            axios.patch('/api/rename/' + f.fileId + '/' + r, {}, this.getAuthRequestParams())
+            axios.patch('/api/rename/' + f.fileId + '/' + r, {}, vm.getAuthRequestParams())
               .then(function (res) {
                 // update file list
                 f.name = r
@@ -266,7 +268,7 @@ export default {
         (r) => {
           if (r) {
             // send delete request
-            axios.delete('/api/delete/' + f.fileId, this.getAuthRequestParams())
+            axios.delete('/api/delete/' + f.fileId, vm.getAuthRequestParams())
               .then(function (res) {
                 // update file list
                 vm.files.splice(ix, 1)
@@ -309,8 +311,8 @@ export default {
       let vm = this
       vm.currentDir = vm.currentDir || '/'
       // console.log(vm.dir)
-      this.getAuthRequestParams()
-      axios.get('/api/files', this.getAuthRequestParams())
+      vm.getAuthRequestParams()
+      axios.get('/api/files', vm.getAuthRequestParams())
         .then(function (response) {
           // merge file list
           // console.log(response.data)
