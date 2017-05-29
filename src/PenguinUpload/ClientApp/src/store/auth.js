@@ -66,6 +66,15 @@ const actions = {
       })
     })
   },
+  delete_all_files ({commit, state}, auth) {
+    return new Promise((resolve, reject) => {
+      state.api.deleteAllFiles()
+        .then((r) => {
+          commit('login_result', { success: false })
+          resolve()
+        })
+    })
+  },
   delete_account ({commit, state}, auth) {
     return new Promise((resolve, reject) => {
       state.api.deleteAccount()

@@ -104,7 +104,17 @@ export default {
     },
 
     deleteAllFiles() {
-
+      let vm = this
+      vm.$root.showConfirm('Are you absolutely sure? All files that you have uploaded will be permanently removed. You will then be logged out.', 'Confirm Action', function (r) {
+        if (r) {
+          // request files nuke; this will log out
+          vm.$store.dispatch('delete_all_files')
+            .then(() => {
+              // proceed
+              vm.$router.replace('/')
+            })
+        }
+      })
     },
 
     deleteAccount() {

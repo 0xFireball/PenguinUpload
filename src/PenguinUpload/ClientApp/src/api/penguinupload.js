@@ -76,6 +76,11 @@ export class PenguinUploadApi {
     this.init()
   }
 
+  deleteAllFiles() {
+    this.ax()
+    return this.axios.delete('/api/nuke/files')
+  }
+
   deleteAccount() {
     this.ax()
     return this.axios.delete('/api/nuke/user')
