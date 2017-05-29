@@ -100,7 +100,17 @@ export default {
     },
 
     generateNewApiKey () {
-
+      let vm = this
+      vm.$root.showConfirm('Are you sure you want a new API key? The old one will no longer work. You will then be logged out.', 'Confirm Action', function (r) {
+        if (r) {
+          // request apikey regen; this will log out
+          vm.$store.dispatch('regenerate_api_key')
+            .then(() => {
+              // proceed
+              vm.$router.replace('/')
+            })
+        }
+      })
     },
 
     deleteAllFiles() {

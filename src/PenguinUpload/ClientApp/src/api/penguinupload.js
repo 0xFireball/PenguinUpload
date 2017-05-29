@@ -76,12 +76,17 @@ export class PenguinUploadApi {
     this.init()
   }
 
-  deleteAllFiles() {
+  regenApiKey () {
+    this.ax()
+    return this.axios.patch('/api/newkey' {})
+  }
+
+  deleteAllFiles () {
     this.ax()
     return this.axios.delete('/api/nuke/files')
   }
 
-  deleteAccount() {
+  deleteAccount () {
     this.ax()
     return this.axios.delete('/api/nuke/user')
   }

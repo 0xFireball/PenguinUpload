@@ -66,6 +66,16 @@ const actions = {
       })
     })
   },
+  regenerate_api_key ({commit, state}, auth) {
+    return new Promise((resolve, reject) => {
+      state.api.regenApiKey()
+        .then((r) => {
+          commit('login_result', { success: false })
+          resolve()
+        })
+        .catch((e) => reject(e))
+    })
+  },
   delete_all_files ({commit, state}, auth) {
     return new Promise((resolve, reject) => {
       state.api.deleteAllFiles()
@@ -73,6 +83,7 @@ const actions = {
           commit('login_result', { success: false })
           resolve()
         })
+        .catch((e) => reject(e))
     })
   },
   delete_account ({commit, state}, auth) {
@@ -82,6 +93,7 @@ const actions = {
           commit('login_result', { success: false })
           resolve()
         })
+        .catch((e) => reject(e))
     })
   },
   logout ({commit, state}) {
@@ -91,6 +103,7 @@ const actions = {
           commit('login_result', { success: false })
           resolve()
         })
+        .catch((e) => reject(e))
     })
   }
 }
