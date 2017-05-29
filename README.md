@@ -13,7 +13,7 @@ lets users upload and share files.
 PenguinUpload was inspired by [sr.ht](https://gogs.sr.ht/SirCmpwn/sr.ht).
 However, while `sr.ht` uses a Flask backend and static HTML as a frontend,
 PenguinUpload uses an ASP.NET Core + NancyFx backend and a Vue.js SPA with
-Vue Material as a frontend.
+Vuetify as a frontend.
 
 ## Features/Details
 
