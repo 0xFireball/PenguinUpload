@@ -6,7 +6,12 @@
         <v-flex xs12 md8 offset-md2>
           <div class="center">
             <template v-for="(item, ix) in quicklinks">
-              <v-btn :primary="item.primary" @click.native="visitUrl(item.link)">
+              <v-btn 
+                :primary="item.primary"
+                :secondary="item.secondary"
+                :info="item.info"
+
+                @click.native="item.router != null ? visitRoute(item.router) : visitUrl(item.link)">
                 {{ item.name }}
                 <v-icon right>{{ item.icon }}</v-icon>
               </v-btn>
@@ -28,8 +33,19 @@ export default {
         {
           name: 'Source',
           icon: 'code',
-          link: 'https://github.com/0xFireball/PenguinUpload',
-          primary: false
+          link: 'https://github.com/0xFireball/PenguinUpload'
+        },
+        {
+          name: 'Log In',
+          icon: 'person',
+          router: '/login',
+          info: true
+        },
+        {
+          name: 'Support',
+          icon: 'favorite',
+          link: 'https://0xfireball.me',
+          primary: true
         }
       ]
     }
@@ -37,6 +53,9 @@ export default {
   methods: {
     visitUrl (u) {
       window.open(u)
+    },
+    visitRoute (r) {
+      this.$router.push(r)
     }
   },
   components: { intro }

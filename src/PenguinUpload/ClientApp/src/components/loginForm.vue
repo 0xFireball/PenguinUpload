@@ -80,7 +80,7 @@ export default {
               if (this.$route.query.r) {
                 this.$router.push(this.$route.query.r)
               } else {
-                this.$router.push('/dashboard')
+                this.$router.push('/d')
               }
             })
             .catch((e) => {
@@ -103,7 +103,7 @@ export default {
             .then(() => {
               console.log('registration successful')
               // proceed
-              this.$router.push('/dashboard')
+              this.$router.push('/d')
             })
             .catch((e) => {
               this.canProceed = true
