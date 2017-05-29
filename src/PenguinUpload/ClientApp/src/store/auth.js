@@ -37,11 +37,11 @@ const actions = {
         resultData.un = auth.un
         resultData.key = state.api.getKey()
         commit('login_result', resultData)
+        commit('persist_auth', resultData)
         resolve()
       })
       .catch((e) => {
         commit('login_result', resultData)
-        commit('persist_auth', resultData)
         console.log(e)
         reject(new Error('login failed'))
       })
@@ -56,7 +56,7 @@ const actions = {
         un: window.localStorage.getItem('auth.un'),
         key: window.localStorage.getItem('auth.key')
       }
-      if (auth.un && auth.pw) {
+      if (auth.un && auth.key) {
         state.api.reauth(auth.un, auth.key)
         .then(() => {
           resultData.success = true
@@ -169,6 +169,7 @@ const mutations = {
     if (data && data.success) {
       window.localStorage.setItem('auth.un', data.un)
       window.localStorage.setItem('auth.key', data.key)
+      console.log('saved auth')
     } else {
       window.localStorage.setItem('auth.un', null)
       window.localStorage.setItem('auth.key', null)

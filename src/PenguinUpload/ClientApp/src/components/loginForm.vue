@@ -71,9 +71,12 @@ export default {
       this.$store.dispatch('ensure_api', `${window.location.origin}/`)
         .then(() => {
           this.$store.dispatch('attempt_reauthenticate')
-          // proceed
-          this.onProceed()
-        }
+            .then(() => {
+              console.log('reauthenticated successfully')
+              // proceed
+              this.onProceed()
+            })
+        })
     },
     proceed_login () {
       this.canProceed = false
@@ -128,6 +131,9 @@ export default {
         this.$router.push('/d')
       }
     }
+  },
+  mounted () {
+    this.attempt_relogin()
   }
 }
 </script>
