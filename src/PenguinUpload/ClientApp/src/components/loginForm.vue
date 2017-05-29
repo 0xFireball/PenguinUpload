@@ -104,6 +104,9 @@ export default {
             .catch((e) => {
               this.canProceed = true
               this.err = 'registration failed'
+              if (e.response) {
+                this.err += `: ${e.response.data}`
+              }
               console.log('registration failure', e)
             })
         })

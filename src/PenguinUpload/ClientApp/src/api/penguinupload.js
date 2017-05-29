@@ -66,6 +66,9 @@ export class PenguinUploadApi {
             resolve()
           })
       }).catch((err) => {
+        if (err.response) {
+          // console.log(err.response.data)
+        }
         reject(err)
       })
     })
