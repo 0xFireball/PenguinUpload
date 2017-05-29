@@ -35,7 +35,7 @@ const actions = {
       .then(() => {
         resultData.success = true
         resultData.un = auth.un
-        resultData.key = state.api.getApiKey()
+        resultData.key = state.api.getKey()
         commit('login_result', resultData)
         resolve()
       })
@@ -55,7 +55,7 @@ const actions = {
       .then(() => {
         resultData.success = true
         resultData.un = auth.un
-        resultData.key = state.api.getApiKey()
+        resultData.key = state.api.getKey()
         commit('login_result', resultData)
         resolve()
       })

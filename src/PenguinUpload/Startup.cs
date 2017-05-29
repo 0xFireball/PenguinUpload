@@ -35,7 +35,9 @@ namespace PenguinUpload
                 try
                 {
                     File.WriteAllText(ConfigurationFile, 
-                        JsonConvert.SerializeObject(new PenguinUploadConfiguration()));
+                        JsonConvert.SerializeObject(
+                            new PenguinUploadConfiguration(),
+                            Formatting.Indented));
                 }
                 catch
                 {
