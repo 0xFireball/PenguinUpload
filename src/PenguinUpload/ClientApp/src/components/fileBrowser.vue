@@ -272,7 +272,6 @@ export default {
             axios.delete('/api/delete/' + f.fileId, vm.getAuthRequestParams())
               .then(function (res) {
                 // update file list
-                vm.files.splice(ix, 1)
                 vm.currentDirStructure.files.splice(ix, 1)
                 // propagate to directories
                 if (vm.noItems) { // if current dir is empty
