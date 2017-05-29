@@ -14,7 +14,7 @@
         </div>
         <v-list two-line subheader>
           <!--directories-->
-          <v-list-item v-if="!atRootDir" @click.native="dirUpLevel()">
+          <v-list-item v-if="!atRootDir" @click="dirUpLevel()">
             <v-list-tile avatar>
               <v-list-tile-avatar>
                 <v-icon>folder</v-icon>
@@ -26,7 +26,7 @@
             </v-list-tile>
           </v-list-item>
           <v-divider inset />
-          <v-list-item :key="ix" v-for="(dir, ix) in dirs" @click.native="openDir(ix)">
+          <v-list-item :key="ix + '_d'" v-for="(dir, ix) in dirs" @click="openDir(ix)">
             <v-list-tile avatar>
               <v-list-tile-avatar>
                 <v-icon primary>folder</v-icon>
@@ -39,7 +39,7 @@
             <v-divider inset></v-divider>
           </v-list-item>
           <!-- files -->
-          <v-list-item :key="ix" v-for="(file, ix) in files" @click.native="openDir(ix)">
+          <v-list-item :key="ix + '_f'" v-for="(file, ix) in files">
             <v-list-tile avatar>
               <v-list-tile-avatar>
                 <v-icon primary>cloud_done</v-icon>
@@ -137,9 +137,11 @@ export default {
     },
     currentDirStructure () {
       // walk directory structure
+      // console.log('current dir', this.currentDir)
       let segments = this.currentDir.split('/')
       // clean up
       segments = segments.filter(Boolean)
+      // console.log('path segments', segments)
       // find matching directory
       let workingDirStructure = this.dirStructure
       for (let i = 0; i < segments.length; i++) {
@@ -150,6 +152,7 @@ export default {
           return null
         }
       }
+      // console.log('dir structure for', this.currentDir, 'is', workingDirStructure)
       return workingDirStructure
     }
   },
@@ -295,20 +298,25 @@ export default {
       }
     },
     navigateToDir (path) {
-      this.$router.push('/files' + path)
+      this.$router.push('/f' + path)
     },
     updateFilesDirs () {
       let workingDirStructure = this.currentDirStructure
+      // console.log(workingDirStructure)
       if (!workingDirStructure) return
       // now update collections
+
+      // this.files = []
+      // this.dirs = []
+
       this.files = workingDirStructure.files
       this.dirs = workingDirStructure.dirs
     },
     fetchData () {
       // load directory structure from server
       let vm = this
+      // console.log('current dir', vm.currentDir)
       vm.currentDir = vm.currentDir || '/'
-      // console.log(vm.dir)
       vm.getAuthRequestParams()
       axios.get('/api/files', vm.getAuthRequestParams())
         .then(function (response) {
@@ -355,12 +363,16 @@ export default {
       if (!this.dirStructure) {
         this.fetchData()
       }
-      this.currentDir = '/' + (to.params.dir || '')
+      let newDir = to.params.dir
+      // console.log('new dir', newDir)
+      this.currentDir = '/' + (newDir || '')
       // this will update structure
       this.updateFilesDirs()
     }
   },
   mounted () {
+    // get dir from route
+    this.currentDir = this.$route.params.dir
     this.fetchData()
     document.onkeydown = this.handleGlobalKeypress
   }

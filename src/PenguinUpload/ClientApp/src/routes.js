@@ -54,6 +54,13 @@ const main = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/f/:dir*',
+    name: 'files navigation',
+    component: Files,
+    props: true,
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/d/:id/:pass',
     name: 'download (with pass)',
     component: Download
