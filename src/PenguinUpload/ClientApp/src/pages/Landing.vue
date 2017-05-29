@@ -6,7 +6,7 @@
         <v-flex xs12 md8 offset-md2>
           <div class="center">
             <template v-for="(item, ix) in quicklinks">
-              <v-btn 
+              <v-btn v-if="!item.autoHide || (item.unauthRequired && !loggedIn) || (item.authRequired && loggedIn)"
                 :primary="item.primary"
                 :secondary="item.secondary"
                 :info="item.info"
@@ -39,7 +39,25 @@ export default {
           name: 'Log In',
           icon: 'person',
           router: '/login',
-          info: true
+          info: true,
+          autoHide: true,
+          unauthRequired: true
+        },
+        {
+          name: 'Register',
+          icon: 'create',
+          router: '/register',
+          info: true,
+          autoHide: true,
+          unauthRequired: true
+        },
+        {
+          name: 'Log Out',
+          icon: 'exit_to_app',
+          router: '/logout',
+          info: true,
+          autoHide: true,
+          authRequired: true
         },
         {
           name: 'Support',
@@ -48,6 +66,11 @@ export default {
           primary: true
         }
       ]
+    }
+  },
+  computed: {
+    loggedIn: function() {
+      return this.$store.state.auth.loggedIn
     }
   },
   methods: {

@@ -89,8 +89,11 @@ export class PenguinUploadApi {
   }
 
   logout () {
-    this.key = null
-    this.init()
+    return new Promise((resolve, reject) => {
+      this.key = null
+      this.init()
+      resolve()
+    })
   }
 
   regenApiKey () {
