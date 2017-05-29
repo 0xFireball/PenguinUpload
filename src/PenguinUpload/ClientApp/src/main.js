@@ -31,7 +31,7 @@ router.beforeEach((to, from, next) => {
     if (!store.getters.is_logged_in) {
       next({
         path: '/login',
-        query: { redirect: to.fullPath }
+        query: { r: to.fullPath }
       })
     } else {
       next()

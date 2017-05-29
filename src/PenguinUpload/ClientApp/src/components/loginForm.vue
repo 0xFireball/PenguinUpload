@@ -77,7 +77,11 @@ export default {
             .then(() => {
               console.log('login successful')
               // proceed
-              this.$router.push('/dashboard')
+              if (this.$route.query.r) {
+                this.$router.push(this.$route.query.r)
+              } else {
+                this.$router.push('/dashboard')
+              }
             })
             .catch((e) => {
               this.canProceed = true
