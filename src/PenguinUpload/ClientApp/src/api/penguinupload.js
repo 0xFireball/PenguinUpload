@@ -66,9 +66,6 @@ export class PenguinUploadApi {
             resolve()
           })
       }).catch((err) => {
-        if (err.response) {
-          // console.log(err.response.data)
-        }
         reject(err)
       })
     })
@@ -77,6 +74,20 @@ export class PenguinUploadApi {
   logout () {
     this.key = null
     this.init()
+  }
+
+  getUserInfo() {
+    return new Promise((resolve, reject) => {
+      this.axios.get('/api/userinfo')
+        .then((res) => {
+          resolve({
+            quota: res.data.quota,
+            usage: res.data.usage
+          })
+        }).catch((err) => {
+          reject(err)
+        })
+    })
   }
 
   /* getters */

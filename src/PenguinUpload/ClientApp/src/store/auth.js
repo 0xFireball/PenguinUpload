@@ -100,6 +100,9 @@ const getters = {
   },
   is_logged_in (state) {
     return state.loggedIn
+  },
+  api (state) {
+    return state.api
   }
 }
 
