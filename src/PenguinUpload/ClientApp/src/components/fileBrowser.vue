@@ -63,13 +63,13 @@
                   <v-icon>file_download</v-icon>
                 </v-btn>
               </v-list-tile-action>
-              <!--
               <v-list-tile-action>
                 <v-menu
                   origin="center center"
                   transition="v-scale-transition"
                   bottom
                 >
+                  <!-- -->
                   <v-btn icon ripple slot="activator">
                     <v-icon>more_horiz</v-icon>
                   </v-btn>
@@ -92,7 +92,6 @@
                   </v-list>
                 </v-menu>
               </v-list-tile-action>
-              -->
             </v-list-tile>
             <v-divider inset></v-divider>
           </v-list-item>
