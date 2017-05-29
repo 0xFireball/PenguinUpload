@@ -25,7 +25,62 @@
           </div>
         </v-flex>
       </v-layout>
+      <v-layout row>
+        <v-flex xs12 lg10 offset-lg1>
+          <div class="upload-progress-indicators">
+              <!--<md-spinner md-size="60" :md-progress="progressIndicator.value" class="md-warn"></md-spinner>
+                  <p>{{ progressMessage }}</p>-->
+              <v-list two-line subheader>
+                <!--Uploading file-->
+                <v-subheader v-if="progressIndicators.length > 0">Uploading</v-subheader>
+                <v-list-item v-for="(prInd, ix) in progressIndicators">
+                  <v-list-tile avatar>
+                    <v-list-tile-avatar>
+                      <v-icon>cloud_queue</v-icon>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title>{{ prInd.name }}</v-list-tile-title>
+                      <template v-if="!prInd.error">
+                        <v-list-tile-sub-title>{{ (prInd.value < 100) ? `Uploading... (${prInd.value}%)` : 'Uploaded, Processing...' }}</v-list-tile-sub-title>
+                      </template>
+                      <template v-else>
+                        <v-list-tile-sub-title>{{ 'Upload error: ' + prInd.message }}</v-list-tile-sub-title>
+                      </template>
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                      <v-btn icon ripple @click.native="cancelUpload(prInd)">
+                        <v-icon class="grey--text text--lighten-1">cancel</v-icon>
+                      </v-btn>
+                    </v-list-tile-action>
+                  </v-list-tile>
+                  <v-divider inset></v-divider>
+                </v-list-item>
+                <!--Upload completed files-->
+                <v-subheader v-if="completedFiles.length > 0">Completed</v-subheader>
+                <v-list-item v-for="(cmplFile, ix) in completedFiles" @click="visitUrl(cmplFile.downloadPage)">
+                  <v-list-tile avatar>
+                    <v-list-tile-avatar>
+                      <v-icon>cloud_done</v-icon>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                      <v-list-tile-title>{{ cmplFile.name }}</v-list-tile-title>
+                      <v-list-tile-sub-title>Upload Complete!</v-list-tile-sub-title>
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                      <v-btn icon ripple>
+                        <v-icon class="grey--text text--lighten-1">done</v-icon>
+                      </v-btn>
+                    </v-list-tile-action>
+                  </v-list-tile>
+                  <v-divider inset></v-divider>
+                </v-list-item>
+              </v-list>
+              <v-btn v-if="completedFiles.length > 0" @click.native="completedFiles = []">Clear All</v-btn>
+            </div>
+        </v-flex>
+      </v-layout>
     </div>
+    <input type="file" class="invisible" ref="browse" @change="onFilesUploaded" multiple />
   </div>
 </template>
 <script>
@@ -137,7 +192,7 @@
           }
         }
         let form = new FormData()
-        form.append("apikey", vm.$root.u.key)
+        form.append("apikey", this.$store.getters.auth_data.key)
         form.append("dir", vm.uploadDestination)
         form.append("file", file)
         xhr.send(form)
