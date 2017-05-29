@@ -41,9 +41,9 @@
   </ItemGroup>
 
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
-    <Exec Command="npm --prefix ./ClientApp install ./ClientApp" />
-    <Exec Command="node ClientApp/node_modules/webpack/bin/webpack.js --config ClientApp/webpack.config.js --env.prod" />
-    <Exec Command="node ClientApp/node_modules/webpack/bin/webpack.js --env.prod" />
+    <Exec WorkingDirectory="./ClientApp/" Command="npm install" />
+    <Exec WorkingDirectory="./ClientApp/" Command="node node_modules/webpack/bin/webpack.js --config webpack.config.js --env.prod" />
+    <Exec WorkingDirectory="./ClientApp/" Command="node node_modules/webpack/bin/webpack.js --env.prod" />
   </Target>
 
 </Project>
