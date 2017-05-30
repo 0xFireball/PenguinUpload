@@ -172,7 +172,7 @@ namespace PenguinUpload.Services.Authentication
         public async Task ChangeUserPasswordAsync(RegisteredUser user, string newPassword)
         {
             var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
-            await lockEntry.WithExclusiveWriteAsync(Task.Run(() =>
+            await lockEntry.WithExclusiveWriteAsync(Task.Run(async () =>
             {
                 // Recompute password crypto
                 var cryptoConf = PasswordCryptoConfiguration.CreateDefault();
@@ -186,16 +186,19 @@ namespace PenguinUpload.Services.Authentication
                     Conf = cryptoConf,
                     Key = encryptedPassword
                 };
+                // Save changes
+                await UpdateUserInDatabaseAsync(user);
             }));
         }
 
         public async Task GenerateNewApiKeyAsync(RegisteredUser user)
         {
             var lockEntry = ServerContext.ServiceTable.GetOrCreate(user.Username).UserLock;
-            await lockEntry.WithExclusiveWriteAsync(Task.Run(() =>
+            await lockEntry.WithExclusiveWriteAsync(Task.Run(async () =>
             {
                 // Recompute key
                 user.ApiKey = StringUtils.SecureRandomString(AuthCryptoHelper.DefaultApiKeyLength);
+                await UpdateUserInDatabaseAsync(user);
             }));
         }
 
