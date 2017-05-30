@@ -1,6 +1,7 @@
 
 # PenguinUpload
 
+![screenshot](img/screenshot_newui.png)
 ![screenshot](img/screenshot_upload.png)
 
 A self-hostable, fully featured file host
