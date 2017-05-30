@@ -29,6 +29,7 @@
           <v-flex xs12 lg6>
             <v-text-field
               label="Current password"
+              type="password"
               v-model="updatePassword.old"
             ></v-text-field>
           </v-flex>
@@ -37,6 +38,7 @@
           <v-flex xs12 lg6>
             <v-text-field
               label="New password"
+              type="password"
               v-model="updatePassword.password"
             ></v-text-field>
           </v-flex>
@@ -45,6 +47,7 @@
           <v-flex xs12 lg6>
             <v-text-field
               label="Confirm new password"
+              type="password"
               v-model="updatePassword.confirm"
             ></v-text-field>
           </v-flex>
