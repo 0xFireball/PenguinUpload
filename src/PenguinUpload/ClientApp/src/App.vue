@@ -47,7 +47,7 @@
           <v-card-title>{{ confirmDialog.title }}</v-card-title>
         </v-card-row>
         <v-card-row>
-          <v-card-text>{{ confirmDialog.content }}</v-card-text>
+          <v-card-text v-html="confirmDialog.content"></v-card-text>
         </v-card-row>
         <v-card-row actions>
           <v-btn class="blue--text darken-1" flat @click.native="onConfirmResult(false)">{{ confirmDialog.cancel }}</v-btn>
