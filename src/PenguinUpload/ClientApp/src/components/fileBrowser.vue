@@ -6,10 +6,10 @@
     <div class="uploaded-files-list">
       <h6 class="center">All My Files</h6>
       <div v-if="loadFinished">
-        <div v-if="error">
+        <div class="center" v-if="error">
           <p>Error</p>
         </div>
-        <div v-else-if="noItems">
+        <div class="center" v-else-if="noItems">
           <p>No Files</p>
         </div>
         <v-list two-line subheader>
