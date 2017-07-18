@@ -12,9 +12,6 @@ PenguinUpload is a self-hostable web application that
 lets users upload and share files.
 
 PenguinUpload was inspired by [sr.ht](https://gogs.sr.ht/SirCmpwn/sr.ht).
-However, while `sr.ht` uses a Flask backend and static HTML as a frontend,
-PenguinUpload uses an ASP.NET Core + NancyFx backend and a Vue.js SPA with
-Vuetify as a frontend.
 
 ## Features/Details
 
@@ -75,7 +72,7 @@ location on the filesystem.
 
 ### Administration
 
-See the [Administration documentation](docs/admin.md)
+See the [Administration documentation](docs/admin.md). PenguinUpload provides an administration API for this purpose.
 
 ## License
 
