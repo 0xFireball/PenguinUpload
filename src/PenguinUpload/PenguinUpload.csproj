@@ -5,13 +5,11 @@
     <Copyright>Copyright (c) 2016 0xFireball. All Rights Reserved.</Copyright>
     <AssemblyTitle>PenguinUpload</AssemblyTitle>
     <VersionPrefix>0.9.1-alpha</VersionPrefix>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>PenguinUpload</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>PenguinUpload</PackageId>
-    <RuntimeFrameworkVersion>1.1.0</RuntimeFrameworkVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
   </PropertyGroup>
 
   <ItemGroup>
